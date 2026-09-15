@@ -42,8 +42,8 @@ Run `make status` for unresolved inputs:
 - Publish the pinned scripts and installer source commits to their Gravity URLs.
 - Pin the downstream Mesa revision; align its spec Version, archive and root
   with that source. The imported Fedora packaging version is 26.2.2.
-- Set the real COPR owner/project in [release.json](release.json), and add the
-  verified ASCII-armored public key at `gravity-repos/RPM-GPG-KEY-gravity`.
+- COPR is configured as `adevwithanidea/gravity`; its public signing key is
+  pinned in `gravity-repos/RPM-GPG-KEY-gravity`.
 - Publish the pinned artwork revision: artwork is CC BY 4.0, the generator is
   MIT, and the existing font license is preserved. Trademark policy is separate.
   Fedora's [license data](https://gitlab.com/fedora/legal/fedora-license-data/-/blob/main/data/CC-BY-4.0.toml)

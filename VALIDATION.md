@@ -6,10 +6,10 @@
   unresolved rpmautospec macros; Python and shell syntax checks.
 - Twelve specs parse with RPM 4.20.1; target-package checks use the Fedora
   44/aarch64 macros, and the logos package is noarch.
-- Ten packages have SRPMs generated with the shared builder in `dist/`:
+- Eleven packages have SRPMs generated with the shared builder in `dist/`:
   kernel, uboot-tools, m1n1, gravity-release, gravity-remix-scripts,
   gravity-platform-metapackage, gravity-appstream-metadata, gravity-scripts
-  gravity-installer and gravity-logos.
+  gravity-installer, gravity-logos and gravity-repos.
 - CC-BY-4.0 is allowed-content and allowed-documentation in Fedora's license
   data. Artwork uses that license; its Python generator uses MIT, and the
   existing font license is unchanged. Trademark policy is separate.
@@ -47,7 +47,23 @@
 - AppStream XML is well-formed; the COPR Makefile resolves the requested spec
   path to the expected package.
 
-## Still pending
+## COPR validation
+
+- User-submitted build [10989758](https://copr.fedorainfracloud.org/coprs/adevwithanidea/gravity/build/10989758/)
+  succeeded for gravity-logos 20260915-101.gravity.fc44 in fedora-44-aarch64.
+  rpmlint reported zero errors and eight warnings (including intentional
+  duplicated notices for embedding consumers, virtual provides, and missing
+  documentation/check sections).
+- Retrieved the project's public key over HTTPS from the URL in COPR's repo
+  file: https://download.copr.fedorainfracloud.org/results/adevwithanidea/gravity/pubkey.gpg
+  Fingerprint: `6CBEBC85D891B94EEF48EA6115974442C8793EE4`.
+  UID: `adevwithanidea_gravity (None) <adevwithanidea#gravity@copr.fedorahosted.org>`.
+- Verified the COPR-built logos RPM's RSA/SHA256 signatures and digests with
+  that key using a temporary isolated RPM database. This checks consistency
+  with COPR's HTTPS-published key, not independent out-of-band identity proof.
+- gravity-repos SRPM builds with the configured project URL and pinned key.
+
+## Remaining release checks
 
 These checks used the Debian host's extracted RPM tooling and existing cross
 compiler. SRPM generation is not a native Fedora binary-package build.
@@ -60,11 +76,11 @@ compiler. SRPM generation is not a native Fedora binary-package build.
   because its Python has no pip module.
 - Publish the installer's pinned Gravity artwork and bootloader submodule
   commits; build and test the full macOS installer bundle.
-- Native Fedora validation of the logos package and m1n1 binary builds.
-- COPR project/public-key configuration and gravity-repos build.
+- Logos installation tests and m1n1 binary builds.
+- gravity-repos COPR binary build and installation tests.
 - Full dependency resolution and installation in the Fedora KDE image.
 - appstreamcli semantic validation (the binary package's %check runs it).
 - Hardware boot, firmware consumption, first-boot and package-update tests.
 
-No builds have been uploaded to COPR, no release assets have been published,
-and no hardware support is claimed from SRPM generation alone.
+The user uploaded the logos build to COPR; other package builds and release
+publication remain pending. No hardware support is claimed from builds alone.
