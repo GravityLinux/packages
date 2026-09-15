@@ -1,4 +1,4 @@
-From b3bd18bf7297fa926f5eeb154a0cfadba19b8780 Mon Sep 17 00:00:00 2001
+From 9b06f6cddc90deef0bd5f35d57437549c4f25593 Mon Sep 17 00:00:00 2001
 From: Cody Ho <codyho@stanford.edu>
 Date: Mon, 14 Sep 2026 22:20:03 -0700
 Subject: [PATCH] arm: apple: Add Apple M4 (T8132) memory map
@@ -6,6 +6,7 @@ Subject: [PATCH] arm: apple: Add Apple M4 (T8132) memory map
 Apple M4 uses an MMIO layout that is not covered by the existing M3 map. Add mappings for its SoC I/O, PCIe apertures, and PCIe controller registers, and select them for apple,t8132.
 
 Signed-off-by: Cody Ho <codyho@stanford.edu>
+Assisted-By: OpenAI Codex (gpt-6-astra, gpt-5.6-sol)
 ---
  arch/arm/mach-apple/board.c | 143 ++++++++++++++++++++++++++++++++++++
  1 file changed, 143 insertions(+)

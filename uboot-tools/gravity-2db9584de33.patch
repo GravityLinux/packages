@@ -1,4 +1,4 @@
-From 1e03b5bea44a16efd6dbe4072452485708242f97 Mon Sep 17 00:00:00 2001
+From 2db9584de33231580db286e13edbfb2d7787b766 Mon Sep 17 00:00:00 2001
 From: Cody Ho <codyho@stanford.edu>
 Date: Tue, 15 Sep 2026 00:13:15 -0700
 Subject: [PATCH] apple: Find the ESP on T8132 NVMe
@@ -9,6 +9,7 @@ fallback. Match it when locating the ESP so Gravity EFI selection works
 on M4 systems.
 
 Signed-off-by: Cody Ho <codyho@stanford.edu>
+Assisted-By: OpenAI Codex (gpt-6-astra, gpt-5.6-sol)
 ---
  arch/arm/mach-apple/board.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)

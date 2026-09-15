@@ -27,13 +27,13 @@ The imported packaging stops at dbd2154cb0d; four additional Asahi NVMe fixes
 asahi-v2026.07-2 before the Gravity patches.
 These committed Gravity patches follow that series:
 
-- ee57aea11c1 — use the Gravity EFI system partition property.
-- b3bd18bf729 — T8132 memory map.
-- f154e6ca557 — T8132 ANS2 NVMe.
-- 1e03b5bea44 — find the ESP on T8132 NVMe.
+- 11da9618ef1 — use the Gravity EFI system partition property.
+- 9b06f6cddc9 — T8132 memory map.
+- 49840d57974 — T8132 ANS2 NVMe.
+- 2db9584de33 — find the ESP on T8132 NVMe.
 
 The current local Gravity U-Boot revision is
-`1e03b5bea44a16efd6dbe4072452485708242f97`.
+`2db9584de33231580db286e13edbfb2d7787b766`.
 Re-export the patches and update this file when that source changes.
 
 ## Kernel

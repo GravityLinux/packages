@@ -35,7 +35,7 @@
   "gravity-scripts": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/scripts.git",
-    "ref": "5080b72254553eb868f40856a7c996894d83663d",
+    "ref": "084cbaea3231bdb75d75f3d49f245101187a116c",
     "archive": "gravity-scripts-20260915.tar.gz",
     "root": "gravity-scripts-20260915",
     "note": "Publish this locally pinned scripts commit to the Gravity repository."
@@ -43,7 +43,7 @@
   "gravity-installer": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/installer.git",
-    "ref": "a9577837629484f84a26219715e35f60ed785bd8",
+    "ref": "2763449877d04707e9f42a7b4f60da1cce50e6d7",
     "archive": "gravity-installer-0.9.1.tar.gz",
     "omit_submodules": ["artwork", "bootloader"],
     "root": "gravity-installer-0.9.1",

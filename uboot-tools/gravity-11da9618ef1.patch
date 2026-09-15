@@ -1,8 +1,10 @@
-From ee57aea11c1acbf81ddf03d6579bbb40ca739f54 Mon Sep 17 00:00:00 2001
+From 11da9618ef185aa380a75ee8bb157e264c4da8b2 Mon Sep 17 00:00:00 2001
 From: Cody Ho <codyho@stanford.edu>
 Date: Mon, 14 Sep 2026 22:04:47 -0700
 Subject: [PATCH] apple: Use Gravity EFI system partition property
 
+Signed-off-by: Cody Ho <codyho@stanford.edu>
+Assisted-By: OpenAI Codex (gpt-6-astra, gpt-5.6-sol)
 ---
  arch/arm/mach-apple/board.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)

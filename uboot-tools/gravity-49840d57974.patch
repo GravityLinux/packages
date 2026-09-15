@@ -1,4 +1,4 @@
-From f154e6ca557d34c8ec3f1e69fc8556a572f54143 Mon Sep 17 00:00:00 2001
+From 49840d57974e4e11691edf4aaf86a20d1c3675ec Mon Sep 17 00:00:00 2001
 From: Cody Ho <codyho@stanford.edu>
 Date: Mon, 14 Sep 2026 23:50:58 -0700
 Subject: [PATCH] nvme: apple: Add T8132 ANS2 support
@@ -15,6 +15,7 @@ Based on the Linux implementation by Yureka Lilian.
 
 Link: https://lore.kernel.org/linux-nvme/20260906-apple-nvme-t8132-v2-2-ac0328590823@cyberchaos.dev/
 Signed-off-by: Cody Ho <codyho@stanford.edu>
+Assisted-By: OpenAI Codex (gpt-6-astra, gpt-5.6-sol)
 ---
  drivers/nvme/nvme.c       |  5 ++++
  drivers/nvme/nvme.h       |  9 +++++++

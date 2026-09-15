@@ -117,10 +117,10 @@ Patch129: asahi-2495a9f2ddf.patch
 Patch130: asahi-ec49c9d70e6.patch
 
 # Gravity changes on top of Asahi releng (source commits recorded in provenance).
-Patch200: gravity-ee57aea11c1.patch
-Patch201: gravity-b3bd18bf729.patch
-Patch202: gravity-f154e6ca557.patch
-Patch203: gravity-1e03b5bea44.patch
+Patch200: gravity-11da9618ef1.patch
+Patch201: gravity-9b06f6cddc9.patch
+Patch202: gravity-49840d57974.patch
+Patch203: gravity-2db9584de33.patch
 
 BuildRequires:  bc
 BuildRequires:  bison
