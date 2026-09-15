@@ -6,9 +6,10 @@
   unresolved rpmautospec macros; Python and shell syntax checks.
 - Eleven specs parse with RPM 4.20.1 using the Fedora 44/aarch64 target macros.
   The logos spec intentionally refuses preparation without its reviewed license.
-- Seven SRPMs were generated with the shared builder and are in `dist/`:
+- Nine SRPMs were generated with the shared builder and are in `dist/`:
   kernel, uboot-tools, m1n1, gravity-release, gravity-remix-scripts,
-  gravity-platform-metapackage and gravity-appstream-metadata.
+  gravity-platform-metapackage, gravity-appstream-metadata, gravity-scripts
+  and gravity-installer.
 - Every generated SRPM has an accompanying SHA256 input manifest.
 - The pinned kernel source SRPM checksum matches. Its Fedora/Asahi patch applies
   to Linux 7.1.13, followed by the generated Gravity M4 diff. Both pass
@@ -26,9 +27,13 @@
 - m1n1's source snapshot and Fedora Rust dependency patch prepare successfully.
   The Asahi artwork submodule is explicitly omitted in favor of gravity-logos.
 - Two independently generated first-boot source archives have identical hashes.
-- The current Gravity scripts working tree passes a staged Fedora install with
+- The pinned Gravity scripts source archive passes a staged Fedora install with
   the RPM's /usr/sbin and /etc/sysconfig paths. The Fedora dangling-DTB-symlink
-  patch applies. This tested an isolated copy, not a published source revision.
+  patch applies. Its transactional firmware-update test and both Gravity-only
+  ESP/dracut identity tests pass from the archive.
+- The pinned installer source archive passes all five firmware/import tests;
+  the renamed source-tree Python symlink resolves without either submodule.
+  The installer boot-logo helper produces the expected m1n1 payload format.
 - AppStream XML is well-formed; the COPR Makefile resolves the requested spec
   path to the expected package.
 
@@ -40,7 +45,11 @@ compiler. SRPM generation is not a native Fedora binary-package build.
 - Native Fedora 44/aarch64 mock or COPR binary builds and RPM linting.
 - Kernel config regeneration/toolchain checks and kernel compilation.
 - Mesa fork source/version selection and build.
-- Publish/pin the scripts and installer changes, then build those RPMs.
+- Publish the pinned scripts and installer commits, then build their binary
+  RPMs. The optional standalone wheel smoke test could not run on this host
+  because its Python has no pip module.
+- Publish the installer's pinned Gravity artwork and bootloader submodule
+  commits; build and test the full macOS installer bundle.
 - Artwork licensing, logos binary package and m1n1 binary package.
 - COPR project/public-key configuration and gravity-repos build.
 - Full dependency resolution and installation in the Fedora KDE image.

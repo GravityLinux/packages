@@ -39,7 +39,7 @@ bundle and bootloader release assets are built separately.
 
 Run `make status` for unresolved inputs:
 
-- Pin and publish the modified scripts and installer source commits.
+- Publish the pinned scripts and installer source commits to their Gravity URLs.
 - Pin the downstream Mesa revision; align its spec Version, archive and root
   with that source. The imported Fedora packaging version is 26.2.2.
 - Set the real COPR owner/project in [release.json](release.json), and add the

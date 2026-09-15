@@ -35,18 +35,19 @@
   "gravity-scripts": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/scripts.git",
-    "ref": null,
+    "ref": "5080b72254553eb868f40856a7c996894d83663d",
     "archive": "gravity-scripts-20260915.tar.gz",
     "root": "gravity-scripts-20260915",
-    "note": "Commit and publish the firmware consumer changes in ../scripts before pinning."
+    "note": "Publish this locally pinned scripts commit to the Gravity repository."
   },
   "gravity-installer": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/installer.git",
-    "ref": null,
+    "ref": "a9577837629484f84a26219715e35f60ed785bd8",
     "archive": "gravity-installer-0.9.1.tar.gz",
+    "omit_submodules": ["artwork", "bootloader"],
     "root": "gravity-installer-0.9.1",
-    "note": "Commit and publish ../installer, including gravity_firmware and setup.py."
+    "note": "Publish this locally pinned installer commit; Linux firmware-tool sources omit the macOS artwork and bootloader submodules."
   },
   "gravity-platform-metapackage": {
     "kind": "spec"

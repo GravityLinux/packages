@@ -33,7 +33,7 @@ This package contains miscellaneous admin scripts for Gravity Linux.
 Summary:        Gravity Linux firmware extractor
 
 Requires:       %{name} = %{version}-%{release}
-# Not using python3dist(asahi-firmware) because its version is fixed
+# Not using python3dist(gravity-firmware) because its version is fixed
 Requires:       python3-gravity_firmware >= 0.9.1
 
 %description -n gravity-fwupdate
@@ -113,8 +113,8 @@ grep -q 'gravity_firmware' && %{_sbindir}/gravity-fwupdate || :
 %files
 %license LICENSE
 %{_datadir}/%{name}/
-%{_sbindir}/asahi-diagnose
-%{_udevhwdbdir}/65-autosuspend-override-asahi-sdhci.hwdb
+%{_sbindir}/gravity-diagnose
+%{_udevhwdbdir}/65-autosuspend-override-gravity-sdhci.hwdb
 
 %files -n gravity-fwupdate
 %license LICENSE
