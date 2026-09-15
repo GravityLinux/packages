@@ -1,0 +1,52 @@
+From 6c8f104a1463560eb887db688eb34d3ba521e3ed Mon Sep 17 00:00:00 2001
+From: Mark Kettenis <kettenis@openbsd.org>
+Date: Sun, 7 Apr 2024 10:04:19 +0200
+Subject: [PATCH 1/1] efi_loader: prefer EFI system partition
+
+When booting from a block io device, prefer the EFI system
+partition over other partitions.
+
+Signed-off-by: Mark Kettenis <kettenis@openbsd.org>
+---
+ lib/efi_loader/efi_bootmgr.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/lib/efi_loader/efi_bootmgr.c b/lib/efi_loader/efi_bootmgr.c
+index 8c9a9b5eb56..e67172fb8a2 100644
+--- a/lib/efi_loader/efi_bootmgr.c
++++ b/lib/efi_loader/efi_bootmgr.c
+@@ -315,6 +315,7 @@ err:
+ static efi_status_t fill_default_file_path(struct udevice *blk,
+ 					   struct efi_device_path **dp)
+ {
++	struct blk_desc *desc = dev_get_uclass_plat(blk);
+ 	efi_status_t ret;
+ 	struct udevice *partition;
+ 
+@@ -323,6 +324,26 @@ static efi_status_t fill_default_file_path(struct udevice *blk,
+ 	if (ret == EFI_SUCCESS)
+ 		return ret;
+ 
++	/* try EFI system partition */
++	if (desc->uclass_id == efi_system_partition.uclass_id &&
++	    desc->devnum == efi_system_partition.devnum) {
++		device_foreach_child(partition, blk) {
++			struct disk_part *part;
++			enum uclass_id id;
++
++			id = device_get_uclass_id(partition);
++			if (id != UCLASS_PARTITION)
++				continue;
++
++			part = dev_get_uclass_plat(partition);
++			if (part->partnum == efi_system_partition.part) {
++				ret = search_default_file(partition, dp);
++				if (ret == EFI_SUCCESS)
++					return ret;
++			}
++		}
++	}
++
+ 	/* try the partitions */
+ 	device_foreach_child(partition, blk) {
+ 		enum uclass_id id;

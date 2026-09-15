@@ -1,0 +1,98 @@
+From a0af6e889957dc72df6f8d7d07f000518fb45668 Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Thu, 18 May 2023 23:39:32 +0900
+Subject: [PATCH 1/1] scsi: Fix a bunch of SCSI definitions
+
+0x9e isn't Read Capacity, it's a service action and the read capacity
+command is a subcommand.
+
+READ16 is not 0x48, it's 0x88. 0x48 is SANITIZE and that sounds like we
+might have been destroying data instead of reading data. No bueno.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/ata/ahci.c  | 9 ++++++---
+ drivers/scsi/scsi.c | 4 ++--
+ include/scsi.h      | 8 ++++++--
+ 3 files changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+index 38e953ee79c..242262de924 100644
+--- a/drivers/ata/ahci.c
++++ b/drivers/ata/ahci.c
+@@ -823,9 +823,6 @@ static int ahci_scsi_exec(struct udevice *dev, struct scsi_cmd *pccb)
+ 	case SCSI_RD_CAPAC10:
+ 		ret = ata_scsiop_read_capacity10(uc_priv, pccb);
+ 		break;
+-	case SCSI_RD_CAPAC16:
+-		ret = ata_scsiop_read_capacity16(uc_priv, pccb);
+-		break;
+ 	case SCSI_TST_U_RDY:
+ 		ret = ata_scsiop_test_unit_ready(uc_priv, pccb);
+ 		break;
+@@ -835,6 +832,12 @@ static int ahci_scsi_exec(struct udevice *dev, struct scsi_cmd *pccb)
+ 	case SCSI_SYNC_CACHE:
+ 		ret = ata_io_flush(uc_priv, pccb->target);
+ 		break;
++	case SCSI_SRV_ACTION_IN:
++		if ((pccb->cmd[1] & 0x1f) == SCSI_SAI_RD_CAPAC16) {
++			ret = ata_scsiop_read_capacity16(uc_priv, pccb);
++			break;
++		}
++		/* Fallthrough */
+ 	default:
+ 		printf("Unsupport SCSI command 0x%02x\n", pccb->cmd[0]);
+ 		return -ENOTSUPP;
+diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+index 50e7d749921..07ec9cb2a33 100644
+--- a/drivers/scsi/scsi.c
++++ b/drivers/scsi/scsi.c
+@@ -402,8 +402,8 @@ static int scsi_read_capacity(struct udevice *dev, struct scsi_cmd *pccb,
+ 
+ 	/* Read capacity (10) was insufficient. Use read capacity (16). */
+ 	memset(pccb->cmd, '\0', sizeof(pccb->cmd));
+-	pccb->cmd[0] = SCSI_RD_CAPAC16;
+-	pccb->cmd[1] = 0x10;
++	pccb->cmd[0] = SCSI_SRV_ACTION_IN;
++	pccb->cmd[1] = SCSI_SAI_RD_CAPAC16;
+ 	pccb->cmdlen = 16;
+ 	pccb->msgout[0] = SCSI_IDENTIFY; /* NOT USED */
+ 
+diff --git a/include/scsi.h b/include/scsi.h
+index 2520a8b8fe6..bbcc1c2e269 100644
+--- a/include/scsi.h
++++ b/include/scsi.h
+@@ -157,10 +157,9 @@ struct scsi_cmd {
+ #define SCSI_MED_REMOVL	0x1E		/* Prevent/Allow medium Removal (O) */
+ #define SCSI_READ6		0x08		/* Read 6-byte (MANDATORY) */
+ #define SCSI_READ10		0x28		/* Read 10-byte (MANDATORY) */
+-#define SCSI_READ16	0x48
++#define SCSI_READ16	0x88		/* Read 16-byte */
+ #define SCSI_RD_CAPAC	0x25		/* Read Capacity (MANDATORY) */
+ #define SCSI_RD_CAPAC10	SCSI_RD_CAPAC	/* Read Capacity (10) */
+-#define SCSI_RD_CAPAC16	0x9e		/* Read Capacity (16) */
+ #define SCSI_RD_DEFECT	0x37		/* Read Defect Data (O) */
+ #define SCSI_READ_LONG	0x3E		/* Read Long (O) */
+ #define SCSI_REASS_BLK	0x07		/* Reassign Blocks (O) */
+@@ -174,16 +173,21 @@ struct scsi_cmd {
+ #define SCSI_SEEK10		0x2B		/* Seek 10-Byte (O) */
+ #define SCSI_SEND_DIAG	0x1D		/* Send Diagnostics (MANDATORY) */
+ #define SCSI_SET_LIMIT	0x33		/* Set Limits (O) */
++#define SCSI_SRV_ACTION_IN	0x9E	/* Service Action In */
++#define SCSI_SRV_ACTION_OUT	0x9F	/* Service Action Out */
+ #define SCSI_START_STP	0x1B		/* Start/Stop Unit (O) */
+ #define SCSI_SYNC_CACHE	0x35		/* Synchronize Cache (O) */
+ #define SCSI_VERIFY		0x2F		/* Verify (O) */
+ #define SCSI_WRITE6		0x0A		/* Write 6-Byte (MANDATORY) */
+ #define SCSI_WRITE10	0x2A		/* Write 10-Byte (MANDATORY) */
++#define SCSI_WRITE16	0x8A		/* Write 16-byte */
+ #define SCSI_WRT_VERIFY	0x2E		/* Write and Verify (O) */
+ #define SCSI_WRITE_LONG	0x3F		/* Write Long (O) */
+ #define SCSI_WRITE_SAME	0x41		/* Write Same (O) */
+ #define SCSI_UNMAP	0x42		/* Write 10-Byte (MANDATORY) */
+ 
++#define SCSI_SAI_RD_CAPAC16	0x10	/* Service Action: Read Capacity (16) */
++
+ /**
+  * enum scsi_cmd_phase - current phase of the SCSI protocol
+  *

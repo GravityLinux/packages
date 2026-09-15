@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: MIT
+
+[Unit]
+Description=Set up swap on first boot
+ConditionVirtualization=no
+# We set up 8G of swap on 8G and 16G machines
+ConditionMemory=<=16G
+ConditionPathExists=!/var/swap/swapfile
+
+[Service]
+Type=oneshot
+TimeoutSec=0
+RemainAfterExit=yes
+ExecStart=/usr/libexec/gravity-remix-scripts/setup-swap.sh 8G
+
+[Install]
+WantedBy=multi-user.target

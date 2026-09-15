@@ -1,0 +1,470 @@
+From 3c9a9164b1da60e6f6bc9c8452ba49a75bcf6504 Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Thu, 18 May 2023 23:07:18 +0900
+Subject: [PATCH 1/1] usb: Pass through timeout to drivers
+
+The old USB code was interrupt-driven and just polled at the top level.
+This has been obsolete since interrupts were removed, which means the
+timeout support has been completely broken.
+
+Rip out the top-level polling and just pass through the timeout
+parameter to host controller drivers. Right now this is ignored in the
+individual drivers.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ common/usb.c                        | 21 ++-------------------
+ drivers/usb/emul/sandbox_flash.c    |  5 +++--
+ drivers/usb/emul/sandbox_hub.c      |  2 +-
+ drivers/usb/emul/sandbox_keyb.c     |  2 +-
+ drivers/usb/emul/usb-emul-uclass.c  | 10 +++++-----
+ drivers/usb/host/dwc2.c             |  5 +++--
+ drivers/usb/host/ehci-hcd.c         |  5 +++--
+ drivers/usb/host/ohci-hcd.c         |  5 +++--
+ drivers/usb/host/r8a66597-hcd.c     |  5 +++--
+ drivers/usb/host/usb-sandbox.c      | 10 ++++++----
+ drivers/usb/host/usb-uclass.c       |  9 +++++----
+ drivers/usb/host/xhci.c             |  5 +++--
+ drivers/usb/isp1760/isp1760-uboot.c |  6 ++++--
+ drivers/usb/musb-new/musb_uboot.c   |  5 +++--
+ include/usb.h                       | 14 ++++++++------
+ 15 files changed, 53 insertions(+), 56 deletions(-)
+
+diff --git a/common/usb.c b/common/usb.c
+index 6a4ad346f4b..b9ecf2a3353 100644
+--- a/common/usb.c
++++ b/common/usb.c
+@@ -242,22 +242,10 @@ int usb_control_msg(struct usb_device *dev, unsigned int pipe,
+ 	      request, requesttype, value, index, size);
+ 	dev->status = USB_ST_NOT_PROC; /*not yet processed */
+ 
+-	err = submit_control_msg(dev, pipe, data, size, setup_packet);
++	err = submit_control_msg(dev, pipe, data, size, setup_packet, timeout);
+ 	if (err < 0)
+ 		return err;
+-	if (timeout == 0)
+-		return (int)size;
+ 
+-	/*
+-	 * Wait for status to update until timeout expires, USB driver
+-	 * interrupt handler may set the status when the USB operation has
+-	 * been completed.
+-	 */
+-	while (timeout--) {
+-		if (!((volatile unsigned long)dev->status & USB_ST_NOT_PROC))
+-			break;
+-		mdelay(1);
+-	}
+ 
+ 	if (timeout == 0)
+ 		return -ETIMEDOUT;
+@@ -279,13 +267,8 @@ int usb_bulk_msg(struct usb_device *dev, unsigned int pipe,
+ 	if (len < 0)
+ 		return -EINVAL;
+ 	dev->status = USB_ST_NOT_PROC; /*not yet processed */
+-	if (submit_bulk_msg(dev, pipe, data, len) < 0)
++	if (submit_bulk_msg(dev, pipe, data, len, timeout) < 0)
+ 		return -EIO;
+-	while (timeout--) {
+-		if (!((volatile unsigned long)dev->status & USB_ST_NOT_PROC))
+-			break;
+-		mdelay(1);
+-	}
+ 	*actual_length = dev->act_len;
+ 	if (dev->status == 0)
+ 		return 0;
+diff --git a/drivers/usb/emul/sandbox_flash.c b/drivers/usb/emul/sandbox_flash.c
+index b5176bb30ce..485133b0213 100644
+--- a/drivers/usb/emul/sandbox_flash.c
++++ b/drivers/usb/emul/sandbox_flash.c
+@@ -132,7 +132,7 @@ static void *flash_desc_list[] = {
+ 
+ static int sandbox_flash_control(struct udevice *dev, struct usb_device *udev,
+ 				 unsigned long pipe, void *buff, int len,
+-				 struct devrequest *setup)
++				 struct devrequest *setup, int timeout)
+ {
+ 	struct sandbox_flash_priv *priv = dev_get_priv(dev);
+ 
+@@ -208,7 +208,8 @@ static int handle_ufi_command(struct sandbox_flash_priv *priv, const void *buff,
+ }
+ 
+ static int sandbox_flash_bulk(struct udevice *dev, struct usb_device *udev,
+-			      unsigned long pipe, void *buff, int len)
++			      unsigned long pipe, void *buff, int len,
++			      int timeout)
+ {
+ 	struct sandbox_flash_priv *priv = dev_get_priv(dev);
+ 	struct scsi_emul_info *info = &priv->eminfo;
+diff --git a/drivers/usb/emul/sandbox_hub.c b/drivers/usb/emul/sandbox_hub.c
+index 3b3e59f978f..9a46944e071 100644
+--- a/drivers/usb/emul/sandbox_hub.c
++++ b/drivers/usb/emul/sandbox_hub.c
+@@ -202,7 +202,7 @@ static int sandbox_hub_submit_control_msg(struct udevice *bus,
+ 					  struct usb_device *udev,
+ 					  unsigned long pipe,
+ 					  void *buffer, int length,
+-					  struct devrequest *setup)
++					  struct devrequest *setup, int timeout)
+ {
+ 	struct sandbox_hub_priv *priv = dev_get_priv(bus);
+ 	int ret = 0;
+diff --git a/drivers/usb/emul/sandbox_keyb.c b/drivers/usb/emul/sandbox_keyb.c
+index 5ed8c2c799a..e03ca231055 100644
+--- a/drivers/usb/emul/sandbox_keyb.c
++++ b/drivers/usb/emul/sandbox_keyb.c
+@@ -176,7 +176,7 @@ int sandbox_usb_keyb_add_string(struct udevice *dev,
+ 
+ static int sandbox_keyb_control(struct udevice *dev, struct usb_device *udev,
+ 				unsigned long pipe, void *buff, int len,
+-				struct devrequest *setup)
++				struct devrequest *setup, int timeout)
+ {
+ 	debug("pipe=%lx\n", pipe);
+ 
+diff --git a/drivers/usb/emul/usb-emul-uclass.c b/drivers/usb/emul/usb-emul-uclass.c
+index cdc18d6cbb9..f24facfc30c 100644
+--- a/drivers/usb/emul/usb-emul-uclass.c
++++ b/drivers/usb/emul/usb-emul-uclass.c
+@@ -176,7 +176,7 @@ int usb_emul_find_for_dev(struct udevice *dev, struct udevice **emulp)
+ 
+ int usb_emul_control(struct udevice *emul, struct usb_device *udev,
+ 		     unsigned long pipe, void *buffer, int length,
+-		     struct devrequest *setup)
++		     struct devrequest *setup, int timeout)
+ {
+ 	struct dm_usb_ops *ops = usb_get_emul_ops(emul);
+ 	struct usb_dev_plat *plat;
+@@ -198,7 +198,7 @@ int usb_emul_control(struct udevice *emul, struct usb_device *udev,
+ 			if (ret)
+ 				return ret;
+ 			return ops->control(emul, udev, pipe, buffer, length,
+-					    setup);
++					    setup, timeout);
+ 		}
+ 	} else if (pipe == usb_snddefctrl(udev)) {
+ 		switch (setup->request) {
+@@ -221,7 +221,7 @@ int usb_emul_control(struct udevice *emul, struct usb_device *udev,
+ 			if (ret)
+ 				return ret;
+ 			return ops->control(emul, udev, pipe, buffer, length,
+-					    setup);
++					    setup, timeout);
+ 		}
+ 	}
+ 	debug("pipe=%lx\n", pipe);
+@@ -230,7 +230,7 @@ int usb_emul_control(struct udevice *emul, struct usb_device *udev,
+ }
+ 
+ int usb_emul_bulk(struct udevice *emul, struct usb_device *udev,
+-		  unsigned long pipe, void *buffer, int length)
++		  unsigned long pipe, void *buffer, int length, int timeout)
+ {
+ 	struct dm_usb_ops *ops = usb_get_emul_ops(emul);
+ 	int ret;
+@@ -242,7 +242,7 @@ int usb_emul_bulk(struct udevice *emul, struct usb_device *udev,
+ 	ret = device_probe(emul);
+ 	if (ret)
+ 		return ret;
+-	return ops->bulk(emul, udev, pipe, buffer, length);
++	return ops->bulk(emul, udev, pipe, buffer, length, timeout);
+ }
+ 
+ int usb_emul_int(struct udevice *emul, struct usb_device *udev,
+diff --git a/drivers/usb/host/dwc2.c b/drivers/usb/host/dwc2.c
+index 16f21fa9083..85b54313438 100644
+--- a/drivers/usb/host/dwc2.c
++++ b/drivers/usb/host/dwc2.c
+@@ -1196,7 +1196,7 @@ int usb_lowlevel_stop(int index)
+ #if CONFIG_IS_ENABLED(DM_USB)
+ static int dwc2_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ 				   unsigned long pipe, void *buffer, int length,
+-				   struct devrequest *setup)
++				   struct devrequest *setup, int timeout)
+ {
+ 	struct dwc2_priv *priv = dev_get_priv(dev);
+ 
+@@ -1207,7 +1207,8 @@ static int dwc2_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ }
+ 
+ static int dwc2_submit_bulk_msg(struct udevice *dev, struct usb_device *udev,
+-				unsigned long pipe, void *buffer, int length)
++				unsigned long pipe, void *buffer, int length,
++				int timeout)
+ {
+ 	struct dwc2_priv *priv = dev_get_priv(dev);
+ 
+diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+index 7d5519c65a9..0674d49aa1c 100644
+--- a/drivers/usb/host/ehci-hcd.c
++++ b/drivers/usb/host/ehci-hcd.c
+@@ -1626,7 +1626,7 @@ int usb_lock_async(struct usb_device *dev, int lock)
+ #if CONFIG_IS_ENABLED(DM_USB)
+ static int ehci_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ 				   unsigned long pipe, void *buffer, int length,
+-				   struct devrequest *setup)
++				   struct devrequest *setup, int timeout)
+ {
+ 	debug("%s: dev='%s', udev=%p, udev->dev='%s', portnr=%d\n", __func__,
+ 	      dev->name, udev, udev->dev->name, udev->portnr);
+@@ -1635,7 +1635,8 @@ static int ehci_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ }
+ 
+ static int ehci_submit_bulk_msg(struct udevice *dev, struct usb_device *udev,
+-				unsigned long pipe, void *buffer, int length)
++				unsigned long pipe, void *buffer, int length,
++				int timeout)
+ {
+ 	debug("%s: dev='%s', udev=%p\n", __func__, dev->name, udev);
+ 	return _ehci_submit_bulk_msg(udev, pipe, buffer, length);
+diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+index 1d6711ccec4..b435e8887d7 100644
+--- a/drivers/usb/host/ohci-hcd.c
++++ b/drivers/usb/host/ohci-hcd.c
+@@ -2050,7 +2050,7 @@ int submit_control_msg(struct usb_device *dev, unsigned long pipe,
+ #if CONFIG_IS_ENABLED(DM_USB)
+ static int ohci_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ 				   unsigned long pipe, void *buffer, int length,
+-				   struct devrequest *setup)
++				   struct devrequest *setup, int timeout)
+ {
+ 	ohci_t *ohci = dev_get_priv(usb_get_bus(dev));
+ 
+@@ -2059,7 +2059,8 @@ static int ohci_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ }
+ 
+ static int ohci_submit_bulk_msg(struct udevice *dev, struct usb_device *udev,
+-				unsigned long pipe, void *buffer, int length)
++				unsigned long pipe, void *buffer, int length,
++				int timeout)
+ {
+ 	ohci_t *ohci = dev_get_priv(usb_get_bus(dev));
+ 
+diff --git a/drivers/usb/host/r8a66597-hcd.c b/drivers/usb/host/r8a66597-hcd.c
+index f0b18bffba4..45b08317972 100644
+--- a/drivers/usb/host/r8a66597-hcd.c
++++ b/drivers/usb/host/r8a66597-hcd.c
+@@ -704,7 +704,8 @@ static int r8a66597_submit_rh_msg(struct udevice *udev, struct usb_device *dev,
+ static int r8a66597_submit_control_msg(struct udevice *udev,
+ 				       struct usb_device *dev,
+ 				       unsigned long pipe, void *buffer,
+-				       int length, struct devrequest *setup)
++				       int length, struct devrequest *setup,
++				       int timeout)
+ {
+ 	struct r8a66597 *r8a66597 = dev_get_priv(udev);
+ 	u16 r8a66597_address = setup->request == USB_REQ_SET_ADDRESS ?
+@@ -742,7 +743,7 @@ static int r8a66597_submit_control_msg(struct udevice *udev,
+ 
+ static int r8a66597_submit_bulk_msg(struct udevice *udev,
+ 				    struct usb_device *dev, unsigned long pipe,
+-				    void *buffer, int length)
++				    void *buffer, int length, int timeout)
+ {
+ 	struct r8a66597 *r8a66597 = dev_get_priv(udev);
+ 	int ret = 0;
+diff --git a/drivers/usb/host/usb-sandbox.c b/drivers/usb/host/usb-sandbox.c
+index f687fe2c430..e9e2a9ed674 100644
+--- a/drivers/usb/host/usb-sandbox.c
++++ b/drivers/usb/host/usb-sandbox.c
+@@ -46,7 +46,8 @@ static int sandbox_submit_control(struct udevice *bus,
+ 				      struct usb_device *udev,
+ 				      unsigned long pipe,
+ 				      void *buffer, int length,
+-				      struct devrequest *setup)
++				      struct devrequest *setup,
++				      int timeout)
+ {
+ 	struct sandbox_usb_ctrl *ctrl = dev_get_priv(bus);
+ 	struct udevice *emul;
+@@ -66,7 +67,7 @@ static int sandbox_submit_control(struct udevice *bus,
+ 		}
+ 	}
+ 
+-	ret = usb_emul_control(emul, udev, pipe, buffer, length, setup);
++	ret = usb_emul_control(emul, udev, pipe, buffer, length, setup, timeout);
+ 	if (ret < 0) {
+ 		debug("ret=%d\n", ret);
+ 		udev->status = ret;
+@@ -80,7 +81,8 @@ static int sandbox_submit_control(struct udevice *bus,
+ }
+ 
+ static int sandbox_submit_bulk(struct udevice *bus, struct usb_device *udev,
+-			       unsigned long pipe, void *buffer, int length)
++			       unsigned long pipe, void *buffer, int length,
++			       int timeout)
+ {
+ 	struct udevice *emul;
+ 	int ret;
+@@ -91,7 +93,7 @@ static int sandbox_submit_bulk(struct udevice *bus, struct usb_device *udev,
+ 	usbmon_trace(bus, pipe, NULL, emul);
+ 	if (ret)
+ 		return ret;
+-	ret = usb_emul_bulk(emul, udev, pipe, buffer, length);
++	ret = usb_emul_bulk(emul, udev, pipe, buffer, length, timeout);
+ 	if (ret < 0) {
+ 		debug("ret=%d\n", ret);
+ 		udev->status = ret;
+diff --git a/drivers/usb/host/usb-uclass.c b/drivers/usb/host/usb-uclass.c
+index 1c74d6fd39a..c42f2987ee8 100644
+--- a/drivers/usb/host/usb-uclass.c
++++ b/drivers/usb/host/usb-uclass.c
+@@ -59,7 +59,8 @@ int submit_int_msg(struct usb_device *udev, unsigned long pipe, void *buffer,
+ }
+ 
+ int submit_control_msg(struct usb_device *udev, unsigned long pipe,
+-		       void *buffer, int length, struct devrequest *setup)
++		       void *buffer, int length, struct devrequest *setup,
++		       int timeout)
+ {
+ 	struct udevice *bus = udev->controller_dev;
+ 	struct dm_usb_ops *ops = usb_get_ops(bus);
+@@ -69,7 +70,7 @@ int submit_control_msg(struct usb_device *udev, unsigned long pipe,
+ 	if (!ops->control)
+ 		return -ENOSYS;
+ 
+-	err = ops->control(bus, udev, pipe, buffer, length, setup);
++	err = ops->control(bus, udev, pipe, buffer, length, setup, timeout);
+ 	if (setup->request == USB_REQ_SET_FEATURE &&
+ 	    setup->requesttype == USB_RT_PORT &&
+ 	    setup->value == cpu_to_le16(USB_PORT_FEAT_RESET) &&
+@@ -82,7 +83,7 @@ int submit_control_msg(struct usb_device *udev, unsigned long pipe,
+ }
+ 
+ int submit_bulk_msg(struct usb_device *udev, unsigned long pipe, void *buffer,
+-		    int length)
++		    int length, int timeout)
+ {
+ 	struct udevice *bus = udev->controller_dev;
+ 	struct dm_usb_ops *ops = usb_get_ops(bus);
+@@ -90,7 +91,7 @@ int submit_bulk_msg(struct usb_device *udev, unsigned long pipe, void *buffer,
+ 	if (!ops->bulk)
+ 		return -ENOSYS;
+ 
+-	return ops->bulk(bus, udev, pipe, buffer, length);
++	return ops->bulk(bus, udev, pipe, buffer, length, timeout);
+ }
+ 
+ struct int_queue *create_int_queue(struct usb_device *udev,
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index c3986dac3e8..957b483849e 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1295,7 +1295,7 @@ static int xhci_lowlevel_stop(struct xhci_ctrl *ctrl)
+ 
+ static int xhci_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ 				   unsigned long pipe, void *buffer, int length,
+-				   struct devrequest *setup)
++				   struct devrequest *setup, int timeout)
+ {
+ 	struct usb_device *uhop;
+ 	struct udevice *hub;
+@@ -1327,7 +1327,8 @@ static int xhci_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ }
+ 
+ static int xhci_submit_bulk_msg(struct udevice *dev, struct usb_device *udev,
+-				unsigned long pipe, void *buffer, int length)
++				unsigned long pipe, void *buffer, int length,
++				int timeout)
+ {
+ 	debug("%s: dev='%s', udev=%p\n", __func__, dev->name, udev);
+ 	return _xhci_submit_bulk_msg(udev, pipe, buffer, length);
+diff --git a/drivers/usb/isp1760/isp1760-uboot.c b/drivers/usb/isp1760/isp1760-uboot.c
+index 8dcb7768a2c..f36e5027fcc 100644
+--- a/drivers/usb/isp1760/isp1760-uboot.c
++++ b/drivers/usb/isp1760/isp1760-uboot.c
+@@ -27,7 +27,8 @@
+ static int isp1760_msg_submit_control(struct udevice *dev,
+ 				      struct usb_device *udev,
+ 				      unsigned long pipe, void *buffer,
+-				      int length, struct devrequest *setup)
++				      int length, struct devrequest *setup,
++				      int timeout)
+ {
+ 	struct isp1760_host_data *host = dev_get_priv(dev);
+ 
+@@ -37,7 +38,8 @@ static int isp1760_msg_submit_control(struct udevice *dev,
+ }
+ 
+ static int isp1760_msg_submit_bulk(struct udevice *dev, struct usb_device *udev,
+-				   unsigned long pipe, void *buffer, int length)
++				   unsigned long pipe, void *buffer, int length,
++				   int timeout)
+ {
+ 	struct isp1760_host_data *host = dev_get_priv(dev);
+ 
+diff --git a/drivers/usb/musb-new/musb_uboot.c b/drivers/usb/musb-new/musb_uboot.c
+index 43ab3245e5c..37600256e70 100644
+--- a/drivers/usb/musb-new/musb_uboot.c
++++ b/drivers/usb/musb-new/musb_uboot.c
+@@ -309,14 +309,15 @@ int usb_lowlevel_init(int index, enum usb_init_type init, void **controller)
+ #if CONFIG_IS_ENABLED(DM_USB)
+ static int musb_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ 				   unsigned long pipe, void *buffer, int length,
+-				   struct devrequest *setup)
++				   struct devrequest *setup, int timeout)
+ {
+ 	struct musb_host_data *host = dev_get_priv(dev);
+ 	return _musb_submit_control_msg(host, udev, pipe, buffer, length, setup);
+ }
+ 
+ static int musb_submit_bulk_msg(struct udevice *dev, struct usb_device *udev,
+-				unsigned long pipe, void *buffer, int length)
++				unsigned long pipe, void *buffer, int length,
++				int timeout)
+ {
+ 	struct musb_host_data *host = dev_get_priv(dev);
+ 	return _musb_submit_bulk_msg(host, udev, pipe, buffer, length);
+diff --git a/include/usb.h b/include/usb.h
+index dab23753f0c..4a14e87ff1e 100644
+--- a/include/usb.h
++++ b/include/usb.h
+@@ -190,9 +190,10 @@ int usb_reset_root_port(struct usb_device *dev);
+ #endif
+ 
+ int submit_bulk_msg(struct usb_device *dev, unsigned long pipe,
+-			void *buffer, int transfer_len);
++			void *buffer, int transfer_len, int timeout);
+ int submit_control_msg(struct usb_device *dev, unsigned long pipe, void *buffer,
+-			int transfer_len, struct devrequest *setup);
++			int transfer_len, struct devrequest *setup,
++			int timeout);
+ int submit_int_msg(struct usb_device *dev, unsigned long pipe, void *buffer,
+ 			int transfer_len, int interval, bool nonblock);
+ 
+@@ -696,14 +697,15 @@ struct dm_usb_ops {
+ 	 */
+ 	int (*control)(struct udevice *bus, struct usb_device *udev,
+ 		       unsigned long pipe, void *buffer, int length,
+-		       struct devrequest *setup);
++		       struct devrequest *setup, int timeout);
+ 	/**
+ 	 * bulk() - Send a bulk message
+ 	 *
+ 	 * Parameters are as above.
+ 	 */
+ 	int (*bulk)(struct udevice *bus, struct usb_device *udev,
+-		    unsigned long pipe, void *buffer, int length);
++		    unsigned long pipe, void *buffer, int length,
++		    int timeout);
+ 	/**
+ 	 * interrupt() - Send an interrupt message
+ 	 *
+@@ -1016,7 +1018,7 @@ int usb_emul_setup_device(struct udevice *dev, struct usb_string *strings,
+  */
+ int usb_emul_control(struct udevice *emul, struct usb_device *udev,
+ 		     unsigned long pipe, void *buffer, int length,
+-		     struct devrequest *setup);
++		     struct devrequest *setup, int timeout);
+ 
+ /**
+  * usb_emul_bulk() - Send a bulk packet to an emulator
+@@ -1027,7 +1029,7 @@ int usb_emul_control(struct udevice *emul, struct usb_device *udev,
+  * Return: 0 if OK, -ve on error
+  */
+ int usb_emul_bulk(struct udevice *emul, struct usb_device *udev,
+-		  unsigned long pipe, void *buffer, int length);
++		  unsigned long pipe, void *buffer, int length, int timeout);
+ 
+ /**
+  * usb_emul_int() - Send an interrupt packet to an emulator

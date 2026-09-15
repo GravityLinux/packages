@@ -1,0 +1,283 @@
+From 50669696be033e8c76f78e182a14e9cadd08387f Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Thu, 18 May 2023 23:18:08 +0900
+Subject: [PATCH 1/1] usb: xhci: Hook up timeouts
+
+Now that the USB core passes through timeout info to the host
+controller, actually hook it up.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/usb/host/xhci-ring.c | 32 ++++++++++++++++++++------------
+ drivers/usb/host/xhci.c      | 23 +++++++++++++----------
+ include/usb/xhci.h           | 14 ++++++++++----
+ 3 files changed, 43 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 55f69c89c8c..d4cd12401d9 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -463,11 +463,16 @@ static int event_ready(struct xhci_ctrl *ctrl)
+  * @param expected	TRB type expected from Event TRB
+  * Return: pointer to event trb
+  */
+-union xhci_trb *xhci_wait_for_event(struct xhci_ctrl *ctrl, trb_type expected)
++union xhci_trb *xhci_wait_for_event(struct xhci_ctrl *ctrl, trb_type expected,
++				    int timeout)
+ {
+ 	trb_type type;
+ 	unsigned long ts = get_timer(0);
+ 
++	/* Fallback in case someone passes in 0 */
++	if (!timeout)
++		timeout = XHCI_TIMEOUT;
++
+ 	do {
+ 		union xhci_trb *event = ctrl->event_ring->dequeue;
+ 
+@@ -504,7 +509,7 @@ union xhci_trb *xhci_wait_for_event(struct xhci_ctrl *ctrl, trb_type expected)
+ 				le32_to_cpu(event->generic.field[3]));
+ 
+ 		xhci_acknowledge_event(ctrl);
+-	} while (get_timer(ts) < XHCI_TIMEOUT);
++	} while (get_timer(ts) < timeout);
+ 
+ 	if (expected == TRB_TRANSFER)
+ 		return NULL;
+@@ -528,7 +533,7 @@ static void reset_ep(struct usb_device *udev, int ep_index)
+ 
+ 	printf("Resetting EP %d...\n", ep_index);
+ 	xhci_queue_command(ctrl, 0, udev->slot_id, ep_index, TRB_RESET_EP);
+-	event = xhci_wait_for_event(ctrl, TRB_COMPLETION);
++	event = xhci_wait_for_event(ctrl, TRB_COMPLETION, XHCI_SYS_TIMEOUT);
+ 	if (!event)
+ 		return;
+ 
+@@ -538,7 +543,7 @@ static void reset_ep(struct usb_device *udev, int ep_index)
+ 	addr = xhci_trb_virt_to_dma(ring->enq_seg, ring->enqueue) |
+ 		ring->cycle_state;
+ 	xhci_queue_command(ctrl, addr, udev->slot_id, ep_index, TRB_SET_DEQ);
+-	event = xhci_wait_for_event(ctrl, TRB_COMPLETION);
++	event = xhci_wait_for_event(ctrl, TRB_COMPLETION, XHCI_SYS_TIMEOUT);
+ 	if (!event)
+ 		return;
+ 
+@@ -567,7 +572,7 @@ static void abort_td(struct usb_device *udev, int ep_index)
+ 
+ 	xhci_queue_command(ctrl, 0, udev->slot_id, ep_index, TRB_STOP_RING);
+ 
+-	event = xhci_wait_for_event(ctrl, TRB_NONE);
++	event = xhci_wait_for_event(ctrl, TRB_NONE, XHCI_SYS_TIMEOUT);
+ 	if (!event)
+ 		return;
+ 
+@@ -579,7 +584,8 @@ static void abort_td(struct usb_device *udev, int ep_index)
+ 		BUG_ON(GET_COMP_CODE(le32_to_cpu(event->trans_event.transfer_len != COMP_STOP)));
+ 		xhci_acknowledge_event(ctrl);
+ 
+-		event = xhci_wait_for_event(ctrl, TRB_COMPLETION);
++		event = xhci_wait_for_event(ctrl, TRB_COMPLETION,
++					    XHCI_SYS_TIMEOUT);
+ 		if (!event)
+ 			return;
+ 		type = TRB_FIELD_TO_TYPE(le32_to_cpu(event->event_cmd.flags));
+@@ -596,7 +602,7 @@ static void abort_td(struct usb_device *udev, int ep_index)
+ 	addr = xhci_trb_virt_to_dma(ring->enq_seg, ring->enqueue) |
+ 		ring->cycle_state;
+ 	xhci_queue_command(ctrl, addr, udev->slot_id, ep_index, TRB_SET_DEQ);
+-	event = xhci_wait_for_event(ctrl, TRB_COMPLETION);
++	event = xhci_wait_for_event(ctrl, TRB_COMPLETION, XHCI_SYS_TIMEOUT);
+ 	if (!event)
+ 		return;
+ 
+@@ -651,10 +657,11 @@ static void record_transfer_result(struct usb_device *udev,
+  * @param pipe		contains the DIR_IN or OUT , devnum
+  * @param length	length of the buffer
+  * @param buffer	buffer to be read/written based on the request
++ * @param timeout	timeout in milliseconds
+  * Return: returns 0 if successful else -1 on failure
+  */
+ int xhci_bulk_tx(struct usb_device *udev, unsigned long pipe,
+-			int length, void *buffer)
++			int length, void *buffer, int timeout)
+ {
+ 	int num_trbs = 0;
+ 	struct xhci_generic_trb *start_trb;
+@@ -824,7 +831,7 @@ int xhci_bulk_tx(struct usb_device *udev, unsigned long pipe,
+ 	giveback_first_trb(udev, ep_index, start_cycle, start_trb);
+ 
+ again:
+-	event = xhci_wait_for_event(ctrl, TRB_TRANSFER);
++	event = xhci_wait_for_event(ctrl, TRB_TRANSFER, timeout);
+ 	if (!event) {
+ 		debug("XHCI bulk transfer timed out, aborting...\n");
+ 		abort_td(udev, ep_index);
+@@ -861,11 +868,12 @@ again:
+  * @param req		request type
+  * @param length	length of the buffer
+  * @param buffer	buffer to be read/written based on the request
++ * @param timeout	timeout in milliseconds
+  * Return: returns 0 if successful else error code on failure
+  */
+ int xhci_ctrl_tx(struct usb_device *udev, unsigned long pipe,
+ 			struct devrequest *req,	int length,
+-			void *buffer)
++			void *buffer, int timeout)
+ {
+ 	int ret;
+ 	int start_cycle;
+@@ -1028,7 +1036,7 @@ int xhci_ctrl_tx(struct usb_device *udev, unsigned long pipe,
+ 
+ 	giveback_first_trb(udev, ep_index, start_cycle, start_trb);
+ 
+-	event = xhci_wait_for_event(ctrl, TRB_TRANSFER);
++	event = xhci_wait_for_event(ctrl, TRB_TRANSFER, timeout);
+ 	if (!event)
+ 		goto abort;
+ 	field = le32_to_cpu(event->trans_event.flags);
+@@ -1053,7 +1061,7 @@ int xhci_ctrl_tx(struct usb_device *udev, unsigned long pipe,
+ 	if (GET_COMP_CODE(le32_to_cpu(event->trans_event.transfer_len))
+ 			== COMP_SHORT_TX) {
+ 		/* Short data stage, clear up additional status stage event */
+-		event = xhci_wait_for_event(ctrl, TRB_TRANSFER);
++		event = xhci_wait_for_event(ctrl, TRB_TRANSFER, XHCI_SYS_TIMEOUT);
+ 		if (!event)
+ 			goto abort;
+ 		BUG_ON(TRB_TO_SLOT_ID(field) != slot_id);
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 957b483849e..9dd8ca81ec8 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -449,7 +449,7 @@ static int xhci_configure_endpoints(struct usb_device *udev, bool ctx_change)
+ 	xhci_flush_cache((uintptr_t)in_ctx->bytes, in_ctx->size);
+ 	xhci_queue_command(ctrl, in_ctx->dma, udev->slot_id, 0,
+ 			   ctx_change ? TRB_EVAL_CONTEXT : TRB_CONFIG_EP);
+-	event = xhci_wait_for_event(ctrl, TRB_COMPLETION);
++	event = xhci_wait_for_event(ctrl, TRB_COMPLETION, XHCI_SYS_TIMEOUT);
+ 	if (!event)
+ 		return -ETIMEDOUT;
+ 
+@@ -682,7 +682,7 @@ static int xhci_address_device(struct usb_device *udev, int root_portnr)
+ 
+ 	xhci_queue_command(ctrl, virt_dev->in_ctx->dma,
+ 			   slot_id, 0, TRB_ADDR_DEV);
+-	event = xhci_wait_for_event(ctrl, TRB_COMPLETION);
++	event = xhci_wait_for_event(ctrl, TRB_COMPLETION, XHCI_SYS_TIMEOUT);
+ 	if (!event)
+ 		return -ETIMEDOUT;
+ 
+@@ -760,7 +760,7 @@ static int _xhci_alloc_device(struct usb_device *udev)
+ 	}
+ 
+ 	xhci_queue_command(ctrl, 0, 0, 0, TRB_ENABLE_SLOT);
+-	event = xhci_wait_for_event(ctrl, TRB_COMPLETION);
++	event = xhci_wait_for_event(ctrl, TRB_COMPLETION, XHCI_SYS_TIMEOUT);
+ 	if (!event)
+ 		return -ETIMEDOUT;
+ 
+@@ -1158,7 +1158,7 @@ static int _xhci_submit_int_msg(struct usb_device *udev, unsigned long pipe,
+ 	 * (at most) one TD. A TD (comprised of sg list entries) can
+ 	 * take several service intervals to transmit.
+ 	 */
+-	return xhci_bulk_tx(udev, pipe, length, buffer);
++	return xhci_bulk_tx(udev, pipe, length, buffer, XHCI_INT_TIMEOUT);
+ }
+ 
+ /**
+@@ -1168,17 +1168,18 @@ static int _xhci_submit_int_msg(struct usb_device *udev, unsigned long pipe,
+  * @param pipe		contains the DIR_IN or OUT , devnum
+  * @param buffer	buffer to be read/written based on the request
+  * @param length	length of the buffer
++ * @param timeout	timeout in milliseconds
+  * Return: returns 0 if successful else -1 on failure
+  */
+ static int _xhci_submit_bulk_msg(struct usb_device *udev, unsigned long pipe,
+-				 void *buffer, int length)
++				 void *buffer, int length, int timeout)
+ {
+ 	if (usb_pipetype(pipe) != PIPE_BULK) {
+ 		printf("non-bulk pipe (type=%lu)", usb_pipetype(pipe));
+ 		return -EINVAL;
+ 	}
+ 
+-	return xhci_bulk_tx(udev, pipe, length, buffer);
++	return xhci_bulk_tx(udev, pipe, length, buffer, timeout);
+ }
+ 
+ /**
+@@ -1190,11 +1191,13 @@ static int _xhci_submit_bulk_msg(struct usb_device *udev, unsigned long pipe,
+  * @param length	length of the buffer
+  * @param setup		Request type
+  * @param root_portnr	Root port number that this device is on
++ * @param timeout	timeout in milliseconds
+  * Return: returns 0 if successful else -1 on failure
+  */
+ static int _xhci_submit_control_msg(struct usb_device *udev, unsigned long pipe,
+ 				    void *buffer, int length,
+-				    struct devrequest *setup, int root_portnr)
++				    struct devrequest *setup, int root_portnr,
++				    int timeout)
+ {
+ 	struct xhci_ctrl *ctrl = xhci_get_ctrl(udev);
+ 	int ret = 0;
+@@ -1220,7 +1223,7 @@ static int _xhci_submit_control_msg(struct usb_device *udev, unsigned long pipe,
+ 		}
+ 	}
+ 
+-	return xhci_ctrl_tx(udev, pipe, setup, length, buffer);
++	return xhci_ctrl_tx(udev, pipe, setup, length, buffer, timeout);
+ }
+ 
+ static int xhci_lowlevel_init(struct xhci_ctrl *ctrl)
+@@ -1323,7 +1326,7 @@ static int xhci_submit_control_msg(struct udevice *dev, struct usb_device *udev,
+ 			hop = hop->parent;
+ */
+ 	return _xhci_submit_control_msg(udev, pipe, buffer, length, setup,
+-					root_portnr);
++					root_portnr, timeout);
+ }
+ 
+ static int xhci_submit_bulk_msg(struct udevice *dev, struct usb_device *udev,
+@@ -1331,7 +1334,7 @@ static int xhci_submit_bulk_msg(struct udevice *dev, struct usb_device *udev,
+ 				int timeout)
+ {
+ 	debug("%s: dev='%s', udev=%p\n", __func__, dev->name, udev);
+-	return _xhci_submit_bulk_msg(udev, pipe, buffer, length);
++	return _xhci_submit_bulk_msg(udev, pipe, buffer, length, timeout);
+ }
+ 
+ static int xhci_submit_int_msg(struct udevice *dev, struct usb_device *udev,
+diff --git a/include/usb/xhci.h b/include/usb/xhci.h
+index 14de983b152..dfbb68757bd 100644
+--- a/include/usb/xhci.h
++++ b/include/usb/xhci.h
+@@ -27,7 +27,11 @@
+ #define MAX_EP_CTX_NUM		31
+ #define XHCI_ALIGNMENT		64
+ /* Generic timeout for XHCI events */
+-#define XHCI_TIMEOUT		5000
++#define XHCI_TIMEOUT		1000
++/* Timeout for interrupt messages */
++#define XHCI_INT_TIMEOUT	1000
++/* Timeout for system commands */
++#define XHCI_SYS_TIMEOUT	200
+ /* Max number of USB devices for any host controller - limit in section 6.1 */
+ #define MAX_HC_SLOTS            256
+ /* Section 5.3.3 - MaxPorts */
+@@ -1252,11 +1256,13 @@ void xhci_setup_addressable_virt_dev(struct xhci_ctrl *ctrl,
+ void xhci_queue_command(struct xhci_ctrl *ctrl, dma_addr_t addr,
+ 			u32 slot_id, u32 ep_index, trb_type cmd);
+ void xhci_acknowledge_event(struct xhci_ctrl *ctrl);
+-union xhci_trb *xhci_wait_for_event(struct xhci_ctrl *ctrl, trb_type expected);
++union xhci_trb *xhci_wait_for_event(struct xhci_ctrl *ctrl, trb_type expected,
++				    int timeout);
+ int xhci_bulk_tx(struct usb_device *udev, unsigned long pipe,
+-		 int length, void *buffer);
++		 int length, void *buffer, int timeout);
+ int xhci_ctrl_tx(struct usb_device *udev, unsigned long pipe,
+-		 struct devrequest *req, int length, void *buffer);
++		 struct devrequest *req, int length, void *buffer,
++		 int timeout);
+ int xhci_check_maxpacket(struct usb_device *udev);
+ void xhci_flush_cache(uintptr_t addr, u32 type_len);
+ void xhci_inval_cache(uintptr_t addr, u32 type_len);

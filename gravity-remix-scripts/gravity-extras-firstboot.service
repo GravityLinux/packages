@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: MIT
+
+[Unit]
+Description=Install extra packages for Gravity
+ConditionPathExistsGlob=/boot/efi/gravity/extras/*.rpm
+
+[Service]
+Type=oneshot
+TimeoutSec=0
+RemainAfterExit=yes
+ExecStart=/usr/libexec/gravity-remix-scripts/install-extras.sh
+
+[Install]
+WantedBy=multi-user.target

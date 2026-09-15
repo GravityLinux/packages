@@ -1,0 +1,54 @@
+From eacc5c5f848f7ba490e7f2127145543d62cd9f48 Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Thu, 18 May 2023 20:40:52 +0900
+Subject: [PATCH 1/1] usb: storage: Clear endpoint stalls properly
+
+I have no idea what usb_stor_BBB_clear_endpt_stall was intended to do,
+but it obviously can't work. When an endpoint stalls, the USB controller
+stops it and needs to be told to restart it, you can't just send a
+control message.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ common/usb_storage.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/common/usb_storage.c b/common/usb_storage.c
+index ac331f1c1b0..4f405775715 100644
+--- a/common/usb_storage.c
++++ b/common/usb_storage.c
+@@ -708,15 +708,6 @@ static int usb_stor_CBI_get_status(struct scsi_cmd *srb, struct us_data *us)
+ #define USB_TRANSPORT_UNKNOWN_RETRY 5
+ #define USB_TRANSPORT_NOT_READY_RETRY 10
+ 
+-/* clear a stall on an endpoint - special for BBB devices */
+-static int usb_stor_BBB_clear_endpt_stall(struct us_data *us, __u8 endpt)
+-{
+-	/* ENDPOINT_HALT = 0, so set value to 0 */
+-	return usb_control_msg(us->pusb_dev, usb_sndctrlpipe(us->pusb_dev, 0),
+-			       USB_REQ_CLEAR_FEATURE, USB_RECIP_ENDPOINT, 0,
+-			       endpt, NULL, 0, USB_CNTL_TIMEOUT * 5);
+-}
+-
+ static int usb_stor_BBB_transport(struct scsi_cmd *srb, struct us_data *us)
+ {
+ 	int result, retry;
+@@ -761,8 +752,7 @@ static int usb_stor_BBB_transport(struct scsi_cmd *srb, struct us_data *us)
+ 	if ((result < 0) && (us->pusb_dev->status & USB_ST_STALLED)) {
+ 		debug("DATA:stall\n");
+ 		/* clear the STALL on the endpoint */
+-		result = usb_stor_BBB_clear_endpt_stall(us,
+-					dir_in ? us->ep_in : us->ep_out);
++		result = usb_clear_halt(us->pusb_dev, pipe);
+ 		if (result >= 0)
+ 			/* continue on to STATUS phase */
+ 			goto st;
+@@ -791,7 +781,7 @@ again:
+ 	    (us->pusb_dev->status & USB_ST_STALLED)) {
+ 		debug("STATUS:stall\n");
+ 		/* clear the STALL on the endpoint */
+-		result = usb_stor_BBB_clear_endpt_stall(us, us->ep_in);
++		result = usb_clear_halt(us->pusb_dev, pipein);
+ 		if (result >= 0 && (retry++ < 1))
+ 			/* do a retry */
+ 			goto again;

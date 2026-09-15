@@ -1,0 +1,399 @@
+From 6835515ba36f290390bc92644e4c47df857a14b3 Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Sat, 30 Jul 2022 17:07:29 +0900
+Subject: [PATCH 1/1] input: apple: Split off report handling into a separate
+ file
+
+The MTP HID driver will reuse this code, so split it off into another
+file.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/input/Kconfig         |   5 ++
+ drivers/input/Makefile        |   1 +
+ drivers/input/apple_kbd.c     | 138 ++++++++++++++++++++++++++++++++++
+ drivers/input/apple_kbd.h     |  30 ++++++++
+ drivers/input/apple_spi_kbd.c | 137 ++-------------------------------
+ 5 files changed, 182 insertions(+), 129 deletions(-)
+ create mode 100644 drivers/input/apple_kbd.c
+ create mode 100644 drivers/input/apple_kbd.h
+
+diff --git a/drivers/input/Kconfig b/drivers/input/Kconfig
+index df8fbf1551d..59c1c662045 100644
+--- a/drivers/input/Kconfig
++++ b/drivers/input/Kconfig
+@@ -38,8 +38,13 @@ config TPL_DM_KEYBOARD
+ 	  includes methods to start/stop the device, check for available
+ 	  input and update LEDs if the keyboard has them.
+ 
++config APPLE_KEYB
++	bool
++	depends on DM_KEYBOARD
++
+ config APPLE_SPI_KEYB
+ 	bool "Enable Apple SPI keyboard support"
++	select APPLE_KEYB
+ 	depends on DM_KEYBOARD && DM_SPI
+ 	help
+ 	  This adds a driver for the keyboards found on various
+diff --git a/drivers/input/Makefile b/drivers/input/Makefile
+index 1303fcdb0b7..0465635c876 100644
+--- a/drivers/input/Makefile
++++ b/drivers/input/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_CPCAP_POWER_BUTTON) += cpcap_pwrbutton.o
+ 
+ ifndef CONFIG_XPL_BUILD
+ 
++obj-$(CONFIG_APPLE_KEYB) += apple_kbd.o
+ obj-$(CONFIG_APPLE_SPI_KEYB) += apple_spi_kbd.o
+ obj-$(CONFIG_I8042_KEYB) += i8042.o
+ obj-$(CONFIG_TEGRA_KEYBOARD) += input.o tegra-kbc.o
+diff --git a/drivers/input/apple_kbd.c b/drivers/input/apple_kbd.c
+new file mode 100644
+index 00000000000..71e242af719
+--- /dev/null
++++ b/drivers/input/apple_kbd.c
+@@ -0,0 +1,138 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (C) 2021 Mark Kettenis <kettenis@openbsd.org>
++ */
++
++#include <dm.h>
++#include <keyboard.h>
++#include <spi.h>
++#include <stdio_dev.h>
++#include <asm-generic/gpio.h>
++#include <linux/delay.h>
++#include <linux/input.h>
++#include "apple_kbd.h"
++
++/*
++ * The Apple keyboard controllers implement a protocol that
++ * closely resembles HID Keyboard Boot protocol.  The key codes are
++ * mapped according to the HID Keyboard/Keypad Usage Table.
++ */
++
++/* Modifier key bits */
++#define HID_MOD_LEFTCTRL	BIT(0)
++#define HID_MOD_LEFTSHIFT	BIT(1)
++#define HID_MOD_LEFTALT		BIT(2)
++#define HID_MOD_LEFTGUI		BIT(3)
++#define HID_MOD_RIGHTCTRL	BIT(4)
++#define HID_MOD_RIGHTSHIFT	BIT(5)
++#define HID_MOD_RIGHTALT	BIT(6)
++#define HID_MOD_RIGHTGUI	BIT(7)
++
++static const u8 hid_kbd_keymap[] = {
++	KEY_RESERVED, 0xff, 0xff, 0xff,
++	KEY_A, KEY_B, KEY_C, KEY_D,
++	KEY_E, KEY_F, KEY_G, KEY_H,
++	KEY_I, KEY_J, KEY_K, KEY_L,
++	KEY_M, KEY_N, KEY_O, KEY_P,
++	KEY_Q, KEY_R, KEY_S, KEY_T,
++	KEY_U, KEY_V, KEY_W, KEY_X,
++	KEY_Y, KEY_Z, KEY_1, KEY_2,
++	KEY_3, KEY_4, KEY_5, KEY_6,
++	KEY_7, KEY_8, KEY_9, KEY_0,
++	KEY_ENTER, KEY_ESC, KEY_BACKSPACE, KEY_TAB,
++	KEY_SPACE, KEY_MINUS, KEY_EQUAL, KEY_LEFTBRACE,
++	KEY_RIGHTBRACE, KEY_BACKSLASH, 0xff, KEY_SEMICOLON,
++	KEY_APOSTROPHE, KEY_GRAVE, KEY_COMMA, KEY_DOT,
++	KEY_SLASH, KEY_CAPSLOCK, KEY_F1, KEY_F2,
++	KEY_F3, KEY_F4, KEY_F5, KEY_F6,
++	KEY_F7, KEY_F8, KEY_F9, KEY_F10,
++	KEY_F11, KEY_F12, KEY_SYSRQ, KEY_SCROLLLOCK,
++	KEY_PAUSE, KEY_INSERT, KEY_HOME, KEY_PAGEUP,
++	KEY_DELETE, KEY_END, KEY_PAGEDOWN, KEY_RIGHT,
++	KEY_LEFT, KEY_DOWN, KEY_UP, KEY_NUMLOCK,
++	KEY_KPSLASH, KEY_KPASTERISK, KEY_KPMINUS, KEY_KPPLUS,
++	KEY_KPENTER, KEY_KP1, KEY_KP2, KEY_KP3,
++	KEY_KP4, KEY_KP5, KEY_KP6, KEY_KP7,
++	KEY_KP8, KEY_KP9, KEY_KP0, KEY_KPDOT,
++	KEY_BACKSLASH, KEY_COMPOSE, KEY_POWER, KEY_KPEQUAL,
++};
++
++/* Report ID used for keyboard input reports. */
++#define KBD_REPORTID	0x01
++
++static void apple_kbd_service_modifiers(struct input_config *input,
++					struct apple_kbd_priv *priv)
++{
++	u8 new = priv->new.modifiers;
++	u8 old = priv->old.modifiers;
++
++	if ((new ^ old) & HID_MOD_LEFTCTRL)
++		input_add_keycode(input, KEY_LEFTCTRL,
++				  old & HID_MOD_LEFTCTRL);
++	if ((new ^ old) & HID_MOD_RIGHTCTRL)
++		input_add_keycode(input, KEY_RIGHTCTRL,
++				  old & HID_MOD_RIGHTCTRL);
++	if ((new ^ old) & HID_MOD_LEFTSHIFT)
++		input_add_keycode(input, KEY_LEFTSHIFT,
++				  old & HID_MOD_LEFTSHIFT);
++	if ((new ^ old) & HID_MOD_RIGHTSHIFT)
++		input_add_keycode(input, KEY_RIGHTSHIFT,
++				  old & HID_MOD_RIGHTSHIFT);
++	if ((new ^ old) & HID_MOD_LEFTALT)
++		input_add_keycode(input, KEY_LEFTALT,
++				  old & HID_MOD_LEFTALT);
++	if ((new ^ old) & HID_MOD_RIGHTALT)
++		input_add_keycode(input, KEY_RIGHTALT,
++				  old & HID_MOD_RIGHTALT);
++	if ((new ^ old) & HID_MOD_LEFTGUI)
++		input_add_keycode(input, KEY_LEFTMETA,
++				  old & HID_MOD_LEFTGUI);
++	if ((new ^ old) & HID_MOD_RIGHTGUI)
++		input_add_keycode(input, KEY_RIGHTMETA,
++				  old & HID_MOD_RIGHTGUI);
++}
++
++static void apple_kbd_service_key(struct input_config *input,
++				  struct apple_kbd_priv *priv,
++				  int i, int released)
++{
++	u8 *new;
++	u8 *old;
++
++	if (released) {
++		new = priv->new.keycode;
++		old = priv->old.keycode;
++	} else {
++		new = priv->old.keycode;
++		old = priv->new.keycode;
++	}
++
++	if (memscan(new, old[i], sizeof(priv->new.keycode)) ==
++	    new + sizeof(priv->new.keycode) &&
++	    old[i] < ARRAY_SIZE(hid_kbd_keymap))
++		input_add_keycode(input, hid_kbd_keymap[old[i]], released);
++}
++
++int apple_kbd_handle_report(struct input_config *input,
++			    struct apple_kbd_priv *priv,
++			    void *data, size_t size)
++{
++	struct apple_kbd_report *report = data;
++	int i;
++
++	if (size < sizeof(struct apple_kbd_report))
++		return -1;
++
++	if (report->reportid != KBD_REPORTID)
++		return 0;
++
++	memcpy(&priv->new, report, sizeof(struct apple_kbd_report));
++	apple_kbd_service_modifiers(input, priv);
++	for (i = 0; i < sizeof(priv->new.keycode); i++) {
++		apple_kbd_service_key(input, priv, i, 1);
++		apple_kbd_service_key(input, priv, i, 0);
++	}
++	memcpy(&priv->old, &priv->new, sizeof(struct apple_kbd_report));
++
++	return 1;
++}
+diff --git a/drivers/input/apple_kbd.h b/drivers/input/apple_kbd.h
+new file mode 100644
+index 00000000000..2a9d0021735
+--- /dev/null
++++ b/drivers/input/apple_kbd.h
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Common code for handling Apple laptop keyboards
++ *
++ * Copyright The Asahi Linux Contributors
++ */
++
++#ifndef _APPLE_KBD_H
++#define _APPLE_KBD_H
++
++#include <input.h>
++
++struct apple_kbd_report {
++	u8 reportid;
++	u8 modifiers;
++	u8 reserved;
++	u8 keycode[6];
++	u8 fn;
++};
++
++struct apple_kbd_priv {
++	struct apple_kbd_report old; /* previous keyboard input report */
++	struct apple_kbd_report new; /* current keyboard input report */
++};
++
++int apple_kbd_handle_report(struct input_config *input,
++			    struct apple_kbd_priv *priv,
++			    void *data, size_t size);
++
++#endif
+diff --git a/drivers/input/apple_spi_kbd.c b/drivers/input/apple_spi_kbd.c
+index 5b30cec2dcb..957e43a5d43 100644
+--- a/drivers/input/apple_spi_kbd.c
++++ b/drivers/input/apple_spi_kbd.c
+@@ -10,68 +10,7 @@
+ #include <asm-generic/gpio.h>
+ #include <linux/delay.h>
+ #include <linux/input.h>
+-
+-/*
+- * The Apple SPI keyboard controller implements a protocol that
+- * closely resembles HID Keyboard Boot protocol.  The key codes are
+- * mapped according to the HID Keyboard/Keypad Usage Table.
+- */
+-
+-/* Modifier key bits */
+-#define HID_MOD_LEFTCTRL	BIT(0)
+-#define HID_MOD_LEFTSHIFT	BIT(1)
+-#define HID_MOD_LEFTALT		BIT(2)
+-#define HID_MOD_LEFTGUI		BIT(3)
+-#define HID_MOD_RIGHTCTRL	BIT(4)
+-#define HID_MOD_RIGHTSHIFT	BIT(5)
+-#define HID_MOD_RIGHTALT	BIT(6)
+-#define HID_MOD_RIGHTGUI	BIT(7)
+-
+-static const u8 hid_kbd_keymap[] = {
+-	KEY_RESERVED, 0xff, 0xff, 0xff,
+-	KEY_A, KEY_B, KEY_C, KEY_D,
+-	KEY_E, KEY_F, KEY_G, KEY_H,
+-	KEY_I, KEY_J, KEY_K, KEY_L,
+-	KEY_M, KEY_N, KEY_O, KEY_P,
+-	KEY_Q, KEY_R, KEY_S, KEY_T,
+-	KEY_U, KEY_V, KEY_W, KEY_X,
+-	KEY_Y, KEY_Z, KEY_1, KEY_2,
+-	KEY_3, KEY_4, KEY_5, KEY_6,
+-	KEY_7, KEY_8, KEY_9, KEY_0,
+-	KEY_ENTER, KEY_ESC, KEY_BACKSPACE, KEY_TAB,
+-	KEY_SPACE, KEY_MINUS, KEY_EQUAL, KEY_LEFTBRACE,
+-	KEY_RIGHTBRACE, KEY_BACKSLASH, 0xff, KEY_SEMICOLON,
+-	KEY_APOSTROPHE, KEY_GRAVE, KEY_COMMA, KEY_DOT,
+-	KEY_SLASH, KEY_CAPSLOCK, KEY_F1, KEY_F2,
+-	KEY_F3, KEY_F4, KEY_F5, KEY_F6,
+-	KEY_F7, KEY_F8, KEY_F9, KEY_F10,
+-	KEY_F11, KEY_F12, KEY_SYSRQ, KEY_SCROLLLOCK,
+-	KEY_PAUSE, KEY_INSERT, KEY_HOME, KEY_PAGEUP,
+-	KEY_DELETE, KEY_END, KEY_PAGEDOWN, KEY_RIGHT,
+-	KEY_LEFT, KEY_DOWN, KEY_UP, KEY_NUMLOCK,
+-	KEY_KPSLASH, KEY_KPASTERISK, KEY_KPMINUS, KEY_KPPLUS,
+-	KEY_KPENTER, KEY_KP1, KEY_KP2, KEY_KP3,
+-	KEY_KP4, KEY_KP5, KEY_KP6, KEY_KP7,
+-	KEY_KP8, KEY_KP9, KEY_KP0, KEY_KPDOT,
+-	KEY_BACKSLASH, KEY_COMPOSE, KEY_POWER, KEY_KPEQUAL,
+-};
+-
+-/* Report ID used for keyboard input reports. */
+-#define KBD_REPORTID	0x01
+-
+-struct apple_spi_kbd_report {
+-	u8 reportid;
+-	u8 modifiers;
+-	u8 reserved;
+-	u8 keycode[6];
+-	u8 fn;
+-};
+-
+-struct apple_spi_kbd_priv {
+-	struct gpio_desc enable;
+-	struct apple_spi_kbd_report old; /* previous keyboard input report */
+-	struct apple_spi_kbd_report new; /* current keyboard input report */
+-};
++#include "apple_kbd.h"
+ 
+ /* Keyboard device. */
+ #define KBD_DEVICE	0x01
+@@ -100,58 +39,10 @@ struct apple_spi_kbd_msg {
+ 	u8 data[0];
+ };
+ 
+-static void apple_spi_kbd_service_modifiers(struct input_config *input)
+-{
+-	struct apple_spi_kbd_priv *priv = dev_get_priv(input->dev);
+-	u8 new = priv->new.modifiers;
+-	u8 old = priv->old.modifiers;
+-
+-	if ((new ^ old) & HID_MOD_LEFTCTRL)
+-		input_add_keycode(input, KEY_LEFTCTRL,
+-				  old & HID_MOD_LEFTCTRL);
+-	if ((new ^ old) & HID_MOD_RIGHTCTRL)
+-		input_add_keycode(input, KEY_RIGHTCTRL,
+-				  old & HID_MOD_RIGHTCTRL);
+-	if ((new ^ old) & HID_MOD_LEFTSHIFT)
+-		input_add_keycode(input, KEY_LEFTSHIFT,
+-				  old & HID_MOD_LEFTSHIFT);
+-	if ((new ^ old) & HID_MOD_RIGHTSHIFT)
+-		input_add_keycode(input, KEY_RIGHTSHIFT,
+-				  old & HID_MOD_RIGHTSHIFT);
+-	if ((new ^ old) & HID_MOD_LEFTALT)
+-		input_add_keycode(input, KEY_LEFTALT,
+-				  old & HID_MOD_LEFTALT);
+-	if ((new ^ old) & HID_MOD_RIGHTALT)
+-		input_add_keycode(input, KEY_RIGHTALT,
+-				  old & HID_MOD_RIGHTALT);
+-	if ((new ^ old) & HID_MOD_LEFTGUI)
+-		input_add_keycode(input, KEY_LEFTMETA,
+-				  old & HID_MOD_LEFTGUI);
+-	if ((new ^ old) & HID_MOD_RIGHTGUI)
+-		input_add_keycode(input, KEY_RIGHTMETA,
+-				  old & HID_MOD_RIGHTGUI);
+-}
+-
+-static void apple_spi_kbd_service_key(struct input_config *input, int i,
+-				      int released)
+-{
+-	struct apple_spi_kbd_priv *priv = dev_get_priv(input->dev);
+-	u8 *new;
+-	u8 *old;
+-
+-	if (released) {
+-		new = priv->new.keycode;
+-		old = priv->old.keycode;
+-	} else {
+-		new = priv->old.keycode;
+-		old = priv->new.keycode;
+-	}
+-
+-	if (memscan(new, old[i], sizeof(priv->new.keycode)) ==
+-	    new + sizeof(priv->new.keycode) &&
+-	    old[i] < ARRAY_SIZE(hid_kbd_keymap))
+-		input_add_keycode(input, hid_kbd_keymap[old[i]], released);
+-}
++struct apple_spi_kbd_priv {
++	struct gpio_desc enable;
++	struct apple_kbd_priv kbd;
++};
+ 
+ static int apple_spi_kbd_check(struct input_config *input)
+ {
+@@ -160,7 +51,7 @@ static int apple_spi_kbd_check(struct input_config *input)
+ 	struct apple_spi_kbd_packet packet;
+ 	struct apple_spi_kbd_msg *msg;
+ 	struct apple_spi_kbd_report *report;
+-	int i, ret;
++	int ret;
+ 
+ 	memset(&packet, 0, sizeof(packet));
+ 
+@@ -195,20 +86,8 @@ static int apple_spi_kbd_check(struct input_config *input)
+ 	msg = (struct apple_spi_kbd_msg *)packet.data;
+ 	report = (struct apple_spi_kbd_report *)msg->data;
+ 	if (packet.flags == PACKET_READ && packet.device == KBD_DEVICE &&
+-	    msg->type == MSG_REPORT && msg->device == KBD_DEVICE &&
+-	    msg->cmdlen == sizeof(struct apple_spi_kbd_report) &&
+-	    report->reportid == KBD_REPORTID) {
+-		memcpy(&priv->new, report,
+-		       sizeof(struct apple_spi_kbd_report));
+-		apple_spi_kbd_service_modifiers(input);
+-		for (i = 0; i < sizeof(priv->new.keycode); i++) {
+-			apple_spi_kbd_service_key(input, i, 1);
+-			apple_spi_kbd_service_key(input, i, 0);
+-		}
+-		memcpy(&priv->old, &priv->new,
+-		       sizeof(struct apple_spi_kbd_report));
+-		return 1;
+-	}
++	    msg->type == MSG_REPORT && msg->device == KBD_DEVICE)
++		return apple_kbd_handle_report(input, &priv->kbd, msg->data, msg->cmdlen);
+ 
+ 	return 0;
+ 

@@ -1,0 +1,151 @@
+From 63091fcaa4736a9a9086c943c53d2238080fb5cb Mon Sep 17 00:00:00 2001
+From: Mark Kettenis <kettenis@openbsd.org>
+Date: Fri, 14 Apr 2023 13:14:41 +0200
+Subject: [PATCH 1/1] scripts/dtc: Add support for floating-point literals
+
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+ scripts/dtc/data.c       | 27 +++++++++++++++++++++++++++
+ scripts/dtc/dtc-lexer.l  | 22 ++++++++++++++++++++++
+ scripts/dtc/dtc-parser.y | 16 ++++++++++++++++
+ scripts/dtc/dtc.h        |  1 +
+ 4 files changed, 66 insertions(+)
+
+diff --git a/scripts/dtc/data.c b/scripts/dtc/data.c
+index 5b25aa06041..ce449824c80 100644
+--- a/scripts/dtc/data.c
++++ b/scripts/dtc/data.c
+@@ -184,6 +184,33 @@ struct data data_append_integer(struct data d, uint64_t value, int bits)
+ 	}
+ }
+ 
++struct data data_append_float(struct data d, double value, int bits)
++{
++	float f32;
++	uint32_t u32;
++	double f64;
++	uint64_t u64;
++	fdt32_t value_32;
++	fdt64_t value_64;
++
++	switch (bits) {
++	case 32:
++		f32 = value;
++		memcpy(&u32, &f32, sizeof(u32));
++		value_32 = cpu_to_fdt32(u32);
++		return data_append_data(d, &value_32, 4);
++
++	case 64:
++		f64 = value;
++		memcpy(&u64, &f64, sizeof(u64));
++		value_64 = cpu_to_fdt64(u64);
++		return data_append_data(d, &value_64, 8);
++
++	default:
++		die("Invalid literal size (%d)\n", bits);
++	}
++}
++
+ struct data data_append_re(struct data d, uint64_t address, uint64_t size)
+ {
+ 	struct fdt_reserve_entry re;
+diff --git a/scripts/dtc/dtc-lexer.l b/scripts/dtc/dtc-lexer.l
+index 15d585c8079..6aa42f356c3 100644
+--- a/scripts/dtc/dtc-lexer.l
++++ b/scripts/dtc/dtc-lexer.l
+@@ -166,6 +166,28 @@ static void PRINTF(1, 2) lexical_error(const char *fmt, ...);
+ 			return DT_LITERAL;
+ 		}
+ 
++<V1>[-+]?(([0-9]+\.[0-9]*)|([0-9]*\.[0-9]+))(e[-+]?[0-9]+)?f? {
++			char *e;
++			DPRINT("Floating-point Literal: '%s'\n", yytext);
++
++			errno = 0;
++			yylval.floating = strtod(yytext, &e);
++
++			if (*e && (*e != 'f' || e[1])) {
++				lexical_error("Bad floating-point literal '%s'",
++					      yytext);
++			}
++
++			if (errno == ERANGE)
++				lexical_error("Floating-point literal '%s' out of range",
++					      yytext);
++			else
++				/* ERANGE is the only strtod error triggerable
++				 *  by strings matching the pattern */
++				assert(errno == 0);
++			return DT_FP_LITERAL;
++		}
++
+ <V1>([0-9]+|0[xX][0-9a-fA-F]+)(U|L|UL|LL|ULL)? {
+ 			char *e;
+ 			DPRINT("Integer Literal: '%s'\n", yytext);
+diff --git a/scripts/dtc/dtc-parser.y b/scripts/dtc/dtc-parser.y
+index 4d5eece5262..225a6b41b14 100644
+--- a/scripts/dtc/dtc-parser.y
++++ b/scripts/dtc/dtc-parser.y
+@@ -48,6 +48,7 @@ static bool is_ref_relative(const char *ref)
+ 	struct node *nodelist;
+ 	struct reserve_info *re;
+ 	uint64_t integer;
++	double floating;
+ 	unsigned int flags;
+ }
+ 
+@@ -61,6 +62,7 @@ static bool is_ref_relative(const char *ref)
+ %token DT_OMIT_NO_REF
+ %token <propnodename> DT_PROPNODENAME
+ %token <integer> DT_LITERAL
++%token <floating> DT_FP_LITERAL
+ %token <integer> DT_CHAR_LITERAL
+ %token <byte> DT_BYTE
+ %token <data> DT_STRING
+@@ -86,6 +88,7 @@ static bool is_ref_relative(const char *ref)
+ %type <node> subnode
+ %type <nodelist> subnodes
+ 
++%type <floating> floating_prim
+ %type <integer> integer_prim
+ %type <integer> integer_unary
+ %type <integer> integer_mul
+@@ -395,6 +398,15 @@ arrayprefix:
+ 			$$.data = data_add_marker(empty_data, TYPE_UINT32, NULL);
+ 			$$.bits = 32;
+ 		}
++	| arrayprefix floating_prim
++		{
++			if ($1.bits < 32) {
++				ERROR(&@2, "Floating-point values must be"
++				      " 32-bit or 64-bit");
++			}
++
++			$$.data = data_append_float($1.data, $2, $1.bits);
++		}
+ 	| arrayprefix integer_prim
+ 		{
+ 			if ($1.bits < 64) {
+@@ -439,6 +451,10 @@ arrayprefix:
+ 		}
+ 	;
+ 
++floating_prim:
++	DT_FP_LITERAL
++	;
++
+ integer_prim:
+ 	  DT_LITERAL
+ 	| DT_CHAR_LITERAL
+diff --git a/scripts/dtc/dtc.h b/scripts/dtc/dtc.h
+index fcc97bbc70e..09e42490062 100644
+--- a/scripts/dtc/dtc.h
++++ b/scripts/dtc/dtc.h
+@@ -176,6 +176,7 @@ struct data data_insert_at_marker(struct data d, struct marker *m,
+ struct data data_merge(struct data d1, struct data d2);
+ struct data data_append_cell(struct data d, cell_t word);
+ struct data data_append_integer(struct data d, uint64_t word, int bits);
++struct data data_append_float(struct data d, double value, int bits);
+ struct data data_append_re(struct data d, uint64_t address, uint64_t size);
+ struct data data_append_addr(struct data d, uint64_t addr);
+ struct data data_append_byte(struct data d, uint8_t byte);

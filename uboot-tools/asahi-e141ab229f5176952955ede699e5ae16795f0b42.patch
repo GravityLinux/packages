@@ -1,0 +1,34 @@
+From e141ab229f5176952955ede699e5ae16795f0b42 Mon Sep 17 00:00:00 2001
+From: Mark Kettenis <kettenis@openbsd.org>
+Date: Tue, 2 May 2023 20:46:52 +0200
+Subject: [PATCH 1/1] apple: Nail down the EFI system partition
+
+Now that we have a way to find the appropriate EFI system
+partition on the internal NVMe storage, nail it down as the
+preferred EFI system partition such that we can use it to
+store EFI variables.  This allows multiple OS installations to
+exist on Apple Silicon machines without interfering with eachother.
+
+Signed-off-by: Mark Kettenis <kettenis@openbsd.org>
+---
+ arch/arm/mach-apple/board.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-apple/board.c b/arch/arm/mach-apple/board.c
+index 4b36bc7d125..d4d0936574c 100644
+--- a/arch/arm/mach-apple/board.c
++++ b/arch/arm/mach-apple/board.c
+@@ -901,8 +901,12 @@ static char *asahi_esp_devpart(void)
+ 			break;
+ 	}
+ 
+-	if (part > 0)
++	if (part > 0) {
+ 		snprintf(devpart, sizeof(devpart), "%x:%x", devnum, part);
++		efi_system_partition.uclass_id = UCLASS_NVME;
++		efi_system_partition.devnum = devnum;
++		efi_system_partition.part = part;
++	}
+ 
+ 	return devpart;
+ }

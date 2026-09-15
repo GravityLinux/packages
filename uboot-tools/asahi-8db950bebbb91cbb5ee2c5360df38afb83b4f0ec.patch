@@ -1,0 +1,38 @@
+From 8db950bebbb91cbb5ee2c5360df38afb83b4f0ec Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Thu, 18 May 2023 23:59:17 +0900
+Subject: [PATCH 1/1] usb: Ignore endpoints in non-zero altsettings
+
+We currently do not really handle altsettings properly, and no driver
+uses them. Ignore the respective endpoint descriptors for secondary
+altsettings, to avoid creating duplicate endpoint records in the
+interface.
+
+This will have to be revisited if/when we have a driver that needs
+altsettings to work properly.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ common/usb.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/common/usb.c b/common/usb.c
+index b9ecf2a3353..1483cb82808 100644
+--- a/common/usb.c
++++ b/common/usb.c
+@@ -445,6 +445,15 @@ static int usb_parse_config(struct usb_device *dev,
+ 				puts("Endpoint descriptor out of order!\n");
+ 				break;
+ 			}
++			if (if_desc->num_altsetting > 1) {
++				/*
++				 * Ignore altsettings, which can trigger duplicate
++				 * endpoint errors below. Revisit this when some
++				 * driver actually needs altsettings with differing
++				 * endpoint setups.
++				 */
++				break;
++			}
+ 			epno = dev->config.if_desc[ifno].no_of_ep;
+ 			if_desc = &dev->config.if_desc[ifno];
+ 			if (epno >= USB_MAXENDPOINTS) {

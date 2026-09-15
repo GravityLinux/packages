@@ -1,0 +1,28 @@
+From 1527497f6729de9d70cf40070e03984bd69dcdad Mon Sep 17 00:00:00 2001
+From: Mark Kettenis <kettenis@openbsd.org>
+Date: Fri, 14 Apr 2023 21:24:04 +0200
+Subject: [PATCH 1/1] iopoll: Add readb_poll_sleep_timeout
+
+Add a variant of readl_poll_sleep_timeout that reads a single
+byte to match the readb_poll_timeout API that Linux has.
+
+Signed-off-by: Mark Kettenis <kettenis@openbsd.org>
+Reviewed-by: Tom Rini <trini@konsulko.com>
+---
+ include/linux/iopoll.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
+index 0ee2bddaa83..955ab881006 100644
+--- a/include/linux/iopoll.h
++++ b/include/linux/iopoll.h
+@@ -46,6 +46,9 @@
+ #define readx_poll_sleep_timeout(op, addr, val, cond, sleep_us, timeout_us) \
+ 	read_poll_timeout(op, val, cond, sleep_us, timeout_us, addr)
+ 
++#define readb_poll_sleep_timeout(addr, val, cond, sleep_us, timeout_us) \
++	readx_poll_sleep_timeout(readb, addr, val, cond, sleep_us, timeout_us)
++
+ #define readl_poll_sleep_timeout(addr, val, cond, sleep_us, timeout_us) \
+ 	readx_poll_sleep_timeout(readl, addr, val, cond, sleep_us, timeout_us)
+ 

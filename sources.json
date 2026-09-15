@@ -1,0 +1,76 @@
+{
+  "kernel": {
+    "kind": "git",
+    "url": "https://github.com/GravityLinux/linux.git",
+    "ref": "9807df349e5c8903f81a25c24c1fc72a523d2e10",
+    "archive": "gravity-m4.patch",
+    "base_ref": "3988dac1664c05fa7c8310fcad8eee10428b5f43",
+    "root": "linux-7.1.13",
+    "base_srpm": {
+      "url": "https://download.copr.fedorainfracloud.org/results/@asahi/kernel/srpm-builds/10979408/kernel-7.1.13-403.asahi.fc44.src.rpm",
+      "sha256": "b21403621e44d6390c089126afb2c8ee41a9926b4bd7a840b544b39ffd15be9a"
+    }
+  },
+  "mesa": {
+    "kind": "git",
+    "url": "https://github.com/GravityLinux/mesa.git",
+    "ref": null,
+    "archive": "mesa-26.2.2.tar.xz",
+    "root": "mesa-26.2.2",
+    "note": "Pin Niklas's downstream Mesa commit and align spec Version with that source."
+  },
+  "uboot-tools": {
+    "kind": "spec",
+    "note": "Asahi/Fedora source plus four checked-in Gravity patches; see UPSTREAM.md."
+  },
+  "m1n1": {
+    "kind": "git",
+    "url": "https://github.com/ADevWithAnIdea/m1n1.git",
+    "ref": "fc564ba4e4098b79ac5e92a0e54a3c6a2980d984",
+    "archive": "m1n1-1.6.1.tar.gz",
+    "omit_submodules": ["artwork"],
+    "root": "m1n1-1.6.1",
+    "note": "Current M4 source. Move URL to GravityLinux/m1n1 when that fork is published."
+  },
+  "gravity-scripts": {
+    "kind": "git",
+    "url": "https://github.com/GravityLinux/scripts.git",
+    "ref": null,
+    "archive": "gravity-scripts-20260915.tar.gz",
+    "root": "gravity-scripts-20260915",
+    "note": "Commit and publish the firmware consumer changes in ../scripts before pinning."
+  },
+  "gravity-installer": {
+    "kind": "git",
+    "url": "https://github.com/GravityLinux/installer.git",
+    "ref": null,
+    "archive": "gravity-installer-0.9.1.tar.gz",
+    "root": "gravity-installer-0.9.1",
+    "note": "Commit and publish ../installer, including gravity_firmware and setup.py."
+  },
+  "gravity-platform-metapackage": {
+    "kind": "spec"
+  },
+  "gravity-repos": {
+    "kind": "spec"
+  },
+  "gravity-remix-scripts": {
+    "kind": "local",
+    "archive": "gravity-remix-scripts-20260915.tar.gz",
+    "root": "gravity-remix-scripts-20260915"
+  },
+  "gravity-release": {
+    "kind": "spec"
+  },
+  "gravity-appstream-metadata": {
+    "kind": "spec"
+  },
+  "gravity-logos": {
+    "kind": "git",
+    "url": "https://github.com/GravityLinux/artwork.git",
+    "ref": "8fc8ab9460c71890c20d491b2e9b5bf851759481",
+    "archive": "gravity-logos-20260915.tar.gz",
+    "root": "gravity-logos-20260915",
+    "note": "Current license is restricted. Pin a relicensed revision before COPR builds."
+  }
+}
