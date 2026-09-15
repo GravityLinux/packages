@@ -44,10 +44,10 @@ Run `make status` for unresolved inputs:
   with that source. The imported Fedora packaging version is 26.2.2.
 - Set the real COPR owner/project in [release.json](release.json), and add the
   verified ASCII-armored public key at `gravity-repos/RPM-GPG-KEY-gravity`.
-- The currently pinned artwork license restricts modification and commercial
-  use. A COPR build requires appropriately licensed artwork. After the owner
-  changes that license, pin that revision and set `artwork_license` to its
-  reviewed SPDX expression. The logos spec checks for this setting.
+- Publish the pinned artwork revision: artwork is CC BY 4.0, the generator is
+  MIT, and the existing font license is preserved. Trademark policy is separate.
+  Fedora's [license data](https://gitlab.com/fedora/legal/fedora-license-data/-/blob/main/data/CC-BY-4.0.toml)
+  lists CC BY 4.0 as allowed for content and documentation, not generally code.
 - Move the pinned ADevWithAnIdea m1n1 URL to GravityLinux/m1n1 once published.
 
 Empty refs and repository credentials are intentional unresolved inputs, not

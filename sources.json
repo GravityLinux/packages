@@ -43,7 +43,7 @@
   "gravity-installer": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/installer.git",
-    "ref": "2763449877d04707e9f42a7b4f60da1cce50e6d7",
+    "ref": "ca452123bd0a003cc2839b39c075a8ddaea62a77",
     "archive": "gravity-installer-0.9.1.tar.gz",
     "omit_submodules": ["artwork", "bootloader"],
     "root": "gravity-installer-0.9.1",
@@ -69,9 +69,9 @@
   "gravity-logos": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/artwork.git",
-    "ref": "8fc8ab9460c71890c20d491b2e9b5bf851759481",
+    "ref": "e613a87e526f8fec439c4129e69dd2821b38d258",
     "archive": "gravity-logos-20260915.tar.gz",
     "root": "gravity-logos-20260915",
-    "note": "Current license is restricted. Pin a relicensed revision before COPR builds."
+    "note": "CC-BY-4.0 artwork, MIT generator, separate trademark policy. Publish this locally pinned revision."
   }
 }

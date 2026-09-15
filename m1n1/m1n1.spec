@@ -14,7 +14,7 @@ m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
 Name:           m1n1
 Vendor:         Gravity Linux
 Version:        %(echo '%{srcversion}' | tr '-' '~')
-Release:        100.gravity%{?dist}
+Release:        101.gravity%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
 
 # The M4 fork adds GPL-2.0-only contributions; vendored projects retain their licenses.
@@ -24,7 +24,7 @@ Summary:        Bootloader and experimentation playground for Apple Silicon
 # MIT
 # MIT OR Apache-2.0
 # LICENSE.dependencies contains a full license breakdown of the rust dependencies
-License:        GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND MIT AND (MIT OR Apache-2.0)
+License:        GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND MIT AND (MIT OR Apache-2.0) AND CC-BY-4.0
 URL:            https://github.com/GravityLinux/m1n1
 Source0:        %{name}-%{srcversion}.tar.gz
 Source:         https://github.com/rafalh/rust-fatfs/archive/%{fatfs_commit}/rust-fatfs-%{fatfs_commit}.tar.gz
@@ -39,7 +39,7 @@ BuildRequires:  make
 BuildRequires:  adobe-source-code-pro-fonts
 BuildRequires:  coreutils
 BuildRequires:  fontconfig
-BuildRequires:  gravity-logos
+BuildRequires:  gravity-logos >= 20260915-101.gravity
 BuildRequires:  ImageMagick >= 7
 
 # For the udev rule
@@ -109,6 +109,9 @@ tar -xf %{SOURCE1} -C rust/vendor/rust-fatfs --strip-components 1
 sed -ie 's;\(^build/$(RUST_LIB):.*\) rust/Cargo.lock$;\1;' Makefile
 
 # Use our logos
+# Carry attribution with the embedded artwork in both binary packages.
+mkdir gravity-artwork-notices
+cp %{_datadir}/gravity-logos/{LICENSE,README.md,TRADEMARKS.md} gravity-artwork-notices/
 pushd data
 ln -s %{_datadir}/pixmaps/bootloader/bootlogo_128.png gravity_128.png
 ln -s %{_datadir}/pixmaps/bootloader/bootlogo_256.png gravity_256.png
@@ -169,6 +172,7 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 
 %files
 %license LICENSE.GPL2 LICENSE.MIT 3rdparty_licenses/LICENSE.* build/LICENSE.dependencies
+%license gravity-artwork-notices
 %doc README.md
 %doc m1n1.conf.example
 %{_libdir}/%{name}/
@@ -177,6 +181,7 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 
 %files stage1
 %license LICENSE.GPL2 LICENSE.MIT 3rdparty_licenses/LICENSE.* rust/vendor/rust-fatfs/LICENSE.txt build-stage1/LICENSE.dependencies
+%license gravity-artwork-notices
 %doc README.md
 %{_libdir}/%{name}-stage1/
 
@@ -185,5 +190,8 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 %{_udevrulesdir}/80-m1n1.rules
 
 %changelog
+* Tue Sep 15 2026 Gravity Linux maintainers - 1.6.1-101.gravity
+- Include CC BY 4.0 artwork licensing and attribution in branded binaries
+
 * Tue Sep 15 2026 Gravity Linux maintainers - 1.6.1-100.gravity
 - Build Gravity M4 fork with Gravity boot logos

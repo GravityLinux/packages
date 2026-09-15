@@ -3,7 +3,7 @@
 Name:           gravity-logos
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        100.gravity%{?dist}
+Release:        101.gravity%{?dist}
 Summary:        Gravity Linux boot and desktop artwork
 License:        %{gravity_artwork_license}
 URL:            https://github.com/GravityLinux/artwork
@@ -23,6 +23,9 @@ and Gravity trademarks are separate; consult the source license.
 %build
 
 %install
+# Stable path for consumers that embed these images in another binary.
+install -d %{buildroot}%{_datadir}/gravity-logos
+install -pm0644 LICENSE README.md TRADEMARKS.md %{buildroot}%{_datadir}/gravity-logos/
 install -Dpm0644 logos/png_128/GravityLinux_logomark.png %{buildroot}%{_datadir}/pixmaps/bootloader/bootlogo_128.png
 install -Dpm0644 logos/png_256/GravityLinux_logomark.png %{buildroot}%{_datadir}/pixmaps/bootloader/bootlogo_256.png
 install -Dpm0644 logos/icns/GravityLinux_logomark.icns %{buildroot}%{_datadir}/pixmaps/bootloader/gravity.icns
@@ -30,10 +33,14 @@ install -Dpm0644 logos/svg/GravityLinux_logomark.svg %{buildroot}%{_datadir}/ico
 install -Dpm0644 logos/boot_logo.ppm %{buildroot}%{_datadir}/pixmaps/bootloader/boot_logo.ppm
 
 %files
-%license README.md logos/licenses/*
+%license LICENSE README.md TRADEMARKS.md logos/licenses/*
+%{_datadir}/gravity-logos/
 %{_datadir}/pixmaps/bootloader/
 %{_datadir}/icons/hicolor/scalable/apps/gravity-logo-icon.svg
 
 %changelog
+* Tue Sep 15 2026 Gravity Linux maintainers - 20260915-101.gravity
+- Adopt CC BY 4.0 artwork and ship notices for embedding consumers
+
 * Tue Sep 15 2026 Gravity Linux maintainers - 20260915-100.gravity
 - Package Gravity bootloader and desktop artwork

@@ -4,12 +4,22 @@
 
 - Repository checks: twelve specs, valid source manifests/full Git pins, no
   unresolved rpmautospec macros; Python and shell syntax checks.
-- Eleven specs parse with RPM 4.20.1 using the Fedora 44/aarch64 target macros.
-  The logos spec intentionally refuses preparation without its reviewed license.
-- Nine SRPMs were generated with the shared builder and are in `dist/`:
+- Twelve specs parse with RPM 4.20.1; target-package checks use the Fedora
+  44/aarch64 macros, and the logos package is noarch.
+- Ten packages have SRPMs generated with the shared builder in `dist/`:
   kernel, uboot-tools, m1n1, gravity-release, gravity-remix-scripts,
   gravity-platform-metapackage, gravity-appstream-metadata, gravity-scripts
-  and gravity-installer.
+  gravity-installer and gravity-logos.
+- CC-BY-4.0 is allowed-content and allowed-documentation in Fedora's license
+  data. Artwork uses that license; its Python generator uses MIT, and the
+  existing font license is unchanged. Trademark policy is separate.
+- gravity-logos 20260915-101.gravity.fc44 builds as a noarch binary RPM with
+  the local extracted RPM tooling. Its License tag is CC-BY-4.0, and its file
+  list includes license, attribution and trademark notices plus all five assets.
+  The host reports its missing RPM database; this is not native Fedora validation.
+- Updated installer SRPM generation and all five firmware tests pass. The final
+  m1n1 SRPM carrying the artwork notice dependency is in `dist/artwork-cc-by/`;
+  the earlier same-version SRPM in `dist/` predates that final dependency change.
 - Every generated SRPM has an accompanying SHA256 input manifest.
 - The pinned kernel source SRPM checksum matches. Its Fedora/Asahi patch applies
   to Linux 7.1.13, followed by the generated Gravity M4 diff. Both pass
@@ -50,7 +60,7 @@ compiler. SRPM generation is not a native Fedora binary-package build.
   because its Python has no pip module.
 - Publish the installer's pinned Gravity artwork and bootloader submodule
   commits; build and test the full macOS installer bundle.
-- Artwork licensing, logos binary package and m1n1 binary package.
+- Native Fedora validation of the logos package and m1n1 binary builds.
 - COPR project/public-key configuration and gravity-repos build.
 - Full dependency resolution and installation in the Fedora KDE image.
 - appstreamcli semantic validation (the binary package's %check runs it).
