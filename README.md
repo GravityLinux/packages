@@ -104,6 +104,9 @@ test.
 
 ## COPR and build order
 
+Use [Git-backed COPR builds](COPR.md) to build directly from GitHub without
+uploading local SRPMs. It includes the exact form settings and webhook setup.
+
 Create one project with the `fedora-44-aarch64` chroot. Configure that project
 to make already built packages available to subsequent builds.
 
