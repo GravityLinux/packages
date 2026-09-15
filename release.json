@@ -1,6 +1,6 @@
 {
   "fedora": 44,
-  "copr_owner": null,
-  "copr_project": null,
+  "copr_owner": "adevwithanidea",
+  "copr_project": "gravity",
   "artwork_license": "CC-BY-4.0"
 }
