@@ -23,6 +23,14 @@
     "kind": "spec",
     "note": "Asahi/Fedora source plus four checked-in Gravity patches; see UPSTREAM.md."
   },
+  "rust-speakersafetyd": {
+    "kind": "git",
+    "url": "https://github.com/GravityLinux/speakersafetyd.git",
+    "ref": null,
+    "archive": "speakersafetyd-2.0.1.tar.gz",
+    "root": "speakersafetyd-2.0.1",
+    "note": "Confirm the downstream fork URL, pin its commit, align Version with Cargo.toml, review Fedora patches/dependencies and validate the M4 safety profiles. No release tag is required."
+  },
   "gravity-bootloader": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/bootloader.git",

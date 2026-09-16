@@ -22,12 +22,18 @@ Gravity-specific RPMs do.
 | gravity-release | common, basic and KDE release identity/defaults | Asahi release packaging |
 | gravity-appstream-metadata | OS identity for software centers | Gravity |
 | gravity-logos | Bootloader and desktop logos | Gravity artwork |
+| rust-speakersafetyd | speakersafetyd (provides gravity-speakersafetyd) | Downstream audio fork; source pin and validation pending |
 
 The package/dependency set retains Asahi's KDE platform dependencies, including
 older Apple hardware support. Ordinary Fedora packages such as alsa-ucm-asahi,
-asahi-audio, speakersafetyd, tiny-dfr, GRUB, shim, linux-firmware, wireless-regdb,
+asahi-audio, tiny-dfr, GRUB, shim, linux-firmware, wireless-regdb,
 muvm and FEX are consumed from Fedora unless we need downstream changes.
 A dependency's presence does not establish M4 hardware support.
+
+Speaker protection must use our downstream fork, not Fedora's stock daemon.
+See [the speakersafetyd preparation checklist](rust-speakersafetyd/README.md).
+Matching UCM and audio-policy forks may also be needed; their requirements
+must be confirmed with the audio developer.
 
 AVD firmware packaging is excluded from this release. Bluetooth is not a release
 requirement. Extracted Apple firmware and IPSWs must never enter this repository,
@@ -42,6 +48,8 @@ Run `make status` for unresolved inputs:
 - Publish the pinned scripts and installer source commits to their Gravity URLs.
 - Pin the downstream Mesa revision; align its spec Version, archive and root
   with that source. The imported Fedora packaging version is 26.2.2.
+- Confirm and pin the speakersafetyd fork and reconcile its version, Cargo
+  dependencies and safety profiles with the prepared rust-speakersafetyd spec.
 - COPR is configured as `adevwithanidea/gravity`; its public signing key is
   pinned in `gravity-repos/RPM-GPG-KEY-gravity`.
 - Publish the pinned artwork revision: artwork is CC BY 4.0, the generator is
@@ -111,6 +119,7 @@ Create one project with the `fedora-44-aarch64` chroot. Configure that project
 to make already built packages available to subsequent builds.
 
 1. Independent: kernel, Mesa, uboot-tools, gravity-installer, gravity-logos,
+   rust-speakersafetyd (once its source inputs are ready),
    gravity-release, gravity-appstream-metadata, gravity-remix-scripts.
 2. gravity-bootloader after gravity-logos.
 3. gravity-scripts after gravity-bootloader, uboot-images-armv8 and python3-gravity_firmware

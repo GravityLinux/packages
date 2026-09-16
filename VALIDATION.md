@@ -1,5 +1,18 @@
 # Validation — 2026-09-15
 
+## 2026-09-16 downstream audio preparation
+
+- Added a thirteenth recipe, rust-speakersafetyd, adapted from Fedora f44.
+  Repository checks pass. Its missing source pin correctly blocks SRPM builds.
+- The audio metapackage now requires the gravity-speakersafetyd capability
+  supplied by our downstream daemon recipe; stock Fedora alone cannot satisfy it.
+- The downstream fork was unavailable for inspection. Version, dependency
+  licenses, Fedora patch reconciliation, model profiles and related UCM/audio
+  policy packages remain unverified. This is a scaffold, not a completed build.
+- Native RPM spec parsing was not rerun: the previously extracted temporary
+  RPM tools are no longer available in this session. COPR builds and hardware
+  safety validation remain pending.
+
 ## Passed
 
 - Repository checks: twelve specs, valid source manifests/full Git pins, no

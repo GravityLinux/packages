@@ -4,7 +4,7 @@
 Name:           gravity-platform-metapackage
 Vendor:         Gravity Linux
 Version:        0
-Release:        100.gravity%{?dist}
+Release:        101.gravity%{?dist}
 Summary:        Metapackage declaring Asahi platform dependencies
 Group:          Metapackages
 License:        MIT
@@ -105,6 +105,8 @@ fi
 Summary:        Metapackage declaring audio support Asahi platform dependencies
 Requires:       asahi-audio >= 0.5-1
 Requires:       speakersafetyd >= 0.1.4-1
+# Stock Fedora speakersafetyd does not contain Gravity's downstream audio changes.
+Requires:       gravity-speakersafetyd
 Conflicts:      pulseaudio
 
 %description audio
@@ -233,6 +235,9 @@ install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name}-desktop %SOURCE1
 install -Dpm0644 -t %{buildroot}%{_datadir}/drirc.d %SOURCE2
 
 %changelog
+* Wed Sep 16 2026 Gravity Linux maintainers - 0-101.gravity
+- Require Gravity's downstream speaker protection implementation for audio
+
 * Fri Mar 27 2026 Neal Gompa <ngompa@fedoraproject.org> - 0-29
 - Add trigger scriptlet to disable plasma-setup for upgrades to F44
 
