@@ -1,7 +1,7 @@
 Name:           gravity-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        100.gravity%{?dist}
+Release:        101.gravity%{?dist}
 Summary:        Miscellaneous admin scripts for Gravity Linux
 
 License:        MIT
@@ -62,7 +62,7 @@ Summary:        Keep m1n1 up to date
 Requires:       %{name} = %{version}-%{release}
 Requires:       bash
 Requires:       gzip
-Requires:       m1n1
+Requires:       bootloader
 Requires:       uboot-images-armv8
 # grubby's /usr/lib/kernel/install.d/10-devicetree.install creates the
 # /boot/dtb symlink update-m1n1 uses to construct the 2nd stage m1n1 image
@@ -143,5 +143,8 @@ grep -q 'gravity_firmware' && %{_sbindir}/gravity-fwupdate || :
 %ghost %config(noreplace) %{_sysconfdir}/udev/macsmc-battery.conf
 
 %changelog
+* Tue Sep 15 2026 Gravity Linux maintainers - 20260915-101.gravity
+- Depend on the renamed bootloader package and update diagnostics
+
 * Tue Sep 15 2026 Gravity Linux maintainers - 20260915-100.gravity
 - Package Gravity firmware consumers and retain Fedora integration

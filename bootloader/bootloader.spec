@@ -1,4 +1,6 @@
 %global debug_package %{nil}
+# Preserve the upstream binary/config names used by the boot chain.
+%global upstream_name m1n1
 %global buildflags RELEASE=1 LOGO=gravity
 
 # We need to vendor fatfs because m1n1 stage1 relies on unreleased changes
@@ -11,10 +13,10 @@ m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
 
 %global srcversion 1.6.1
 
-Name:           m1n1
+Name:           bootloader
 Vendor:         Gravity Linux
 Version:        %(echo '%{srcversion}' | tr '-' '~')
-Release:        101.gravity%{?dist}
+Release:        102.gravity%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
 
 # The M4 fork adds GPL-2.0-only contributions; vendored projects retain their licenses.
@@ -25,7 +27,7 @@ Summary:        Bootloader and experimentation playground for Apple Silicon
 # MIT OR Apache-2.0
 # LICENSE.dependencies contains a full license breakdown of the rust dependencies
 License:        GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND MIT AND (MIT OR Apache-2.0) AND CC-BY-4.0
-URL:            https://github.com/GravityLinux/m1n1
+URL:            https://github.com/GravityLinux/bootloader
 Source0:        %{name}-%{srcversion}.tar.gz
 Source:         https://github.com/rafalh/rust-fatfs/archive/%{fatfs_commit}/rust-fatfs-%{fatfs_commit}.tar.gz
 # * Vendor git dependency rust-fatfs and ensure its dependencies are
@@ -55,7 +57,8 @@ BuildArch:      noarch
 # The aarch64-unknown-none-softfloat rust target is only available on aarch64
 ExclusiveArch:  aarch64 noarch
 # Ensure we obsolete the old arched packages; drop once f45 is EOL
-Obsoletes:      %{name} < 1.5.2-3
+Provides:       m1n1 = %{version}-%{release}
+Obsoletes:      m1n1 < %{version}-%{release}
 
 # These are bundled, modified and statically linked into m1n1
 Provides:       bundled(arm-trusted-firmware)
@@ -69,12 +72,14 @@ Provides:       bundled(tinf)
 %description    %_description
 
 %package        stage1
+Provides:       m1n1-stage1 = %{version}-%{release}
+Obsoletes:      m1n1-stage1 < %{version}-%{release}
 Summary:        %{summary}
 # The following breakdown only covers the rust dependencies
 # Apache-2.0 OR MIT
 # MIT
 # MIT OR Apache-2.0
-License:        GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND (Apache-2.0 OR MIT) AND MIT AND (MIT OR Apache-2.0)
+License:        GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND (Apache-2.0 OR MIT) AND MIT AND (MIT OR Apache-2.0) AND CC-BY-4.0
 # LICENSE.dependencies contains a full license breakdown of the rust dependencies
 
 # This is vendored and statically linked into m1n1 when building for stage 1
@@ -82,10 +87,12 @@ Provides:       bundled(crate(fatfs))= 0.4.0
 
 %description    stage1 %_description
 
-This package contains the stage1 build of m1n1 that is used by the Asahi Linux
-Installer.
+This package contains the stage1 build of m1n1 that is used by the Gravity Linux
+installer.
 
 %package        tools
+Provides:       m1n1-tools = %{version}-%{release}
+Obsoletes:      m1n1-tools < %{version}-%{release}
 Summary:        Developer tools for m1n1
 License:        GPL-2.0-only AND MIT
 Requires:       %{name} = %{version}-%{release}
@@ -152,21 +159,21 @@ pushd rust
 popd
 
 %install
-install -Dpm0644 -t %{buildroot}%{_libdir}/%{name} \
-  build/%{name}.{bin,macho} build/%{name}-asahi.bin
+install -Dpm0644 -t %{buildroot}%{_libdir}/%{upstream_name} \
+  build/%{upstream_name}.{bin,macho} build/%{upstream_name}-asahi.bin
 # install backwards compatibility symlink since update-m1n1 hardcodes
 # `/usr/lib64/m1n1/m1n1.bin` as m1n1 binary
 # check if the dir exists since %{_libdir} expands to "/usr/lib64" for
 # aarch64 builds in mock
-if [ ! -d %{buildroot}%{_exec_prefix}/lib64/%{name} ]; then
-  mkdir -p %{buildroot}%{_exec_prefix}/lib64/%{name}
-  ln -s %{_libdir}/%{name}/%{name}.bin \
-    %{buildroot}%{_exec_prefix}/lib64/m1n1/%{name}.bin
+if [ ! -d %{buildroot}%{_exec_prefix}/lib64/%{upstream_name} ]; then
+  mkdir -p %{buildroot}%{_exec_prefix}/lib64/%{upstream_name}
+  ln -s %{_libdir}/%{upstream_name}/%{upstream_name}.bin \
+    %{buildroot}%{_exec_prefix}/lib64/m1n1/%{upstream_name}.bin
 fi
-install -Dpm0644 -t %{buildroot}%{_libdir}/%{name}-stage1 \
-  build-stage1/%{name}.{bin,macho} build-stage1/%{name}-asahi.bin
-install -Ddpm0755 %{buildroot}%{_libexecdir}/%{name}
-cp -pr proxyclient tools %{buildroot}%{_libexecdir}/%{name}/
+install -Dpm0644 -t %{buildroot}%{_libdir}/%{upstream_name}-stage1 \
+  build-stage1/%{upstream_name}.{bin,macho} build-stage1/%{upstream_name}-asahi.bin
+install -Ddpm0755 %{buildroot}%{_libexecdir}/%{upstream_name}
+cp -pr proxyclient tools %{buildroot}%{_libexecdir}/%{upstream_name}/
 install -Dpm0644 -t %{buildroot}%{_udevrulesdir} udev/80-m1n1.rules
 install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 
@@ -175,21 +182,25 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 %license gravity-artwork-notices
 %doc README.md
 %doc m1n1.conf.example
-%{_libdir}/%{name}/
-%{_exec_prefix}/lib64/%{name}
+%{_libdir}/%{upstream_name}/
+%{_exec_prefix}/lib64/%{upstream_name}
 %config(noreplace) %{_sysconfdir}/m1n1.conf
 
 %files stage1
 %license LICENSE.GPL2 LICENSE.MIT 3rdparty_licenses/LICENSE.* rust/vendor/rust-fatfs/LICENSE.txt build-stage1/LICENSE.dependencies
 %license gravity-artwork-notices
 %doc README.md
-%{_libdir}/%{name}-stage1/
+%{_libdir}/%{upstream_name}-stage1/
 
 %files tools
-%{_libexecdir}/%{name}/
+%{_libexecdir}/%{upstream_name}/
 %{_udevrulesdir}/80-m1n1.rules
 
 %changelog
+* Tue Sep 15 2026 Gravity Linux maintainers - 1.6.1-102.gravity
+- Rename packages to bootloader and use GravityLinux/bootloader sources
+- Preserve m1n1 runtime paths and provide compatibility package names
+
 * Tue Sep 15 2026 Gravity Linux maintainers - 1.6.1-101.gravity
 - Include CC BY 4.0 artwork licensing and attribution in branded binaries
 

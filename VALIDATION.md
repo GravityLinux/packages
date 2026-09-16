@@ -49,6 +49,11 @@
 
 ## COPR validation
 
+- After the package rename, bootloader and gravity-scripts SRPMs build locally.
+  The bootloader spec resolves to bootloader, bootloader-stage1 and
+  bootloader-tools while retaining upstream m1n1 binary/configuration paths.
+  A COPR binary build of the renamed package remains pending.
+
 - User-submitted build [10989758](https://copr.fedorainfracloud.org/coprs/adevwithanidea/gravity/build/10989758/)
   succeeded for gravity-logos 20260915-101.gravity.fc44 in fedora-44-aarch64.
   rpmlint reported zero errors and eight warnings (including intentional
@@ -76,7 +81,7 @@ compiler. SRPM generation is not a native Fedora binary-package build.
   because its Python has no pip module.
 - Publish the installer's pinned Gravity artwork and bootloader submodule
   commits; build and test the full macOS installer bundle.
-- Logos installation tests and m1n1 binary builds.
+- Logos installation tests and bootloader binary builds (renamed from m1n1).
 - gravity-repos COPR binary build and installation tests.
 - Full dependency resolution and installation in the Fedora KDE image.
 - appstreamcli semantic validation (the binary package's %check runs it).

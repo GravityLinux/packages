@@ -13,7 +13,7 @@ Gravity-specific RPMs do.
 | kernel | kernel-16k, core, modules, modules-core, modules-extra, devel | Asahi 7.1.13-403 SRPM |
 | mesa | Fedora Mesa libraries, DRI and Vulkan drivers | Fedora 44 dist-git |
 | uboot-tools | uboot-tools, uboot-images-armv8 | Asahi packaging plus four Gravity patches |
-| m1n1 | m1n1, m1n1-stage1, m1n1-tools | Fedora 44 packaging, pinned M4 fork |
+| bootloader | bootloader, bootloader-stage1, bootloader-tools | Fedora 44 m1n1 packaging, pinned M4 fork |
 | gravity-scripts | gravity-scripts, gravity-fwupdate, dracut-gravity, update-m1n1, linux-firmware-vendor, gravity-battery | Fedora packaging and Gravity consumers |
 | gravity-installer | python3-gravity_firmware and gravity-fwextract | Linux half of installer packaging |
 | gravity-platform-metapackage | core, audio, plasma, desktop, fex, mesa integration | Asahi platform dependencies plus Gravity packages |
@@ -48,7 +48,7 @@ Run `make status` for unresolved inputs:
   MIT, and the existing font license is preserved. Trademark policy is separate.
   Fedora's [license data](https://gitlab.com/fedora/legal/fedora-license-data/-/blob/main/data/CC-BY-4.0.toml)
   lists CC BY 4.0 as allowed for content and documentation, not generally code.
-- Move the pinned ADevWithAnIdea m1n1 URL to GravityLinux/m1n1 once published.
+- Publish the pinned M4 source at GravityLinux/bootloader.
 
 Empty refs and repository credentials are intentional unresolved inputs, not
 working defaults. Nothing is submitted or published automatically.
@@ -112,8 +112,8 @@ to make already built packages available to subsequent builds.
 
 1. Independent: kernel, Mesa, uboot-tools, gravity-installer, gravity-logos,
    gravity-release, gravity-appstream-metadata, gravity-remix-scripts.
-2. m1n1 after gravity-logos.
-3. gravity-scripts after m1n1, uboot-images-armv8 and python3-gravity_firmware
+2. bootloader after gravity-logos.
+3. gravity-scripts after bootloader, uboot-images-armv8 and python3-gravity_firmware
    are available for installation tests.
 4. gravity-repos after project/key configuration; gravity-platform-metapackage
    last, then test the complete image dependency transaction.

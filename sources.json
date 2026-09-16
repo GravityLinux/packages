@@ -23,19 +23,19 @@
     "kind": "spec",
     "note": "Asahi/Fedora source plus four checked-in Gravity patches; see UPSTREAM.md."
   },
-  "m1n1": {
+  "bootloader": {
     "kind": "git",
-    "url": "https://github.com/ADevWithAnIdea/m1n1.git",
+    "url": "https://github.com/GravityLinux/bootloader.git",
     "ref": "fc564ba4e4098b79ac5e92a0e54a3c6a2980d984",
-    "archive": "m1n1-1.6.1.tar.gz",
+    "archive": "bootloader-1.6.1.tar.gz",
     "omit_submodules": ["artwork"],
-    "root": "m1n1-1.6.1",
-    "note": "Current M4 source. Move URL to GravityLinux/m1n1 when that fork is published."
+    "root": "bootloader-1.6.1",
+    "note": "Publish the pinned M4 source commit at GravityLinux/bootloader."
   },
   "gravity-scripts": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/scripts.git",
-    "ref": "084cbaea3231bdb75d75f3d49f245101187a116c",
+    "ref": "12418e50125a72749a75917db578db55ea42704c",
     "archive": "gravity-scripts-20260915.tar.gz",
     "root": "gravity-scripts-20260915",
     "note": "Publish this locally pinned scripts commit to the Gravity repository."

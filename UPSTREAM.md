@@ -54,7 +54,11 @@ No source archive is committed to this repo.
 The generated diff uses two context lines to avoid overlapping Fedora's
 adjacent iomfb-surfaces fix in dcp_platform_probe. Both changes are retained.
 
-## m1n1
+## bootloader (upstream m1n1)
+
+Gravity's package and repository are named `bootloader`; the source URL is
+https://github.com/GravityLinux/bootloader. Upstream binary and runtime paths
+retain their m1n1 names for boot-chain compatibility.
 
 The selected M4 fork carries GPL-2.0-only contributions in addition to upstream
 MIT code and vendored dependencies. The spec includes both LICENSE.GPL2 and

@@ -67,8 +67,8 @@ def blockers(name, recipe, release):
     result = []
     if recipe["kind"] == "git" and not recipe.get("ref"):
         result.append(recipe.get("note", "Pin source commit in sources.json"))
-    if name in ("gravity-logos", "m1n1") and not release["artwork_license"]:
-        result.append("Relicense artwork and set release.json artwork_license (m1n1 BuildRequires gravity-logos)")
+    if name in ("gravity-logos", "bootloader") and not release["artwork_license"]:
+        result.append("Set release.json artwork_license (bootloader BuildRequires gravity-logos)")
     if name == "gravity-repos":
         if not release["copr_owner"] or not release["copr_project"]:
             result.append("Set copr_owner and copr_project in release.json")
@@ -216,8 +216,8 @@ def macros(work, release):
 
 def prepare(name, recipe, release, args):
     problems = blockers(name, recipe, release)
-    # An m1n1 SRPM can be prepared before its logo build dependency exists.
-    if name == "m1n1":
+    # A bootloader SRPM can be prepared before its logo build dependency exists.
+    if name == "bootloader":
         problems = []
     if problems:
         raise ValueError("\n".join(problems))
