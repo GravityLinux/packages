@@ -23,13 +23,13 @@
     "kind": "spec",
     "note": "Asahi/Fedora source plus four checked-in Gravity patches; see UPSTREAM.md."
   },
-  "bootloader": {
+  "gravity-bootloader": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/bootloader.git",
     "ref": "ec2127ce80de0db71234a1a5d55dab1438774235",
-    "archive": "bootloader-1.6.1.tar.gz",
+    "archive": "gravity-bootloader-1.6.1.tar.gz",
     "omit_submodules": ["artwork"],
-    "root": "bootloader-1.6.1",
+    "root": "gravity-bootloader-1.6.1",
     "note": "Publish the pinned M4 source commit at GravityLinux/bootloader."
   },
   "gravity-scripts": {

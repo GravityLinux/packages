@@ -13,10 +13,10 @@ m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
 
 %global srcversion 1.6.1
 
-Name:           bootloader
+Name:           gravity-bootloader
 Vendor:         Gravity Linux
 Version:        %(echo '%{srcversion}' | tr '-' '~')
-Release:        103.gravity%{?dist}
+Release:        104.gravity%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
 
 # The M4 fork adds GPL-2.0-only contributions; vendored projects retain their licenses.
@@ -59,6 +59,8 @@ ExclusiveArch:  aarch64 noarch
 # Ensure we obsolete the old arched packages; drop once f45 is EOL
 Provides:       m1n1 = %{version}-%{release}
 Obsoletes:      m1n1 < %{version}-%{release}
+Provides:       bootloader = %{version}-%{release}
+Obsoletes:      bootloader < %{version}-%{release}
 
 # These are bundled, modified and statically linked into m1n1
 Provides:       bundled(arm-trusted-firmware)
@@ -74,6 +76,8 @@ Provides:       bundled(tinf)
 %package        stage1
 Provides:       m1n1-stage1 = %{version}-%{release}
 Obsoletes:      m1n1-stage1 < %{version}-%{release}
+Provides:       bootloader-stage1 = %{version}-%{release}
+Obsoletes:      bootloader-stage1 < %{version}-%{release}
 Summary:        %{summary}
 # The following breakdown only covers the rust dependencies
 # Apache-2.0 OR MIT
@@ -93,6 +97,8 @@ installer.
 %package        tools
 Provides:       m1n1-tools = %{version}-%{release}
 Obsoletes:      m1n1-tools < %{version}-%{release}
+Provides:       bootloader-tools = %{version}-%{release}
+Obsoletes:      bootloader-tools < %{version}-%{release}
 Summary:        Developer tools for m1n1
 License:        GPL-2.0-only AND MIT
 Requires:       %{name} = %{version}-%{release}
@@ -197,6 +203,9 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 %{_udevrulesdir}/80-m1n1.rules
 
 %changelog
+* Tue Sep 15 2026 Gravity Linux maintainers - 1.6.1-104.gravity
+- Rename RPMs to gravity-bootloader; retain bootloader repository and runtime paths
+
 * Tue Sep 15 2026 Gravity Linux maintainers - 1.6.1-102.gravity
 - Rename packages to bootloader and use GravityLinux/bootloader sources
 - Preserve m1n1 runtime paths and provide compatibility package names

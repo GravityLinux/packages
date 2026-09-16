@@ -31,9 +31,9 @@ For another package, change Spec File to `PACKAGE/PACKAGE.spec`. Do not use
 a raw spec URL: the shared builder needs the rest of this repository, including
 source pins, patches, configuration and the signing key.
 
-For the bootloader, use `bootloader/bootloader.spec`. Its source repository is
-`https://github.com/GravityLinux/bootloader.git`. RPMs are named `bootloader`,
-`bootloader-stage1` and `bootloader-tools`; upstream binary names, Python module
+For the bootloader, use `gravity-bootloader/gravity-bootloader.spec`. Its source repository is
+`https://github.com/GravityLinux/bootloader.git`. RPMs are named `gravity-bootloader`,
+`gravity-bootloader-stage1` and `gravity-bootloader-tools`; upstream binary names, Python module
 names and installed `/usr/lib64/m1n1` paths remain compatible with the boot chain.
 
 Use `gravity-repos` for the first SCM smoke test: all its source inputs are

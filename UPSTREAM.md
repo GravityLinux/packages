@@ -54,9 +54,9 @@ No source archive is committed to this repo.
 The generated diff uses two context lines to avoid overlapping Fedora's
 adjacent iomfb-surfaces fix in dcp_platform_probe. Both changes are retained.
 
-## bootloader (upstream m1n1)
+## gravity-bootloader (upstream m1n1)
 
-Gravity's package and repository are named `bootloader`; the source URL is
+Gravity's package is named `gravity-bootloader`; its repository remains `bootloader`:
 https://github.com/GravityLinux/bootloader. Upstream binary and runtime paths
 retain their m1n1 names for boot-chain compatibility.
 

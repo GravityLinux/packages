@@ -49,9 +49,9 @@
 
 ## COPR validation
 
-- After the package rename, bootloader and gravity-scripts SRPMs build locally.
-  The bootloader spec resolves to bootloader, bootloader-stage1 and
-  bootloader-tools while retaining upstream m1n1 binary/configuration paths.
+- After the package rename, gravity-bootloader and gravity-scripts SRPMs build locally.
+  The bootloader spec resolves to gravity-bootloader, gravity-bootloader-stage1 and
+  gravity-bootloader-tools while retaining upstream m1n1 binary/configuration paths.
   A COPR binary build of the renamed package remains pending.
 
 - User-submitted build [10989758](https://copr.fedorainfracloud.org/coprs/adevwithanidea/gravity/build/10989758/)
