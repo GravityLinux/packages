@@ -16,7 +16,7 @@ m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
 Name:           bootloader
 Vendor:         Gravity Linux
 Version:        %(echo '%{srcversion}' | tr '-' '~')
-Release:        102.gravity%{?dist}
+Release:        103.gravity%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
 
 # The M4 fork adds GPL-2.0-only contributions; vendored projects retain their licenses.

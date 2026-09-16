@@ -8,7 +8,7 @@
 Name:           gravity-installer
 Vendor:         Gravity Linux
 Version:        0.9.1
-Release:        101.gravity%{?dist}
+Release:        102.gravity%{?dist}
 Summary:        Gravity Linux firmware extraction tools
 License:        MIT
 URL:            https://github.com/GravityLinux/installer
