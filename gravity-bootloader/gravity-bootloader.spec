@@ -16,7 +16,7 @@ m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
 Name:           gravity-bootloader
 Vendor:         Gravity Linux
 Version:        %(echo '%{srcversion}' | tr '-' '~')
-Release:        105.gravity%{?dist}
+Release:        106.gravity%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
 
 # The M4 fork adds GPL-2.0-only contributions; vendored projects retain their licenses.
@@ -33,6 +33,8 @@ Source:         https://github.com/rafalh/rust-fatfs/archive/%{fatfs_commit}/rus
 # * Vendor git dependency rust-fatfs and ensure its dependencies are
 #   included as well.
 Patch:          m1n1-1.6.1-rust-deps.patch
+# Keep M4 bring-up configuration in packaging, not the source fork.
+Patch:          m1n1-no-display.patch
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -203,6 +205,9 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 %{_udevrulesdir}/80-m1n1.rules
 
 %changelog
+* Thu Sep 17 2026 Gravity Linux maintainers - 1.6.1-106.gravity
+- Apply packaging-only NO_DISPLAY patch to both boot stages
+
 * Wed Sep 16 2026 Gravity Linux maintainers - 1.6.1-105.gravity
 - Pin freestanding bit-count fix for the GCC bootloader link failure
 
