@@ -190,13 +190,13 @@ Summary: The Linux kernel
 %define specrpmversion 7.1.13
 %define specversion 7.1.13
 %define patchversion 7.1
-%define pkgrelease 502.gravity
+%define pkgrelease 503.gravity
 %define kversion 7
 %define tarfile_release 7.1.13
 # This is needed to do merge window version magic
 %define patchlevel 1
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 502.gravity%{?buildid}%{?dist}
+%define specrelease 503.gravity%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.1.13
 
@@ -1225,6 +1225,11 @@ Source4002: gating.yaml
 
 Patch1: patch-%{patchversion}-redhat.patch
 Patch2: gravity-m4.patch
+# Temporary modular Apple DRM bring-up exports; retire once carried by Linux fork.
+Patch3: 0003-arm64-export-can-set-direct-map.patch
+Patch4: 0004-arm64-export-set-direct-map-invalid.patch
+Patch5: 0005-arm64-export-set-direct-map-default.patch
+Patch6: 0006-arm64-export-dcache-clean-inval-poc.patch
 %endif
 
 # empty final patch to facilitate testing of kernel patches
@@ -2184,6 +2189,10 @@ ApplyOptionalPatch patch-%{patchversion}-redhat.patch
 
 ApplyOptionalPatch linux-kernel-test.patch
 ApplyOptionalPatch gravity-m4.patch
+ApplyPatch 0003-arm64-export-can-set-direct-map.patch
+ApplyPatch 0004-arm64-export-set-direct-map-invalid.patch
+ApplyPatch 0005-arm64-export-set-direct-map-default.patch
+ApplyPatch 0006-arm64-export-dcache-clean-inval-poc.patch
 
 %{log_msg "End of patch applications"}
 # END OF PATCH APPLICATIONS
@@ -4871,6 +4880,9 @@ fi\
 #
 #
 %changelog
+* Wed Sep 16 2026 Gravity Linux maintainers [7.1.13-503.gravity]
+- Export four ARM64 helpers for modular Apple DRM as temporary bring-up patches
+
 * Wed Sep 16 2026 Gravity Linux maintainers [7.1.13-502.gravity]
 - Set Apple DockChannel earlycon in all AArch64 config variants checked in prep
 
