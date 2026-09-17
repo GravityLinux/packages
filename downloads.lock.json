@@ -6,5 +6,6 @@
   "https://crates.io/api/v1/crates/syn/2.0.115/download": "6e614ed320ac28113fa64972c4262d5dbc89deacdfd00c34a3e4cea073243c12",
   "https://crates.io/api/v1/crates/unicode-ident/1.0.23/download": "537dd038a89878be9b64dd4bd1b260315c1bb94f4d784956b81e27a088d9a09e",
   "https://ftp.denx.de/pub/u-boot/u-boot-2026.07.tar.bz2": "78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e",
+  "https://gitlab.freedesktop.org/virgl/venus-protocol/-/archive/e94b12f301b9eb27ebead757128a18420b4f7994/venus-protocol-e94b12f301b9eb27ebead757128a18420b4f7994.tar.gz": "7c00e631fc59d849c80e0f44f80d0dfa5a4dbc45061ba11c0f675a5e5ad09caf",
   "https://github.com/rafalh/rust-fatfs/archive/4eccb50d011146fbed20e133d33b22f3c27292e7/rust-fatfs-4eccb50d011146fbed20e133d33b22f3c27292e7.tar.gz": "06302558ed3878e70e51109648e2972faf8ec444c352c31f8272a55d93850e95"
 }

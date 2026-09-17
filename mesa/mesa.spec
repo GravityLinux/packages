@@ -82,7 +82,7 @@ Name:           mesa
 Vendor:         Gravity Linux
 Summary:        Mesa graphics libraries
 Version:        26.3.0~devel
-Release:        100.gravity%{?dist}
+Release:        101.gravity%{?dist}
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
 
@@ -96,6 +96,11 @@ Source0:        mesa-%{ver}.tar.xz
 # Source1 contains email correspondence clarifying the license terms.
 # Fedora opts to ignore the optional part of clause 2 and treat that code as 2 clause BSD.
 Source1:        Mesa-MLAA-License-Clarification-Email.txt
+
+# Match subprojects/venus-protocol.wrap in the pinned Mesa tree. Git snapshots
+# do not bundle this fallback; COPR binary builds must remain offline.
+%global venus_protocol_commit e94b12f301b9eb27ebead757128a18420b4f7994
+Source2:        https://gitlab.freedesktop.org/virgl/venus-protocol/-/archive/%{venus_protocol_commit}/venus-protocol-%{venus_protocol_commit}.tar.gz
 
 # In CentOS/RHEL, Rust crates required to build NVK are vendored.
 # The minimum target versions are obtained from the .wrap files
@@ -337,6 +342,9 @@ Development tools for translating SPIR-V shader code to DXIL for Direct3D 12
 
 %package vulkan-drivers
 Summary:        Mesa Vulkan drivers
+%if 0%{?with_virtio}
+Provides:       bundled(venus-protocol) = 1.1
+%endif
 Requires:       vulkan%{_isa}
 Requires:       %{name}-filesystem%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      mesa-vulkan-devel < %{?epoch:%{epoch}:}%{version}-%{release}
@@ -348,6 +356,12 @@ The drivers with support for the Vulkan API.
 %prep
 %autosetup -n %{name}-%{ver} -p1
 cp %{SOURCE1} docs/
+
+# Fail rather than silently using stale vendored protocol after a Mesa repin.
+grep -Fx 'revision = %{venus_protocol_commit}' subprojects/venus-protocol.wrap
+grep -Fx 'directory = venus-protocol-1.1' subprojects/venus-protocol.wrap
+tar -xf %{SOURCE2} -C subprojects/
+mv subprojects/venus-protocol-%{venus_protocol_commit} subprojects/venus-protocol-1.1
 
 # Extract Rust crates meson cache directory
 %if 0%{?vendor_nvk_crates}
@@ -745,6 +759,9 @@ ln -s libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
 %endif
 
 %changelog
+* Wed Sep 16 2026 Gravity Linux maintainers - 26.3.0~devel-101.gravity
+- Bundle the pinned Venus protocol fallback for offline builds
+
 * Wed Sep 16 2026 Gravity Linux maintainers - 26.3.0~devel-100.gravity
 - Pin Gravity main at 4bd3d1801ae6 for preliminary hardware image testing
 - Align the source version and minimum Meson version with the snapshot
