@@ -14,10 +14,10 @@
   "mesa": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/mesa.git",
-    "ref": null,
-    "archive": "mesa-26.2.2.tar.xz",
-    "root": "mesa-26.2.2",
-    "note": "Pin Niklas's downstream Mesa commit and align spec Version with that source."
+    "ref": "4bd3d1801ae6e8c0b01d07c9f0ec4247325960bc",
+    "archive": "mesa-26.3.0-devel.tar.xz",
+    "root": "mesa-26.3.0-devel",
+    "note": "Temporary hardware-test snapshot of GravityLinux/mesa main on 2026-09-16; confirm the final M4 release revision with Niklas."
   },
   "uboot-tools": {
     "kind": "spec",

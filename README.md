@@ -48,8 +48,8 @@ bundle and bootloader release assets are built separately.
 Run `make status` for unresolved inputs:
 
 - Publish the pinned scripts and installer source commits to their Gravity URLs.
-- Pin the downstream Mesa revision; align its spec Version, archive and root
-  with that source. The imported Fedora packaging version is 26.2.2.
+- Mesa is temporarily pinned to Gravity's main at `4bd3d1801ae6` (26.3.0-devel)
+  for hardware image testing. Confirm the final release revision with Niklas.
 - Confirm and pin the speakersafetyd fork and reconcile its version, Cargo
   dependencies and safety profiles with the prepared rust-speakersafetyd spec.
 - COPR is configured as `adevwithanidea/gravity`; its public signing key is
