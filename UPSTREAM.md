@@ -21,7 +21,9 @@ build the macOS installer archive inside COPR.
 
 ## U-Boot
 
-The package retains the Fedora/Asahi board list, tools and patch series.
+The package retains the Fedora/Asahi tools and patch series. Starting with
+201.gravity, the AArch64 board list is restricted to apple_m1 to shorten builds;
+firmware build dependencies used only by other AArch64 boards are omitted.
 The imported packaging stops at dbd2154cb0d; four additional Asahi NVMe fixes
 (01e7f95a992, 6bfd8a4fa84, 2495a9f2ddf, ec49c9d70e6) bring it to
 asahi-v2026.07-2 before the Gravity patches.

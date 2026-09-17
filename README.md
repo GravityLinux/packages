@@ -24,6 +24,8 @@ Gravity-specific RPMs do.
 | gravity-logos | Bootloader and desktop logos | Gravity artwork |
 | rust-speakersafetyd | speakersafetyd (provides gravity-speakersafetyd) | Downstream audio fork; source pin and validation pending |
 
+U-Boot's AArch64 image build is limited to `apple_m1`; host utilities are retained.
+
 The package/dependency set retains Asahi's KDE platform dependencies, including
 older Apple hardware support. Ordinary Fedora packages such as alsa-ucm-asahi,
 asahi-audio, tiny-dfr, GRUB, shim, linux-firmware, wireless-regdb,

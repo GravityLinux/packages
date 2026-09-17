@@ -7,7 +7,7 @@
 Name:     uboot-tools
 Vendor:         Gravity Linux
 Version:  2026.07
-Release:  200.gravity%{?candidate:.%{candidate}}%{?dist}
+Release:  201.gravity%{?candidate:.%{candidate}}%{?dist}
 Epoch:    1
 Summary:  U-Boot utilities
 # Automatically converted from old format: GPLv2+ BSD LGPL-2.1+ LGPL-2.0+ - review is highly recommended.
@@ -144,9 +144,7 @@ BuildRequires:  SDL2-devel
 BuildRequires:  swig
 %if %{with toolsonly}
 %ifarch aarch64
-BuildRequires:  arm-trusted-firmware-armv8
-BuildRequires:  optee-os-firmware-armv8
-BuildRequires:  crust-firmware
+# Only apple_m1 is built; other boards' ATF, OP-TEE and Crust firmware are not needed.
 BuildRequires:  python3-pyelftools
 BuildRequires:  xxd
 %endif
@@ -163,11 +161,11 @@ and fw_printenv/fw_setenv for manipulating the boot environment variables.
 %if %{with toolsonly}
 %ifarch aarch64
 %package     -n uboot-images-armv8
-Summary:     U-Boot firmware images for aarch64 boards
+Summary:     U-Boot firmware images for Apple Silicon
 BuildArch:   noarch
 
 %description -n uboot-images-armv8
-U-Boot firmware binaries for aarch64 boards
+U-Boot firmware binaries for Apple Silicon using the apple_m1 configuration.
 %endif
 
 %ifarch riscv64
@@ -389,6 +387,10 @@ install -p -m 0755 builds/tools/env/fw_printenv %{buildroot}%{_bindir}
 %endif
 
 %changelog
+* Wed Sep 16 2026 Gravity Linux maintainers - 1:2026.07-201.gravity
+- Limit AArch64 board builds to apple_m1, retaining host utilities
+- Drop build dependencies on unrelated board firmware
+
 * Thu Sep 03 2026 Janne Grunau <j@jannau.net> - 1:2026.07-101
 - Import asahi u-boot downstream patches for v2026.07
 
