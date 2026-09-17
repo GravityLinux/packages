@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="operating-system">
+  <id>org.gravitylinux.gravity</id>
+  <metadata_license>MIT</metadata_license>
+  <name>Gravity Linux</name>
+  <summary>Fedora-based Linux for Apple Silicon Macs</summary>
+  <developer id="gravitylinux.org">
+    <name>Gravity Linux contributors</name>
+  </developer>
+  <description>
+    <p>Gravity Linux is a Fedora-based operating system for the Apple M4 Mac mini.
+    It builds on the Asahi Linux project with device-specific kernel and graphics
+    changes, bootloader integration, and firmware installation tools.</p>
+  </description>
+  <url type="homepage">https://gravitylinux.org/</url>
+  <url type="bugtracker">https://github.com/GravityLinux/linux/issues</url>
+  <releases/>
+</component>
