@@ -190,13 +190,13 @@ Summary: The Linux kernel
 %define specrpmversion 7.1.13
 %define specversion 7.1.13
 %define patchversion 7.1
-%define pkgrelease 500.gravity
+%define pkgrelease 501.gravity
 %define kversion 7
 %define tarfile_release 7.1.13
 # This is needed to do merge window version magic
 %define patchlevel 1
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 500.gravity%{?buildid}%{?dist}
+%define specrelease 501.gravity%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.1.13
 
@@ -4871,6 +4871,9 @@ fi\
 #
 #
 %changelog
+* Wed Sep 16 2026 Gravity Linux maintainers [7.1.13-501.gravity]
+- Explicitly enable Apple DockChannel early console in the 16K configs
+
 * Sat Sep 12 2026 Neal Gompa <neal@gompa.dev> [7.1.13-500.gravity]
 - wifi: brcmfmac: cfg80211: Report port_authorized for 4-way HS offload (Janne Grunau)
 - fixup! arm64: dts: apple: t[603x,8122]: Add speaker/jack nodes (sofus)
