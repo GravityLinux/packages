@@ -4,7 +4,7 @@
 Name:           gravity-platform-metapackage
 Vendor:         Gravity Linux
 Version:        0
-Release:        102.gravity%{?dist}
+Release:        103.gravity%{?dist}
 Summary:        Metapackage declaring Asahi platform dependencies
 Group:          Metapackages
 License:        MIT
@@ -12,6 +12,8 @@ URL:            https://pagure.io/fedora-asahi/gravity-platform-metapackage
 ExclusiveArch:  aarch64
 Source1:        FAR_grub2_config_fixup.sh
 Source2:        10-asahi-browser-apple.conf
+Source3:        50-gravity-mesa.conf
+Source4:        50-gravity-plasmalogin-mesa.conf
 
 BuildRequires:  systemd-rpm-macros
 Requires:       %{name}-core = %{version}-%{release}
@@ -187,14 +189,18 @@ exit 0
 %dnl -------------------------------------------------------------------
 
 %package mesa
-Summary:        Metapackage shipping mesa driconf for Asahi systems
+Summary:        Metapackage shipping Mesa configuration for Asahi systems
 Requires:       mesa-filesystem
 
 %description mesa
-This package contains asahi specific mesa driconf files
+This package contains Asahi-specific Mesa driconf files and environment
+defaults for desktop applications and the Plasma login screen.
 
 %files mesa
 %{_datadir}/drirc.d/10-asahi-browser-apple.conf
+%{_environmentdir}/50-gravity-mesa.conf
+%dir %{_unitdir}/plasmalogin.service.d
+%{_unitdir}/plasmalogin.service.d/50-gravity-plasmalogin-mesa.conf
 
 
 %dnl -------------------------------------------------------------------
@@ -231,8 +237,13 @@ install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name}-desktop %SOURCE1
 %endif
 
 install -Dpm0644 -t %{buildroot}%{_datadir}/drirc.d %SOURCE2
+install -Dpm0644 -t %{buildroot}%{_environmentdir} %SOURCE3
+install -Dpm0644 -t %{buildroot}%{_unitdir}/plasmalogin.service.d %SOURCE4
 
 %changelog
+* Fri Sep 18 2026 Gravity Linux maintainers - 0-103.gravity
+- Disable Mesa framebuffer compression for desktop sessions and Plasma Login
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 0-102.gravity
 - Drop userspace speaker protection requirements; J773g protection is in-kernel
 
