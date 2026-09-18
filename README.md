@@ -103,9 +103,10 @@ Release or choose another `--outdir` for a test rebuild.
 The kernel builder extracts the pinned Asahi SRPM's configs and auxiliary
 sources, generates a diff from the matching Asahi source commit to Gravity's
 commit, and adds that after the Fedora/Asahi patch stack. This preserves Fedora
-kernel-specific changes. `kernel/gravity.config` enables the M4 GPU in both
-16K Fedora configurations. Keep the kernel SRPM, base_ref, ref, version and
-config changes in sync on each kernel rebase; check the patch stack again.
+kernel-specific changes. `kernel/gravity.config` enables the M4 GPU and built-in
+J773g speaker support, including its dependencies, in both 16K Fedora
+configurations. Keep the kernel SRPM, base_ref, ref, version and config changes
+in sync on each kernel rebase; check the patch stack again.
 
 For Mesa, keep Fedora's complete subpackage split and Rust dependency
 packaging. Pinning a new source version may require adapting the Meson options,

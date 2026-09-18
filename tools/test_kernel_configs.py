@@ -7,7 +7,7 @@ from package import overlay_kernel_configs
 
 
 class KernelConfigTests(unittest.TestCase):
-    def test_all_aarch64_variants_and_16k_gpu_scope(self):
+    def test_all_aarch64_variants_and_16k_driver_scope(self):
         variants = (
             "aarch64", "aarch64-debug", "aarch64-16k", "aarch64-16k-debug",
             "aarch64-rt", "aarch64-rt-debug", "aarch64-rt-64k",
@@ -33,6 +33,8 @@ class KernelConfigTests(unittest.TestCase):
                         self.assertIn("CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON=y\n", result)
                         self.assertNotIn("# CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON is not set", result)
                         self.assertEqual("CONFIG_DRM_ASAHI_M4=m\n" in result,
+                                         variant.startswith("aarch64-16k"))
+                        self.assertEqual("CONFIG_SND_SOC_APPLE_T8132_SPEAKER=y\n" in result,
                                          variant.startswith("aarch64-16k"))
                         self.assertIn("CONFIG_OTHER=y\n", result)
                     else:
