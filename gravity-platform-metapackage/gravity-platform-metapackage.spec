@@ -4,7 +4,7 @@
 Name:           gravity-platform-metapackage
 Vendor:         Gravity Linux
 Version:        0
-Release:        101.gravity%{?dist}
+Release:        102.gravity%{?dist}
 Summary:        Metapackage declaring Asahi platform dependencies
 Group:          Metapackages
 License:        MIT
@@ -104,9 +104,7 @@ fi
 %package audio
 Summary:        Metapackage declaring audio support Asahi platform dependencies
 Requires:       asahi-audio >= 0.5-1
-Requires:       speakersafetyd >= 0.1.4-1
-# Stock Fedora speakersafetyd does not contain Gravity's downstream audio changes.
-Requires:       gravity-speakersafetyd
+# J773g speaker protection is implemented by the kernel driver.
 Conflicts:      pulseaudio
 
 %description audio
@@ -235,6 +233,9 @@ install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name}-desktop %SOURCE1
 install -Dpm0644 -t %{buildroot}%{_datadir}/drirc.d %SOURCE2
 
 %changelog
+* Fri Sep 18 2026 Gravity Linux maintainers - 0-102.gravity
+- Drop userspace speaker protection requirements; J773g protection is in-kernel
+
 * Wed Sep 16 2026 Gravity Linux maintainers - 0-101.gravity
 - Require Gravity's downstream speaker protection implementation for audio
 
