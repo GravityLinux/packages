@@ -14,10 +14,10 @@
   "mesa": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/mesa.git",
-    "ref": "4bd3d1801ae6e8c0b01d07c9f0ec4247325960bc",
+    "ref": "353cfbc31546748cdbab68481cd40a27106663cf",
     "archive": "mesa-26.3.0-devel.tar.xz",
     "root": "mesa-26.3.0-devel",
-    "note": "Temporary hardware-test snapshot of GravityLinux/mesa main on 2026-09-16; confirm the final M4 release revision with Niklas."
+    "note": "Published M4 compiler and driver updates, including automatic Apple9 rendering selection, through 2026-09-18."
   },
   "uboot-tools": {
     "kind": "spec",
@@ -34,11 +34,11 @@
   "gravity-bootloader": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/bootloader.git",
-    "ref": "12b4b5f60ef4ab3d38e28817b32742f0300289f1",
+    "ref": "47d97ba32aef1f52b95ab2b47c4d139563aad2e1",
     "archive": "gravity-bootloader-1.6.1.tar.gz",
     "omit_submodules": ["artwork"],
     "root": "gravity-bootloader-1.6.1",
-    "note": "Publish the pinned M4 source commit at GravityLinux/bootloader."
+    "note": "Published M4 NVMe support and DCP 26.6 compatibility for firmware 26.6.2."
   },
   "gravity-scripts": {
     "kind": "git",
@@ -51,11 +51,11 @@
   "gravity-installer": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/installer.git",
-    "ref": "191dd5721ed79c892e90feaa8e33ede373f20a16",
+    "ref": "b930a886a70eb2a56d4bb3e6cc3b89ac6e974485",
     "archive": "gravity-installer-0.9.1.tar.gz",
     "omit_submodules": ["artwork", "bootloader"],
     "root": "gravity-installer-0.9.1",
-    "note": "Publish this locally pinned installer commit; Linux firmware-tool sources omit the macOS artwork and bootloader submodules."
+    "note": "Published macOS 26.6.2 recovery and firmware extraction support; Linux firmware-tool sources omit the macOS artwork and bootloader submodules."
   },
   "gravity-platform-metapackage": {
     "kind": "spec"
