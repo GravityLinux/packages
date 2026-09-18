@@ -7,7 +7,7 @@
 Name:     uboot-tools
 Vendor:         Gravity Linux
 Version:  2026.07
-Release:  201.gravity%{?candidate:.%{candidate}}%{?dist}
+Release:  202.gravity%{?candidate:.%{candidate}}%{?dist}
 Epoch:    1
 Summary:  U-Boot utilities
 # Automatically converted from old format: GPLv2+ BSD LGPL-2.1+ LGPL-2.0+ - review is highly recommended.
@@ -121,6 +121,8 @@ Patch200: gravity-11da9618ef1.patch
 Patch201: gravity-9b06f6cddc9.patch
 Patch202: gravity-49840d57974.patch
 Patch203: gravity-2db9584de33.patch
+Patch204: gravity-61d4b40d3fa.patch
+Patch205: gravity-4b738f4f51b.patch
 
 BuildRequires:  bc
 BuildRequires:  bison
@@ -387,6 +389,10 @@ install -p -m 0755 builds/tools/env/fw_printenv %{buildroot}%{_bindir}
 %endif
 
 %changelog
+* Fri Sep 18 2026 Gravity Linux maintainers - 1:2026.07-202.gravity
+- Service RTKit messages while waiting for the NVMe controller
+- Hold ANS reset during controller removal for the Linux handoff
+
 * Wed Sep 16 2026 Gravity Linux maintainers - 1:2026.07-201.gravity
 - Limit AArch64 board builds to apple_m1, retaining host utilities
 - Drop build dependencies on unrelated board firmware

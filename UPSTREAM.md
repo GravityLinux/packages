@@ -33,9 +33,11 @@ These committed Gravity patches follow that series:
 - 9b06f6cddc9 — T8132 memory map.
 - 49840d57974 — T8132 ANS2 NVMe.
 - 2db9584de33 — find the ESP on T8132 NVMe.
+- 61d4b40d3fa — service RTKit messages while waiting for the controller.
+- 4b738f4f51b — hold ANS reset during controller removal.
 
-The current local Gravity U-Boot revision is
-`2db9584de33231580db286e13edbfb2d7787b766`.
+The packaged Gravity U-Boot revision on `gravity-alpha-20260925` is
+`4b738f4f51bc47778cd8dfd7125ae0802399cd7b` (RPM release 202.gravity).
 Re-export the patches and update this file when that source changes.
 
 ## Kernel

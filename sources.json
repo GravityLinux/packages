@@ -21,7 +21,7 @@
   },
   "uboot-tools": {
     "kind": "spec",
-    "note": "Asahi/Fedora source plus four checked-in Gravity patches; see UPSTREAM.md."
+    "note": "Asahi/Fedora source plus six checked-in Gravity patches through 4b738f4f51bc47778cd8dfd7125ae0802399cd7b; see UPSTREAM.md."
   },
   "rust-speakersafetyd": {
     "kind": "git",

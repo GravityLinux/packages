@@ -12,7 +12,7 @@ Gravity-specific RPMs do.
 | --- | --- | --- |
 | kernel | kernel-16k, core, modules, modules-core, modules-extra, devel | Asahi 7.1.13-403 SRPM |
 | mesa | Fedora Mesa libraries, DRI and Vulkan drivers | Fedora 44 dist-git |
-| uboot-tools | uboot-tools, uboot-images-armv8 | Asahi packaging plus four Gravity patches |
+| uboot-tools | uboot-tools, uboot-images-armv8 | Asahi packaging plus six Gravity patches |
 | gravity-bootloader | gravity-bootloader, gravity-bootloader-stage1, gravity-bootloader-tools | Fedora 44 m1n1 packaging, pinned M4 fork |
 | gravity-scripts | gravity-scripts, gravity-fwupdate, dracut-gravity, update-m1n1, linux-firmware-vendor, gravity-battery | Fedora packaging and Gravity consumers |
 | gravity-installer | python3-gravity_firmware and gravity-fwextract | Linux half of installer packaging |
