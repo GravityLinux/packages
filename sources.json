@@ -2,7 +2,7 @@
   "kernel": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/linux.git",
-    "ref": "1c374608abd47b59d47faae30a4e4bb447fffab0",
+    "ref": "3cd0faa9ba07cc520c8e57bc5342d59660313753",
     "archive": "gravity-m4.patch",
     "base_ref": "3988dac1664c05fa7c8310fcad8eee10428b5f43",
     "root": "linux-7.1.13",

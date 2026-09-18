@@ -196,7 +196,7 @@ Summary: The Linux kernel
 # This is needed to do merge window version magic
 %define patchlevel 1
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 504.gravity%{?buildid}%{?dist}
+%define specrelease 505.gravity%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.1.13
 
@@ -4880,6 +4880,9 @@ fi\
 #
 #
 %changelog
+* Fri Sep 18 2026 Gravity Linux maintainers - 7.1.13-505.gravity
+- Include the BCM4388 beamforming-only device-tree calibration fix
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 7.1.13-504.gravity
 - Update M4 source pin with display handoff and kernel speaker protection fixes
 - Build J773g speaker support and its dependencies into the 16K kernels
