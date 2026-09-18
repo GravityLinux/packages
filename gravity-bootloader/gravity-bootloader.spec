@@ -16,7 +16,7 @@ m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
 Name:           gravity-bootloader
 Vendor:         Gravity Linux
 Version:        %(echo '%{srcversion}' | tr '-' '~')
-Release:        106.gravity%{?dist}
+Release:        107.gravity%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
 
 # The M4 fork adds GPL-2.0-only contributions; vendored projects retain their licenses.
@@ -205,6 +205,9 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 %{_udevrulesdir}/80-m1n1.rules
 
 %changelog
+* Thu Sep 17 2026 Gravity Linux maintainers - 1.6.1-107.gravity
+- Pin M4 GPU handoff and macOS 26.6.2 firmware setup fixes
+
 * Thu Sep 17 2026 Gravity Linux maintainers - 1.6.1-106.gravity
 - Apply packaging-only NO_DISPLAY patch to both boot stages
 

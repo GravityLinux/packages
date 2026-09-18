@@ -34,7 +34,7 @@
   "gravity-bootloader": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/bootloader.git",
-    "ref": "ff7489ca80ed7d541c54aac23cb2beaaaf4d8766",
+    "ref": "12b4b5f60ef4ab3d38e28817b32742f0300289f1",
     "archive": "gravity-bootloader-1.6.1.tar.gz",
     "omit_submodules": ["artwork"],
     "root": "gravity-bootloader-1.6.1",
