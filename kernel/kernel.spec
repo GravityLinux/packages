@@ -196,7 +196,7 @@ Summary: The Linux kernel
 # This is needed to do merge window version magic
 %define patchlevel 1
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 507.gravity%{?buildid}%{?dist}
+%define specrelease 508.gravity%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.1.13
 
@@ -4880,6 +4880,9 @@ fi\
 #
 #
 %changelog
+* Sat Sep 19 2026 Gravity Linux maintainers - 7.1.13-508.gravity
+- Update the M4 kernel pin for ALSA underrun handling, DCP firmware compatibility, and speaker mixer control removal.
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 7.1.13-507.gravity
 - Canonicalize disabled config options and reconcile trimmed audio/SoC dependencies
 
