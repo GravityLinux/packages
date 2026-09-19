@@ -34,11 +34,11 @@
   "gravity-bootloader": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/bootloader.git",
-    "ref": "47d97ba32aef1f52b95ab2b47c4d139563aad2e1",
+    "ref": "2f43e06644451dfbc98283832bc07c66bebc53b5",
     "archive": "gravity-bootloader-1.6.1.tar.gz",
     "omit_submodules": ["artwork"],
     "root": "gravity-bootloader-1.6.1",
-    "note": "Published M4 NVMe support and DCP 26.6 compatibility for firmware 26.6.2."
+    "note": "Pinned Gravity bootloader main at 2f43e0664445 for the next image build."
   },
   "gravity-scripts": {
     "kind": "git",
