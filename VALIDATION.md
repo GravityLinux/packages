@@ -1,5 +1,27 @@
 # Validation — 2026-09-15
 
+## 2026-09-19 DCP actual-version contract (kernel 509 / bootloader 110)
+
+- Linux 3c08d26a0bd0 requires actual 26.6.2 on T8132 DCP/DCPEXT without reading
+  firmware-compat. Older platforms retain their compatibility-based selection.
+- Bootloader b5bc943 emits both properties unchanged for 26.6.2; no catalog,
+  protocol structure, GPU or ISP changes. Both source pins require publishing.
+- Host-compiled tests of the actual C functions pass, covering exact-version
+  rejection, missing/mismatched compatibility, failed version reads, both T8132
+  node types, and preservation of older bootloader/kernel mappings. Harness:
+  infrastructure/firmware-version/test_dcp_version.py in the parent workspace.
+- This is not full kernel/bootloader compilation or a hardware boot test.
+- Publish/test the new kernel before deploying the new stage2 to existing systems.
+
+## Kernel refresh (508.gravity)
+
+- Fast-forwarded Linux gravity-m4 to 7b9ba99a50084ce5bf19a4e07a29f68269c39856:
+  DCP firmware compatibility string fix and T8132 ALSA underrun handling.
+- All four modular DRM export patches still pass git apply --check.
+- Overlay regression tests and all eight AArch64 configurations pass the
+  pinned-source Kconfig generation and Fedora mismatch comparator checks.
+- No full kernel compilation or hardware audio/display test performed locally.
+
 ## 2026-09-18 Fedora config comparison fix (507.gravity)
 
 - Config overlays now emit canonical disabled-option comments, not `=n`.

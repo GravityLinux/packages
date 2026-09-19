@@ -2,7 +2,7 @@
   "kernel": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/linux.git",
-    "ref": "d45c71e4b0404e9eced41f5bdfe9a289c9835364",
+    "ref": "dea38a96aa86679d5e24da16b799030fe07ad2f6",
     "archive": "gravity-m4.patch",
     "base_ref": "3988dac1664c05fa7c8310fcad8eee10428b5f43",
     "root": "linux-7.1.13",
@@ -34,11 +34,11 @@
   "gravity-bootloader": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/bootloader.git",
-    "ref": "2f43e06644451dfbc98283832bc07c66bebc53b5",
+    "ref": "b5bc943afc4310b38cf464ea98355ac4c5fecc96",
     "archive": "gravity-bootloader-1.6.1.tar.gz",
     "omit_submodules": ["artwork"],
     "root": "gravity-bootloader-1.6.1",
-    "note": "Pinned Gravity bootloader main at 2f43e0664445 for the next image build."
+    "note": "Preserve DCP firmware-version and firmware-compat as 26.6.2; pair with the kernel's exact actual-version check. Publish pinned source commits before building."
   },
   "gravity-scripts": {
     "kind": "git",
