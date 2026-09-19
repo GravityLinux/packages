@@ -201,6 +201,9 @@ def overlay_kernel_configs(sources):
             if not line.startswith("CONFIG_"):
                 continue
             key = line.split("=", 1)[0]
+            # Fedora compares the spelling too, not just Kconfig semantics.
+            if line == key + "=n":
+                line = f"# {key} is not set"
             contents = re.sub(r"^(?:" + key + r"=.*|# " + key + r" is not set)\n", "", contents, flags=re.M)
             contents += line + "\n"
         config.write_text(contents)

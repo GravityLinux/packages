@@ -1,5 +1,20 @@
 # Validation — 2026-09-15
 
+## 2026-09-18 Fedora config comparison fix (507.gravity)
+
+- Config overlays now emit canonical disabled-option comments, not `=n`.
+- Apple 16K overlays explicitly reconcile REGMAP_SPMI=m, QCOM_SCM=m and
+  SND_COMPRESS_OFFLOAD=y with the selected drivers' Kconfig requirements.
+- Overlay regression tests pass, including repeated application, disabled-option
+  spelling, dependency values and preservation of non-16K variants.
+- Ran tools/check_kernel_kconfig.py against pinned Linux 3cd0faa9ba07 and the
+  existing extracted baseline SRPM SOURCES in .work/kernel-hobv6jv7/SOURCES.
+  All eight Fedora AArch64 variants passed listnewconfig, olddefconfig and
+  the baseline process_configs.sh AWK mismatch comparator, with no new options,
+  config warnings or mismatches. Inputs were not modified.
+- This tests Kconfig generation/comparison with Fedora's dummy GCC toolchain;
+  it is not a complete RPM %prep, kernel compilation or hardware test.
+
 ## 2026-09-18 Apple 16K trim (506.gravity)
 
 - Rebased the removable no-sleep policy onto published packages/main.
