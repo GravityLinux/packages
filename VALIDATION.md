@@ -4,7 +4,7 @@
 
 - Linux 3c08d26a0bd0 requires actual 26.6.2 on T8132 DCP/DCPEXT without reading
   firmware-compat. Older platforms retain their compatibility-based selection.
-- Bootloader b5bc943 emits both properties unchanged for 26.6.2; no catalog,
+- Bootloader f64760b emits both properties unchanged for 26.6.2; no catalog,
   protocol structure, GPU or ISP changes. Both source pins require publishing.
 - Host-compiled tests of the actual C functions pass, covering exact-version
   rejection, missing/mismatched compatibility, failed version reads, both T8132
