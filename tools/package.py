@@ -190,6 +190,7 @@ def unpack_srpm(srpm, destination):
 def overlay_kernel_configs(sources):
     common = (ROOT / "kernel" / "gravity-aarch64.config").read_text().splitlines()
     apple_16k = (ROOT / "kernel" / "gravity.config").read_text().splitlines()
+    apple_16k += (ROOT / "kernel" / "gravity-trim.config").read_text().splitlines()
     # Fedora checks all config variants in %prep, not just the shipped 16K one.
     for config in sources.glob("kernel-aarch64*-fedora.config"):
         fragment = common

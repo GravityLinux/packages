@@ -19,7 +19,7 @@ class KernelConfigTests(unittest.TestCase):
         ):
             with self.subTest(previous=previous), tempfile.TemporaryDirectory() as tmp:
                 sources = Path(tmp)
-                initial = "# Preserve existing config\nCONFIG_OTHER=y\n" + previous
+                initial = "# Preserve existing config\nCONFIG_OTHER=y\nCONFIG_DRM_NOUVEAU=m\nCONFIG_ARCH_QCOM=y\nCONFIG_USB_STORAGE=m\n" + previous
                 for variant in variants:
                     (sources / f"kernel-{variant}-fedora.config").write_text(initial)
                 overlay_kernel_configs(sources)
@@ -28,6 +28,14 @@ class KernelConfigTests(unittest.TestCase):
                 self.assertEqual(first, {p.name: p.read_text() for p in sources.iterdir()})
                 for variant in variants:
                     result = first[f"kernel-{variant}-fedora.config"]
+                    if variant.startswith("aarch64-16k"):
+                        self.assertIn("CONFIG_DRM_NOUVEAU=n\n", result)
+                        self.assertNotIn("CONFIG_DRM_NOUVEAU=m\n", result)
+                        self.assertIn("CONFIG_ARCH_QCOM=n\n", result)
+                    else:
+                        self.assertIn("CONFIG_DRM_NOUVEAU=m\n", result)
+                        self.assertIn("CONFIG_ARCH_QCOM=y\n", result)
+                    self.assertIn("CONFIG_USB_STORAGE=m\n", result)
                     if variant.startswith("aarch64"):
                         self.assertEqual(result.count("CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON="), 1)
                         self.assertIn("CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON=y\n", result)

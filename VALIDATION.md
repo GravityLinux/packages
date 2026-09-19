@@ -1,5 +1,22 @@
 # Validation — 2026-09-15
 
+## 2026-09-18 Apple 16K trim (506.gravity)
+
+- Rebased the removable no-sleep policy onto published packages/main.
+- Source pins match fetched Gravity kernel 3cd0faa9ba07, Mesa 353cfbc3154,
+  bootloader 47d97ba32aef, installer 34c9ded9e2e4, and U-Boot a2f6913694f.
+- Normal and debug 16K configurations pass listnewconfig (no new options)
+  and olddefconfig using the pinned kernel and Fedora's dummy GCC toolchain.
+- Normal module selections drop from 5596 to 4711; debug from 5600 to 4715.
+  These are Kconfig selections, not measured binary size/build-time savings.
+- Checked that Apple display/GPU/audio/NVMe/radio, USB storage/UAS/audio,
+  virtio, filesystem and PM settings match their respective untrimmed configs.
+  Normal retains both Asahi GPU drivers. The debug baseline already loses Rust
+  with dummy GCC because KASAN requires Clang for Rust; the trim does not change
+  that existing toolchain-dependent behavior.
+- Overlay regression tests verify 16K-only scope and idempotence. No full
+  kernel compilation or hardware test has been performed for this trim.
+
 ## 2026-09-18 J773g radio calibration
 
 - Installer tests pass both with the bundled ASN.1 decoder and on the Fedora
