@@ -8,7 +8,7 @@
 Name:           gravity-installer
 Vendor:         Gravity Linux
 Version:        0.9.1
-Release:        103.gravity%{?dist}
+Release:        104.gravity%{?dist}
 Summary:        Gravity Linux firmware extraction tools
 License:        MIT
 URL:            https://github.com/GravityLinux/installer
@@ -58,6 +58,9 @@ rm %{pypi_name}/asn1.py
 %{_bindir}/gravity-fwextract
 
 %changelog
+* Fri Sep 18 2026 Gravity Linux maintainers - 0.9.1-104.gravity
+- Preserve J773g Wi-Fi and Bluetooth factory calibration for boot DT injection
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 0.9.1-103.gravity
 - Pin qualified macOS 26.6.2 recovery and firmware extraction support
 

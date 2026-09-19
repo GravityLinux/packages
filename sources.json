@@ -21,7 +21,7 @@
   },
   "uboot-tools": {
     "kind": "spec",
-    "note": "Asahi/Fedora source plus six checked-in Gravity patches through 4b738f4f51bc47778cd8dfd7125ae0802399cd7b; see UPSTREAM.md."
+    "note": "Asahi/Fedora source plus nine checked-in Gravity patches through a2f6913694ff26908c16948af3f8372429782263; see UPSTREAM.md."
   },
   "rust-speakersafetyd": {
     "kind": "git",
@@ -51,11 +51,11 @@
   "gravity-installer": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/installer.git",
-    "ref": "b930a886a70eb2a56d4bb3e6cc3b89ac6e974485",
+    "ref": "34c9ded9e2e4efd9add6bb984d5c50656ea324da",
     "archive": "gravity-installer-0.9.1.tar.gz",
     "omit_submodules": ["artwork", "bootloader"],
     "root": "gravity-installer-0.9.1",
-    "note": "Published macOS 26.6.2 recovery and firmware extraction support; Linux firmware-tool sources omit the macOS artwork and bootloader submodules."
+    "note": "Qualified recovery extraction plus per-radio J773g Wi-Fi and Bluetooth factory calibration."
   },
   "gravity-platform-metapackage": {
     "kind": "spec"

@@ -35,9 +35,12 @@ These committed Gravity patches follow that series:
 - 2db9584de33 — find the ESP on T8132 NVMe.
 - 61d4b40d3fa — service RTKit messages while waiting for the controller.
 - 4b738f4f51b — hold ANS reset during controller removal.
+- ddecfb8eb6a — record the tested 32-bank Apple memory configuration.
+- 6e594cafea8 — inject per-radio Bluetooth calibration from the ESP.
+- a2f6913694f — inject Wi-Fi calibration through the same bounded loader.
 
 The packaged Gravity U-Boot revision on `gravity-alpha-20260925` is
-`4b738f4f51bc47778cd8dfd7125ae0802399cd7b` (RPM release 202.gravity).
+`a2f6913694ff26908c16948af3f8372429782263` (RPM release 203.gravity).
 Re-export the patches and update this file when that source changes.
 
 ## Kernel

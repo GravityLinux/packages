@@ -1,5 +1,33 @@
 # Validation — 2026-09-15
 
+## 2026-09-18 J773g radio calibration
+
+- Installer tests pass both with the bundled ASN.1 decoder and on the Fedora
+  test image using Fedora's ASN.1 2.7.0 module (22 tests in each environment).
+- The installer extracts BTBF and WCAL from local factory BWCl records, saves
+  address-bound ESP filenames and raw-archive metadata, and reproduces them
+  during firmware updates. No Apple calibration data is committed.
+- U-Boot's checked-in Apple configuration now includes the 32 memory banks
+  used in the working M4 test builds and 128 KiB of DT fixup padding.
+- The updated U-Boot cross-build passes. A fresh m1n1 → U-Boot → EFI boot into
+  the Fedora test image produces both calibration DT properties with exact
+  matches to the local factory extraction (Bluetooth 15,040 bytes; Wi-Fi
+  5,888 bytes). The Wi-Fi driver reports loading its platform calibration.
+- Bluetooth initializes automatically with the already-pinned BCM4388
+  beamforming-only probe fix compiled against the image's matching kernel
+  development package. This is a test module, not a completed RPM rebuild.
+  Bluetooth discovers nearby devices and Wi-Fi finds 25 access points.
+  Association, pairing and throughput were not tested in this validation.
+- A host libfdt harness exercises the actual U-Boot loader function, covering
+  both address byte orders, existing-property preservation, missing/invalid/
+  short files, invalid addresses and insufficient DT capacity.
+- All 58 U-Boot RPM patches apply to the checksum-verified upstream tarball.
+  The resulting Apple board source and defconfig match the committed fork
+  byte for byte, and the patched package source cross-builds successfully.
+  That exact package-derived U-Boot build also boots the Fedora test image
+  through EFI with both matching calibration properties and working radios.
+- Package input checks pass. New COPR binary builds remain required.
+
 ## 2026-09-16 downstream audio preparation
 
 - Added a thirteenth recipe, rust-speakersafetyd, adapted from Fedora f44.

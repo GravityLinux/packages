@@ -7,7 +7,7 @@
 Name:     uboot-tools
 Vendor:         Gravity Linux
 Version:  2026.07
-Release:  202.gravity%{?candidate:.%{candidate}}%{?dist}
+Release:  203.gravity%{?candidate:.%{candidate}}%{?dist}
 Epoch:    1
 Summary:  U-Boot utilities
 # Automatically converted from old format: GPLv2+ BSD LGPL-2.1+ LGPL-2.0+ - review is highly recommended.
@@ -123,6 +123,9 @@ Patch202: gravity-49840d57974.patch
 Patch203: gravity-2db9584de33.patch
 Patch204: gravity-61d4b40d3fa.patch
 Patch205: gravity-4b738f4f51b.patch
+Patch206: gravity-ddecfb8eb6a.patch
+Patch207: gravity-6e594cafea8.patch
+Patch208: gravity-a2f6913694f.patch
 
 BuildRequires:  bc
 BuildRequires:  bison
@@ -389,6 +392,10 @@ install -p -m 0755 builds/tools/env/fw_printenv %{buildroot}%{_bindir}
 %endif
 
 %changelog
+* Fri Sep 18 2026 Gravity Linux maintainers - 1:2026.07-203.gravity
+- Include the tested 32-bank Apple memory configuration
+- Inject per-radio J773g Wi-Fi and Bluetooth calibration from the ESP
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 1:2026.07-202.gravity
 - Service RTKit messages while waiting for the NVMe controller
 - Hold ANS reset during controller removal for the Linux handoff
