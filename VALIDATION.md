@@ -2,10 +2,12 @@
 
 ## 2026-09-19 DCP actual-version contract (kernel 509 / bootloader 110)
 
-- Linux 3c08d26a0bd0 requires actual 26.6.2 on T8132 DCP/DCPEXT without reading
-  firmware-compat. Older platforms retain their compatibility-based selection.
+- Linux dea38a96aa86 includes 3c08d26a0bd0's exact 26.6.2 check on T8132
+  DCP/DCPEXT without reading firmware-compat, plus d45c71e4b040's speaker mixer
+  control fix. Older platforms retain their compatibility-based selection.
 - Bootloader f64760b emits both properties unchanged for 26.6.2; no catalog,
-  protocol structure, GPU or ISP changes. Both source pins require publishing.
+  protocol structure, GPU or ISP changes. Linux is published; this bootloader
+  commit must be pushed before building. Its tree is identical to b5bc943.
 - Host-compiled tests of the actual C functions pass, covering exact-version
   rejection, missing/mismatched compatibility, failed version reads, both T8132
   node types, and preservation of older bootloader/kernel mappings. Harness:
