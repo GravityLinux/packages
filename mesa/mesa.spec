@@ -82,7 +82,7 @@ Name:           mesa
 Vendor:         Gravity Linux
 Summary:        Mesa graphics libraries
 Version:        26.3.0~devel
-Release:        102.gravity%{?dist}
+Release:        103.gravity%{?dist}
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
 
@@ -759,6 +759,9 @@ ln -s libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
 %endif
 
 %changelog
+* Sun Sep 27 2026 Gravity Linux maintainers - 26.3.0~devel-103.gravity
+- Update Mesa source pin to include ordinary varying export for legacy clip vertex
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 26.3.0~devel-102.gravity
 - Pin published M4 compiler and driver updates with automatic Apple9 rendering
 

@@ -14,10 +14,10 @@
   "mesa": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/mesa.git",
-    "ref": "353cfbc31546748cdbab68481cd40a27106663cf",
+    "ref": "87ac51d411f0e58a9433567ec2666f457be89e1d",
     "archive": "mesa-26.3.0-devel.tar.xz",
     "root": "mesa-26.3.0-devel",
-    "note": "Published M4 compiler and driver updates, including automatic Apple9 rendering selection, through 2026-09-18."
+    "note": "Published M4 compiler and driver updates, including automatic Apple9 rendering selection and ordinary varying export for legacy clip vertex."
   },
   "uboot-tools": {
     "kind": "spec",
