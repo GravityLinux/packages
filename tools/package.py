@@ -79,6 +79,8 @@ def blockers(name, recipe, release):
 
 def check(recipes, release):
     for name, recipe in recipes.items():
+        if "base_srpm" in recipe:
+            raise ValueError(f"{name}: baseline SRPM downloads are no longer supported; vendor packaging inputs")
         spec = ROOT / name / (name + ".spec")
         if not spec.is_file():
             raise ValueError(f"Missing {spec}")
@@ -166,25 +168,20 @@ def local_snapshot(package_dir, recipe, destination):
             subprocess.run(["gzip", "-n", "-c"], stdin=raw, stdout=out, check=True)
 
 
-def unpack_srpm(srpm, destination):
-    # Source RPMs in our pinned baseline have flat payloads.
-    listing = subprocess.Popen(["rpm2cpio", str(srpm)], stdout=subprocess.PIPE)
-    names = subprocess.run(["cpio", "-t", "--quiet"], stdin=listing.stdout, capture_output=True, text=True)
-    listing.stdout.close()
-    if listing.wait() or names.returncode:
-        raise ValueError("Cannot list baseline SRPM")
-    for name in names.stdout.splitlines():
-        normalized = name.removeprefix("./")
-        if "/" in normalized or normalized in (".", ".."):
-            raise ValueError(f"Unexpected baseline payload path: {name}")
-    converter = subprocess.Popen(["rpm2cpio", str(srpm)], stdout=subprocess.PIPE)
-    unpack = subprocess.run(
-        ["cpio", "-idm", "--quiet", "--no-absolute-filenames"],
-        stdin=converter.stdout, cwd=destination, check=False,
-    )
-    converter.stdout.close()
-    if converter.wait() or unpack.returncode:
-        raise ValueError("Cannot unpack baseline SRPM")
+def stage_package_sources(name, sources):
+    package_dir = ROOT / name
+    if name == "kernel":
+        inputs = package_dir / "inputs"
+        if not inputs.is_dir():
+            raise ValueError("Missing checked-in kernel packaging inputs")
+        for file in inputs.iterdir():
+            if file.is_symlink() or not file.is_file():
+                raise ValueError(f"Expected flat kernel packaging input: {file}")
+            shutil.copy2(file, sources / file.name)
+        overlay_kernel_configs(sources)
+    for file in package_dir.iterdir():
+        if file.is_file() and not file.name.endswith(".spec"):
+            shutil.copy2(file, sources / file.name)
 
 
 def overlay_kernel_configs(sources):
@@ -230,7 +227,7 @@ def prepare(name, recipe, release, args):
         problems = []
     if problems:
         raise ValueError("\n".join(problems))
-    for command in ("rpmspec", "rpmbuild", "git", "gzip", "xz", "cpio", "rpm2cpio"):
+    for command in ("rpmspec", "rpmbuild", "git", "gzip", "xz"):
         if not shutil.which(command):
             raise ValueError(f"Missing {command}; use the Fedora environment documented in README.md")
     parent = ROOT / ".work"
@@ -241,16 +238,8 @@ def prepare(name, recipe, release, args):
     sources = work / "SOURCES"
     locks = read_json("downloads.lock.json")
     updates = {}
-    base = recipe.get("base_srpm")
-    if base:
-        srpm = work / "baseline.src.rpm"
-        download(base["url"], srpm, base["sha256"], False, updates)
-        unpack_srpm(srpm, sources)
-        overlay_kernel_configs(sources)
     package_dir = ROOT / name
-    for file in package_dir.iterdir():
-        if file.is_file() and not file.name.endswith(".spec"):
-            shutil.copyfile(file, sources / file.name)
+    stage_package_sources(name, sources)
     if not (sources / "LICENSE").exists():
         shutil.copyfile(ROOT / "LICENSE", sources / "LICENSE")
     spec = work / "SPECS" / (name + ".spec")

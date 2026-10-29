@@ -1,0 +1,2619 @@
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/df492e6c799d6dcfed130996cc5e679a1b15551a
+ df492e6c799d6dcfed130996cc5e679a1b15551a wifi: brcmfmac: cfg80211: Report port_authorized for 4-way HS offload
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0b9c8c56426939bb88501348d67bc719ac4b195b
+ 0b9c8c56426939bb88501348d67bc719ac4b195b fixup! arm64: dts: apple: t[603x,8122]: Add speaker/jack nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/91ed183ef0f561a3c47fa3a2d4dcce775dc27432
+ 91ed183ef0f561a3c47fa3a2d4dcce775dc27432 fixup! arm64: dts: apple: t[603x,8122]: Add speaker/jack nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1a65925d28be2bc096da22a761db52804730dc1e
+ 1a65925d28be2bc096da22a761db52804730dc1e fixup! media: apple: avd: support vp9
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5b4263a99da57719099c5d84d3d9aaad6e000c9f
+ 5b4263a99da57719099c5d84d3d9aaad6e000c9f media: apple: avd: add a dedicated "submit" step
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/625a4ca81491ef3117f5e5c166632cffad030ffe
+ 625a4ca81491ef3117f5e5c166632cffad030ffe fixup! media: apple: avd: define static values and bitmasks
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f81aef399af545c7f715051c92a832cf0297e42d
+ f81aef399af545c7f715051c92a832cf0297e42d media: apple: avd: rename buffers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ed7f65b05bbaec1d624cc3c129ebf8dc82606a1a
+ ed7f65b05bbaec1d624cc3c129ebf8dc82606a1a fixup! media: apple: avd: add av1 support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e86593ea8d273be3a1ad42841aaeb9a29940e30b
+ e86593ea8d273be3a1ad42841aaeb9a29940e30b media: apple: avd: check that buffer size is positive
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6a1eb40919034c74fafd88eb34f767edd17b777b
+ 6a1eb40919034c74fafd88eb34f767edd17b777b fixup! media: apple: add avd driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d501ce3165d0ebab228ea28672dc4773776b1cb8
+ d501ce3165d0ebab228ea28672dc4773776b1cb8 fixup! HID: magicmouse: add support for Macbook trackpads
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e5f1d4dfbc8da2b286218c04d2669286e4b831b3
+ e5f1d4dfbc8da2b286218c04d2669286e4b831b3 mfd: macsmc: Add second gpio subdevice for 'gp00' keys
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/45e157d6d314b8641255a87ad16e181ddffe04db
+ 45e157d6d314b8641255a87ad16e181ddffe04db gpio: gpio-macsmc: Support 'gp00' GPIO keys
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/43f36a95c40d2ab7c0b4230f9e176f42db0286d9
+ 43f36a95c40d2ab7c0b4230f9e176f42db0286d9 dt-bindings: gpio: apple,smc: Add compatible for 'gp00' keys
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ccb4457e399bcf7cd8f230a0ee73fcde4f2946ec
+ ccb4457e399bcf7cd8f230a0ee73fcde4f2946ec driver-core: Add error message to device_links_missing_supplier WARN()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/66b3a6b6e05bc1b05f6b1da9d5e3f64d90ff169f
+ 66b3a6b6e05bc1b05f6b1da9d5e3f64d90ff169f Fail the build on RUST=y and RUST_IS_AVAILABLE=n
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7c4ff11e82759c54cae212962032dc16a737bb45
+ 7c4ff11e82759c54cae212962032dc16a737bb45 Bluetooth: Add Broadcom channel priority commands
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/25b225fa96ed2a1ab4b342170a6d7e4394e02743
+ 25b225fa96ed2a1ab4b342170a6d7e4394e02743 Bluetooth: hci_bcm4377: Ignore reserved PHY in ext adv reports on BCM4378
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b250477596feaf78fb78aa27c2243d903dd5d89f
+ b250477596feaf78fb78aa27c2243d903dd5d89f arch: arm64: add early_param idle=<wfi|yield|nop>
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/147387421c47992250e032fc9f91566d8b710809
+ 147387421c47992250e032fc9f91566d8b710809 nvme-apple: Drop the PRP null check chicken bit
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7e9396298822fc3543407239f3166f24525e8065
+ 7e9396298822fc3543407239f3166f24525e8065 nvme-apple: Require page aligned buffers on the admin queue
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d632a7c74f02e06aa1147ed602dbe5a7d6b4574a
+ d632a7c74f02e06aa1147ed602dbe5a7d6b4574a nvme: Add a quirk for page aligned admin queue buffers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3fb253b49493cb9eadb73810c1a4b76172261c41
+ 3fb253b49493cb9eadb73810c1a4b76172261c41 nvme-apple: Never set the opcode in the NVMMU TCB
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/109a1300fef6d4eeb4b482b8743db117e40be883
+ 109a1300fef6d4eeb4b482b8743db117e40be883 nvme-apple: Don't set a DMA direction for commands without a data transfer
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fd618da55e00bc5ca1da957e44c26c7a874cce43
+ fd618da55e00bc5ca1da957e44c26c7a874cce43 nvme-apple: Destroy the admin queue on removal
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d968fb33adcfc51b9e7a624f5a8417b7c2fb1431
+ d968fb33adcfc51b9e7a624f5a8417b7c2fb1431 mm: pull writability check to follow_pfnmap_start()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/95a7d9b6add1f6eef5fff7e5791bb902fafbf7f9
+ 95a7d9b6add1f6eef5fff7e5791bb902fafbf7f9 kvm: apply VM_READ/VM_WRITE checks to all VMA types
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d312006717d18050226f9b4000808f3cf0c28a69
+ d312006717d18050226f9b4000808f3cf0c28a69 drm/ttm, drm/vmwgfx: directly create writable PTEs when mkwrite is in use
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5aaaa7a8de049bf57443febabd499f0462f78640
+ 5aaaa7a8de049bf57443febabd499f0462f78640 drm/shmem_helper: use vmf_insert_pfn_mkwrite()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1d619e24092b467bcb8ea08f4541dcb6a5bc89a9
+ 1d619e24092b467bcb8ea08f4541dcb6a5bc89a9 mm: export vmf_insert_pfn_prot_mkwrite(), change variants to inline
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/99b2c0dc226ff009ad4aca73efac46ecd712ad03
+ 99b2c0dc226ff009ad4aca73efac46ecd712ad03 mfd: macsmc: Fix key count endianness annotation
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7a49f5abe25a9831fa3551232cb60e59b91ed23e
+ 7a49f5abe25a9831fa3551232cb60e59b91ed23e cpufreq: apple-soc: Calculate frequency as a 64-bit value
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/84fd249c2d594ef08151ef48eb11167b82d858d0
+ 84fd249c2d594ef08151ef48eb11167b82d858d0 bus: simple-pm-bus: Add "apple,*-pmgr" compatibles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2cd3be4e1e71c5bcd6ce048aec2f654a43155ec6
+ 2cd3be4e1e71c5bcd6ce048aec2f654a43155ec6 nvmem: core: Fix OOB read for bit offsets of more than one byte
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d34b52daaeea70ce3460a0d3cbcf40c453a35f2d
+ d34b52daaeea70ce3460a0d3cbcf40c453a35f2d spmi: apple: Add interrupt functionality
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3f444807187f9d210ce0c5b1486c738893bc16bf
+ 3f444807187f9d210ce0c5b1486c738893bc16bf spmi: apple: lock around FIFOs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/22f8305ae92009b5200cd61987526acdcc40746c
+ 22f8305ae92009b5200cd61987526acdcc40746c spmi: apple: Implement remaining commands
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9953272cfc4ad2d24b86d39c25a46f002b8ecfcc
+ 9953272cfc4ad2d24b86d39c25a46f002b8ecfcc spmi: apple: check transaction status
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8366e1a0c8d6b4a61e188cdf425f2a305422ec71
+ 8366e1a0c8d6b4a61e188cdf425f2a305422ec71 spmi: apple: Validate FIFO state
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3ef51e30d99b734aeb55daf56f95668fe5ff5024
+ 3ef51e30d99b734aeb55daf56f95668fe5ff5024 dt-bindings: spmi: apple,spmi: Add t603x
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8cb23985079afcfac5c0e2189fd253f20947e1ff
+ 8cb23985079afcfac5c0e2189fd253f20947e1ff usb: typec: tipd: Add sn201202x support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/97cdbbdbf894c6883d3b211634b6cbf61719870c
+ 97cdbbdbf894c6883d3b211634b6cbf61719870c usb: typec: tipd: Factor out i2c specifics
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ecef4ccc1be8a3ca07abac9ac3fbbcae3592a59f
+ ecef4ccc1be8a3ca07abac9ac3fbbcae3592a59f dt-bindings: usb: tps6598x: Add sn201202x/ACE3
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/00db955278586aadf80ed30205006af8de08a1eb
+ 00db955278586aadf80ed30205006af8de08a1eb ASoC: apple: aop: Add M3 generation built-in mics
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8d06bc74744884a6d4cd207d48559368da06e3d8
+ 8d06bc74744884a6d4cd207d48559368da06e3d8 fixup! soc: apple: Add support for the PMP co-processor
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/115f670945a5cab6a7659460c7507c2dd826d337
+ 115f670945a5cab6a7659460c7507c2dd826d337 soc: apple: Add support for the PMP co-processor
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2c5d523d0f582f0e41d1252e61ee0b65b8e2388c
+ 2c5d523d0f582f0e41d1252e61ee0b65b8e2388c rust: bindings: WIP(?): Export various bits for PMP driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e0fa988f55e9356fb74a2d269f7ae5d1fe93cba2
+ e0fa988f55e9356fb74a2d269f7ae5d1fe93cba2 fixup! ASoC: apple: Add aop_audio driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fe2d28b1768f56ba30cbaec5df6e6da787a74ce2
+ fe2d28b1768f56ba30cbaec5df6e6da787a74ce2 ASoC: apple: aop: Simply C string handling for snd identifiers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/aac47e28d3a0e959a9fc4393244a8972a58f341f
+ aac47e28d3a0e959a9fc4393244a8972a58f341f ASoC: apple: aop: Ensure all fields are aligned
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c916ec38f2e00153d1954be1534b0e989ed0e0f7
+ c916ec38f2e00153d1954be1534b0e989ed0e0f7 ASoC: apple: aop: Import unaligned u32 from asahi
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/890914d7c0b0089be004ad2787991675a734902a
+ 890914d7c0b0089be004ad2787991675a734902a fixup! soc: apple: Add SEP driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5485573010c9f0c21f42afdc792dc3a97bf7f714
+ 5485573010c9f0c21f42afdc792dc3a97bf7f714 soc: apple: Add SEP driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/09832e513050dcc882f7be2f4c54714b4963180c
+ 09832e513050dcc882f7be2f4c54714b4963180c rust: soc: apple: Add Apple mailbox abstractions
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d61af69cd0f630972c27efb10ae0e97835083708
+ d61af69cd0f630972c27efb10ae0e97835083708 fixup! iio: common: Add AOP sensor drivers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d7dbceaf123cc1c86e1f58645c4bd5358dc1ca3c
+ d7dbceaf123cc1c86e1f58645c4bd5358dc1ca3c iio: common: Add AOP sensor drivers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6bb671b8353a4f356e5196cdbc600694397e4b35
+ 6bb671b8353a4f356e5196cdbc600694397e4b35 ASoC: apple: aop: Add module parameter to check mics without beamforming
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f02ab6b5e14881ec9569f4923f4df67455eed1b6
+ f02ab6b5e14881ec9569f4923f4df67455eed1b6 ASoC: apple: Add aop_audio driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f794dba12d63cfaed76f5646f218a5999d05cddd
+ f794dba12d63cfaed76f5646f218a5999d05cddd fixup! soc: apple: Add support for the AOP co-processor
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3c0ded2d8bc6de16e91083334336b8203d248641
+ 3c0ded2d8bc6de16e91083334336b8203d248641 squash! soc: apple: Add support for the AOP co-processor
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/65cbeaa32e4292e4974e17198328b44185c3a9a9
+ 65cbeaa32e4292e4974e17198328b44185c3a9a9 soc: apple: Add support for the AOP co-processor
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/296588eb3e00ef0ddc2548513cd6208788cfcdcd
+ 296588eb3e00ef0ddc2548513cd6208788cfcdcd rust: alloc: kvec: WIP(?): Add swap_remove() for AOP series
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/80c1b336865816c6777813345a8afed978f0246b
+ 80c1b336865816c6777813345a8afed978f0246b rust: device: WIP(?): Add get_drvdata for AOP series
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4599965bb264c14b7a251351d19783ed72f47606
+ 4599965bb264c14b7a251351d19783ed72f47606 rust: bindings: WIP(?): Add IIO bits for AOP series
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ce327a008caa397b0a48abd3a9612f79b242aa71
+ ce327a008caa397b0a48abd3a9612f79b242aa71 rust: bindings: WIP(?): Add sound bits for AOP series
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/70dc5ee27714718e7162455d58969d9b45988091
+ 70dc5ee27714718e7162455d58969d9b45988091 rust: soc: apple: rtkit: Add apple_rtkit_has_endpoint
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5b662f819d0bdccbd8ebbed582c95b9de07f6f02
+ 5b662f819d0bdccbd8ebbed582c95b9de07f6f02 rust: bindgen: Make snd_dec_flac opaque
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/935971c248a9e95e51a2b3e4440bf69dcea85b49
+ 935971c248a9e95e51a2b3e4440bf69dcea85b49 rust: device: HACK? make parent() public
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f5f896341b63b5fad1d08ac751637853d92de9a6
+ f5f896341b63b5fad1d08ac751637853d92de9a6 rust: device: WIP(?): Make as_raw() public for AOP series
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d6b87835fbc1ddb074b0b54a2ae660ccd18c0bdd
+ d6b87835fbc1ddb074b0b54a2ae660ccd18c0bdd rust: property: HACK? make as_raw() public
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d02c245ca8f3f998483d404d4cb63171f19ac4cf
+ d02c245ca8f3f998483d404d4cb63171f19ac4cf media: apple: avd: h264: fix default weights handling
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/155748ebe9c4e8bd169ad09135eacf5ef28eca93
+ 155748ebe9c4e8bd169ad09135eacf5ef28eca93 dt-bindings: media: add apple,avd
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ab5527c5637cf8c69ff8ac8f15a46162d4720f22
+ ab5527c5637cf8c69ff8ac8f15a46162d4720f22 media: apple: avd: h264: size buffers correctly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/326810181bcc8a84c5d9a0dea8836e85aefa969d
+ 326810181bcc8a84c5d9a0dea8836e85aefa969d media: apple: avd: hevc: size buffers correctly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cb747311d393285e16921b5cff3b9c1e3a01e3e1
+ cb747311d393285e16921b5cff3b9c1e3a01e3e1 media: apple: avd: vp9: size buffers correctly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1b07bafeed143cab8b883b65c5fa8a1f5d629106
+ 1b07bafeed143cab8b883b65c5fa8a1f5d629106 media: apple: avd: av1: size buffers (semi) correctly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a7fb80068ec9f3344395466deab070b17a7c0a99
+ a7fb80068ec9f3344395466deab070b17a7c0a99 media: apple: avd: only allocate if new buffer is larger
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2b16175d1b2df5754c6788f829de964358efc96a
+ 2b16175d1b2df5754c6788f829de964358efc96a media: apple: avd: change rvra naming and fix size calculation
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7d713826b3b1117f1a39ad648ee9bd7b0686339b
+ 7d713826b3b1117f1a39ad648ee9bd7b0686339b media: apple: avd: add y, uv and coded to common struct
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/34d255d031d4db45d790466e073c47cf2364e7dc
+ 34d255d031d4db45d790466e073c47cf2364e7dc media: apple: avd: drop INST_DMA
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ef8c885da43b272da99fcc7584234faa643e1863
+ ef8c885da43b272da99fcc7584234faa643e1863 media: apple: avd: av1: add try_ctrl handler
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/75c34b2c78fff276d7feffadb7f4dd0e442ba82b
+ 75c34b2c78fff276d7feffadb7f4dd0e442ba82b media: apple: avd: calculate buffer size
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/41ab0f84d73dda512547e1251d9bf31c280dbb1f
+ 41ab0f84d73dda512547e1251d9bf31c280dbb1f media: apple: avd: mark suspend/resume as __maybe_unused
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/da70975d25a8f9368e8133ae3ffb62e9cabdc24b
+ da70975d25a8f9368e8133ae3ffb62e9cabdc24b media: apple: avd: add MODULE_FIRMWARE
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7e41c7dd0117351265761a9dea256807adc1ee65
+ 7e41c7dd0117351265761a9dea256807adc1ee65 media: apple: avd: better av1 support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e525e6cbb11626c6984e24a6c1f74656f4bb7dd8
+ e525e6cbb11626c6984e24a6c1f74656f4bb7dd8 media: apple: avd: fix hevc offsets
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2a4749f217cd2a61337b79eb147c3416a6ba5234
+ 2a4749f217cd2a61337b79eb147c3416a6ba5234 fixup! media: apple: avd: define static values and bitmasks
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d4d32b46152c5ad24df894aa658291add2273eaa
+ d4d32b46152c5ad24df894aa658291add2273eaa media: apple: avd: clang-format avd-{av1,h264,hevc,vp9}
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dd948477aff19f6c6cd2123f28f586f285e09972
+ dd948477aff19f6c6cd2123f28f586f285e09972 media: apple: isp: add t8122 support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3215b80fd95f0b346e8404b3b56a37973cc4ef28
+ 3215b80fd95f0b346e8404b3b56a37973cc4ef28 media: apple: isp: add t6030 support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d8bfc32a3dcbe2a09e982e4d28294d773662be22
+ d8bfc32a3dcbe2a09e982e4d28294d773662be22 media: apple: avd: add av1 support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9e2b1f9727aad207c5e1999dd0d08369d9fb9527
+ 9e2b1f9727aad207c5e1999dd0d08369d9fb9527 media: apple: avd: define static values and bitmasks
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e2c95b1c05881d2b22309e00a8ca0d4d26657440
+ e2c95b1c05881d2b22309e00a8ca0d4d26657440 media: apple: avd: fix vp9 format selection
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/177e852c408935b64b59073ffde11165ba153a82
+ 177e852c408935b64b59073ffde11165ba153a82 fixup! media: apple: avd: add hevc support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9e7581a5766101976a49f2ca464fd7c5825195f6
+ 9e7581a5766101976a49f2ca464fd7c5825195f6 fixup! media: apple: avd: make get_ref_buf shared
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/28279d96e0a8d7797a614b1961b21da841d70a5b
+ 28279d96e0a8d7797a614b1961b21da841d70a5b media: apple: avd: add hevc support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/13cb6371adc08dc71c3b4c4cd4ee89604955103a
+ 13cb6371adc08dc71c3b4c4cd4ee89604955103a fixup! media: apple: avd: vp9: remove undefined var
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8ffc9449ca4413b8542d0b5fda9a3b80c09a8a2e
+ 8ffc9449ca4413b8542d0b5fda9a3b80c09a8a2e media: apple: avd: make get_ref_buf shared
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c20ee5e64e483d61812ff916fafa331745ae10fb
+ c20ee5e64e483d61812ff916fafa331745ae10fb fixup! media: apple: add avd driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d73765c03e67e173da6e11d58e46bbee1e3d5ecb
+ d73765c03e67e173da6e11d58e46bbee1e3d5ecb media: apple: avd: support vp9
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/643c6b4b9eda3488cdbc26d41f4e82843c9f1249
+ 643c6b4b9eda3488cdbc26d41f4e82843c9f1249 media: apple: add avd driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f68206b257265fae1bd8a01ea84fe90dc4727674
+ f68206b257265fae1bd8a01ea84fe90dc4727674 media: apple: isp: Add t6031 support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0c327a31906a619d46880b273576b129afa33bd2
+ 0c327a31906a619d46880b273576b129afa33bd2 media: apple: isp: select APPLE_PMP_REPORT
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/30ea48317d22dd1d4e76bfd8c8004690c7ff4bde
+ 30ea48317d22dd1d4e76bfd8c8004690c7ff4bde media: apple: isp: Support system sleep
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4161696df080395c4f7c2e35d4b90e9d09919318
+ 4161696df080395c4f7c2e35d4b90e9d09919318 media: apple: isp: Use a mutex instead of a spinlock for channels
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6d8d0534aff171463b6bf6b505bbc8946b35cd61
+ 6d8d0534aff171463b6bf6b505bbc8946b35cd61 media: apple: isp: implement ENUM_FRAMEINTERVALS trivially
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f6d700272c0a554672bb36cdff6cccad9789ce43
+ f6d700272c0a554672bb36cdff6cccad9789ce43 media: apple: isp: Enable IMX364 sensor
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c7370d7e80a56605c009a62404a2e0fdd659febe
+ c7370d7e80a56605c009a62404a2e0fdd659febe media: apple: isp: Show camera presets even for unsupported sensors
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ae6963cdf9cdb461a0b713e4406a313ed18f7e68
+ ae6963cdf9cdb461a0b713e4406a313ed18f7e68 media: apple: isp: Parse firmware version from device tree
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9c734beca408457239e6cdda1d8de6da7c3a6425
+ 9c734beca408457239e6cdda1d8de6da7c3a6425 media: apple: isp: Use a more user-friendly device name
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b030b97be182211859fc6a699744a573e868f7bd
+ b030b97be182211859fc6a699744a573e868f7bd media: apple: isp: Option to use CMD_STOP (ifdeffed out)
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a54330833266e7168c996faba0366fae537f78c6
+ a54330833266e7168c996faba0366fae537f78c6 media: apple: isp: Only reset coproc when necessary, fix minor race
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3181df539c33aef663bc08bcc2e7928e2fbf7687
+ 3181df539c33aef663bc08bcc2e7928e2fbf7687 media: apple: isp: VMap only what is necessary, remove redundant logging state bit
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/965aa6ecde55f2d0e73cdd515e68f4fe04364883
+ 965aa6ecde55f2d0e73cdd515e68f4fe04364883 media: apple: isp: Add a missing read barrier (possibly?)
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/731af627d763306ce8c10e7d01f75f0914929d48
+ 731af627d763306ce8c10e7d01f75f0914929d48 media: apple: isp: Clear IRQs when resetting coproc
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c3fcc1642947fadfb985438b1ea2c767165c1b6a
+ c3fcc1642947fadfb985438b1ea2c767165c1b6a media: apple: isp: Rework meta surface handling & buffer return
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6624e00e6458c3220fcac4c15138b6f1e65785ba
+ 6624e00e6458c3220fcac4c15138b6f1e65785ba media: apple: isp: Use cached IOMMU mappings
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2cf86b529656391ad817bb6ce68489dc18abbdf5
+ 2cf86b529656391ad817bb6ce68489dc18abbdf5 media: apple: isp: Zero out pages allocated to ISP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/54b1ec919f0914e10f4075945f4c78ddeb9694c2
+ 54b1ec919f0914e10f4075945f4c78ddeb9694c2 media: apple: isp: Make sub-pmdomain handling explicit
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/71341c7787cab55fac414c8f6d9dc16611aa55aa
+ 71341c7787cab55fac414c8f6d9dc16611aa55aa media: apple: isp: Minor changes to cam flow
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3c76259154a9f7d8e4bfa6761e016240b1e4095c
+ 3c76259154a9f7d8e4bfa6761e016240b1e4095c media: apple: isp: Add flicker_sensor_set cmd
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9a126c129b5c25158533c4ea2b01c1d1dba40490
+ 9a126c129b5c25158533c4ea2b01c1d1dba40490 media: apple: isp: t8112 fixes...
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bab86ef5bcff9289dae8172ab3c3871abd778223
+ bab86ef5bcff9289dae8172ab3c3871abd778223 media: apple: isp: Limit maximal number of buffers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7a4189613b27f2a715f72a4a05ac24404625f60f
+ 7a4189613b27f2a715f72a4a05ac24404625f60f media: apple: isp: t8112 HW config
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0145a97b03cf529fcd20da1ed91bd39f051f0630
+ 0145a97b03cf529fcd20da1ed91bd39f051f0630 media: apple: isp: Use a second region for MBOX_IRQ_{DOORBELL,ACK}
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/27cf6af99bc52d49d9571d1c8f45023d3f89671a
+ 27cf6af99bc52d49d9571d1c8f45023d3f89671a media: apple: isp: Make channel sends not interruptible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8311f73c3ae019cbc6e94587ddcdc9e8438875a3
+ 8311f73c3ae019cbc6e94587ddcdc9e8438875a3 media: apple: isp: Maybe fix some DMA ordering issues
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8a0dc9022e22bc57f258368a89efb4579ef90da5
+ 8a0dc9022e22bc57f258368a89efb4579ef90da5 media: apple: isp: Add STOP and POWER_DOWN commands
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2ba535dfa0ba5cd7666d01545f3be7e08d1bd241
+ 2ba535dfa0ba5cd7666d01545f3be7e08d1bd241 media: apple: isp: Implement posted commands
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1b232ef15204eba739730c37b7210b1c4615a528
+ 1b232ef15204eba739730c37b7210b1c4615a528 media: apple: isp: Propagate EINTR from firmware loads
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9422700ad277d9492b261aaaffddda70b39c997b
+ 9422700ad277d9492b261aaaffddda70b39c997b media: apple: isp: Remove ioread/iowrite and stop doing raw address translation
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b6208535ced26ff8226935bc7e3c1477e877ecab
+ b6208535ced26ff8226935bc7e3c1477e877ecab media: apple: isp: Switch to threaded IRQs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2c7ed50a64f7fd70497e77386414b8f4a8e04700
+ 2c7ed50a64f7fd70497e77386414b8f4a8e04700 media: apple: isp: Always enable singleplane API, make multiple a module param
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a6d7433cf50fdad8ba8418dd0d3b9e4ddeb13378
+ a6d7433cf50fdad8ba8418dd0d3b9e4ddeb13378 media: apple: isp: Working t602x and multiple formats and more fixes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/81608789a6dada00cf399193eff6c7936b8e33fb
+ 81608789a6dada00cf399193eff6c7936b8e33fb media: apple: isp: t602x hw config
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7df6e10c1d1f19e91127d9a836007677635c7ee9
+ 7df6e10c1d1f19e91127d9a836007677635c7ee9 media: apple: isp: Support >32bit VAs for t602x
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6fc837d8f669f0b0bf080e3ae71bd71f4fe58808
+ 6fc837d8f669f0b0bf080e3ae71bd71f4fe58808 media: apple: isp: fix copyright
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4737b66343303b5cdbca833380c8375f76a622e6
+ 4737b66343303b5cdbca833380c8375f76a622e6 media: apple: isp: alloc static surfaces only once
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/398afee11a75c19dbb1a60b89f55e8691815d6db
+ 398afee11a75c19dbb1a60b89f55e8691815d6db media: apple: isp: misc isp-fw.c improvements
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/679c424de2ff179ad9c69b1a3c711c1d7f1a7748
+ 679c424de2ff179ad9c69b1a3c711c1d7f1a7748 media: apple: isp: rm old isp_resv struct
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/73b01ab858f0a91e4b1dc88334f9237dfed9f242
+ 73b01ab858f0a91e4b1dc88334f9237dfed9f242 media: apple: isp: rm unused bootargs members
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c0cae0fca865328133efe11f3f410d2b347e57f2
+ c0cae0fca865328133efe11f3f410d2b347e57f2 media: apple: isp: s/asc/coproc/
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/58273bec5b1a2b6c5f54ec3ad69bdafa38f5506b
+ 58273bec5b1a2b6c5f54ec3ad69bdafa38f5506b media: apple: isp: wmb() before GPIO write
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e8458127f2990b5676f63083220dcac185e42ba9
+ e8458127f2990b5676f63083220dcac185e42ba9 media: apple: isp: Don't use define for bootargs size
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/64409c40da77c6a77c4e2c334627210f940f7ce0
+ 64409c40da77c6a77c4e2c334627210f940f7ce0 media: apple: isp: Better document info struct fields
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f8cd1ebfdeb407cacb9d7a53d6ce5d995845e640
+ f8cd1ebfdeb407cacb9d7a53d6ce5d995845e640 media: apple: isp: Set platform_id in bootargs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/87018ae92da10bcce883623adcb3bbc0b68efb39
+ 87018ae92da10bcce883623adcb3bbc0b68efb39 media: apple: WIP: t6000 hax
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e1e61b129f9015d1295dcc5bd706aafe12034fe2
+ e1e61b129f9015d1295dcc5bd706aafe12034fe2 media: apple: isp: Do not defer on failure to initialize DART
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bd438f6c219b08ee7511fa2af816eb55b6e0b7b8
+ bd438f6c219b08ee7511fa2af816eb55b6e0b7b8 media: apple: isp: Drop the DART mirroring stuff
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3a1d2fad8364979352edd0a793767a3cd600ed3d
+ 3a1d2fad8364979352edd0a793767a3cd600ed3d media: apple: isp: Split gpio/mbox MMIO range
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/eeca984712c2e6b6f0d2beb42b4a40633082f466
+ eeca984712c2e6b6f0d2beb42b4a40633082f466 media: apple: isp: Enable t6000
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e22dfcdab5d3faf870ab5a3af9875531f0b3c1ff
+ e22dfcdab5d3faf870ab5a3af9875531f0b3c1ff media: apple: isp: Fixup shared region arg
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c97a223d60d8d8276c208cbae25d09fc4c0bd286
+ c97a223d60d8d8276c208cbae25d09fc4c0bd286 media: apple: isp: Use preallocated heap
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1233667393840d4262525f4e7e66bdd628026431
+ 1233667393840d4262525f4e7e66bdd628026431 media: apple: isp: IMX558 initial support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ba3d1ad48b0261188a4ef806b5dc4ab174e28e9a
+ ba3d1ad48b0261188a4ef806b5dc4ab174e28e9a media: apple: Add Apple ISP driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/64e12b298d30076a17e279f5bdcfbd41f2bcf5ad
+ 64e12b298d30076a17e279f5bdcfbd41f2bcf5ad KVM: arm64: Expose TSO capability to guests and context switch
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e28d59dd61df62bf5be584987aa5153adc670e83
+ e28d59dd61df62bf5be584987aa5153adc670e83 arm64: Implement Apple IMPDEF TSO memory model control
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ce0c6627eabaec066872874daf64311719f879ef
+ ce0c6627eabaec066872874daf64311719f879ef arm64: Introduce scaffolding to add ACTLR_EL1 to thread state
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3a2b5e7dd194371aded635f0e8362b614c357720
+ 3a2b5e7dd194371aded635f0e8362b614c357720 arm64: Implement PR_{GET,SET}_MEM_MODEL for always-TSO CPUs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f37fa2cd07a444f904ade60c64ba15da2f40486d
+ f37fa2cd07a444f904ade60c64ba15da2f40486d prctl: Introduce PR_{SET,GET}_MEM_MODEL
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f8f1946edf38d9b1feab2f16ed889cf0364d41af
+ f8f1946edf38d9b1feab2f16ed889cf0364d41af rust_binder: fix compilation error due to Owned<Page> allocation (#34d50740e253)
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/412777598b250711b6934a4c6e71d6c4178f936e
+ 412777598b250711b6934a4c6e71d6c4178f936e drm/asahi: Clean up deferred BOs when dropping a VM
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b47c54e652d11292b29dbc23d60d17221985fd02
+ b47c54e652d11292b29dbc23d60d17221985fd02 rust/drm: gem: User kernel vertical style
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a5c59595c7b5d27a43283f5c446ceb2b8190a0ab
+ a5c59595c7b5d27a43283f5c446ceb2b8190a0ab drm: asahi: rustfmt
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/893cec1885146d31b1c8db1c7b1a98b2421a2bed
+ 893cec1885146d31b1c8db1c7b1a98b2421a2bed drm: asahi: v7.1 Mmio relaxed changes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a45315966c7f59f6be242bac3bc65ba92458fbae
+ a45315966c7f59f6be242bac3bc65ba92458fbae drm:asahi: `use` formatting annd rename changes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1836d3fd5bb15c8dd724776f200913531e555264
+ 1836d3fd5bb15c8dd724776f200913531e555264 asahi: Improve VM bind performance for large BOs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d94693c8ebf2f258c457676c6305095fa0011933
+ d94693c8ebf2f258c457676c6305095fa0011933 drm/asahi: select APPLE_PMP_REPORT
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0e89255a8544ee01e77cd8ae1a9d7cbddc8333ba
+ 0e89255a8544ee01e77cd8ae1a9d7cbddc8333ba fixup! rust: drm: Add GPUVM Manager abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/72289ddda4ba37aa1d35909d0b3714a291ac3996
+ 72289ddda4ba37aa1d35909d0b3714a291ac3996 drm/asahi: rtkit pin adaptation
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5ce42e85d69c117c9080d2a868deba127d2e898d
+ 5ce42e85d69c117c9080d2a868deba127d2e898d drm/asahi: workqueue: Drop completed work items
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/12754d80be17257c690ce7830787da67b81cee69
+ 12754d80be17257c690ce7830787da67b81cee69 drm/asahi: MemFlag change in v6.19
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4478abf03646b14d9dacdca6472c3305c81b9663
+ 4478abf03646b14d9dacdca6472c3305c81b9663 Revert "rust: drm: gpuvm: Add a missing lock"
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1e6d208c96c871fad9b8763d8973c34eb4407f25
+ 1e6d208c96c871fad9b8763d8973c34eb4407f25 rust: drm: gpuvm: Add a missing lock
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9f333578d0c348ba9ae097afee150fc658f85ce7
+ 9f333578d0c348ba9ae097afee150fc658f85ce7 drm/asahi: Switch gpuvm to DRM_GPUVM_IMMEDIATE_MODE
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/baafd78263848ca056731074ad65371fd5546771
+ baafd78263848ca056731074ad65371fd5546771 drm/asahi: Copy tyr's mmu/vm/range.rs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b59dbf1820efd09c5a5af658c30704a7cdaf5662
+ b59dbf1820efd09c5a5af658c30704a7cdaf5662 drm/asahi: starlight-debug
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8c4b4ad99543fdb40350e5afab7bf691ef421fe1
+ 8c4b4ad99543fdb40350e5afab7bf691ef421fe1 drm/asahi: Hook up crashdump to devcoredump
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b64f5e986735f9f7ecb88a77cb3fd5def4907fee
+ b64f5e986735f9f7ecb88a77cb3fd5def4907fee rust: devcoredump: Add devcoredump abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/68639091fd76cffcc8c1830c208c89ab7e086a21
+ 68639091fd76cffcc8c1830c208c89ab7e086a21 rust: uapi: Add ELF headers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3f92d171f9f25c416e712397e105b4d44df2afd3
+ 3f92d171f9f25c416e712397e105b4d44df2afd3 drm/asahi: gpu: Hook up crashdump generation
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/af6f62e645fd75c40f3feb8a5cbc2e1090175406
+ af6f62e645fd75c40f3feb8a5cbc2e1090175406 drm/asahi: mmu: Wire up kernel AS dumper
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/762030456c2d6259cc9f2d496a36e15bb8a03888
+ 762030456c2d6259cc9f2d496a36e15bb8a03888 drm/asahi: crashdump: Add crash dumper module
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/275c1dc5a2290ef5680346e1ec05d8c96dcbdf36
+ 275c1dc5a2290ef5680346e1ec05d8c96dcbdf36 drm/asahi: pgtable: Add helpers for decoding PTE perms
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f08168f47e323bbc45a25f51362067446f4bfd2c
+ f08168f47e323bbc45a25f51362067446f4bfd2c drm/asahi: pgtable: Add dumper
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b2f65ceb0c8dd4c52b0849825dd97b696c9c306f
+ b2f65ceb0c8dd4c52b0849825dd97b696c9c306f drm/asahi: Implement ASAHI_BIND_SINGLE_PAGE (mmu/pgtbl)
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/41bbf0b46120d036a490e6106c5b6ca764498d2e
+ 41bbf0b46120d036a490e6106c5b6ca764498d2e drm/asahi: RiiR page tables
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6c69e39a359f55bbd9cbb26c2f3d40c1f31e8011
+ 6c69e39a359f55bbd9cbb26c2f3d40c1f31e8011 rust: page: Add physical address conversion functions
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8fb6dd418f2cde6e5daef3ea6b3fbfec004bce5f
+ 8fb6dd418f2cde6e5daef3ea6b3fbfec004bce5f rust: addr: Add a module to declare core address types
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ef44b2b14da4a39359184c53f8e87f3f46d53915
+ ef44b2b14da4a39359184c53f8e87f3f46d53915 rust: page: Make with_page_mapped() and with_pointer_into_page() public
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/eba8af47850103186ccdd7b86ed8d270c9653c43
+ eba8af47850103186ccdd7b86ed8d270c9653c43 rust: page: Convert to Ownable
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cd4bed1e75ed89713f4054ece2501f104d791746
+ cd4bed1e75ed89713f4054ece2501f104d791746 drm/asahi: Move unsafe data initialization to driver code
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/42f296d7b1d3acd7cab94507e48a728ad873ea48
+ 42f296d7b1d3acd7cab94507e48a728ad873ea48 drm/asahi: Avoid variable/field ref shadowing in pin-init
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0d5a58440ce9609509736b2421204872c57805ca
+ 0d5a58440ce9609509736b2421204872c57805ca drm/asahi: initdata: Fold GlobalsSub struct into Globals
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e936a00dcce8fe1091d7cf5147a3c5f37cf6d880
+ e936a00dcce8fe1091d7cf5147a3c5f37cf6d880 drm/asahi: v6.19 probe change
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b5d2b4074929febfd43a41d4d5bbe6402514bc72
+ b5d2b4074929febfd43a41d4d5bbe6402514bc72 drm/asahi: Add the Asahi driver for Apple AGX GPUs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7c8711d1f47867af75f249974f80c03b86b57f21
+ 7c8711d1f47867af75f249974f80c03b86b57f21 rust: bindings: Bind the Asahi DRM UAPI
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3244fec79d3b5a658c862b18f2e5e677b068bcd1
+ 3244fec79d3b5a658c862b18f2e5e677b068bcd1 rust: macros: Add versions macro
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/72b3a29dcb84d084d0fe45c4b7fca8fd6bdb50b8
+ 72b3a29dcb84d084d0fe45c4b7fca8fd6bdb50b8 drm/gpuvm: Disable immediate mode warning in drm_gpuvm_bo_obtain_locked()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/25b80f4ce1ecd718e9ab8cc7a1ba1a20edfedab5
+ 25b80f4ce1ecd718e9ab8cc7a1ba1a20edfedab5 rust: drm: gpuvm: Add sm_can_merge_flags
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ccb9e842fffc85cc6214a6b20c3c1fa98701d0ac
+ ccb9e842fffc85cc6214a6b20c3c1fa98701d0ac fixup! rust: drm: Add GPUVM Manager abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8265a486f63488c07838d1d264dd5480b38b87a5
+ 8265a486f63488c07838d1d264dd5480b38b87a5 fixup! rust: drm: Add GPUVM Manager abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/20df1418338745169511965d96c59202b5b8205e
+ 20df1418338745169511965d96c59202b5b8205e rust: drm: gpuvm: Switch to DRM_GPUVM_IMMEDIATE_MODE
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b8e2d33aafae3e6ba8967799b3d60762c40af02b
+ b8e2d33aafae3e6ba8967799b3d60762c40af02b rust: drm: gem: Support locking gpuva.lock
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/780d720823a065b07cceadf45df06fc5c880e90b
+ 780d720823a065b07cceadf45df06fc5c880e90b rust: drm/gpuvm: Add GpuVaFlags support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f17b675f43b24a4a26e472e29a5e9a99cf9c0c12
+ f17b675f43b24a4a26e472e29a5e9a99cf9c0c12 rust: drm: Add GPUVM Manager abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/206a7029bb1dd8018cb7aa0f1ddc7092edbff4b4
+ 206a7029bb1dd8018cb7aa0f1ddc7092edbff4b4 fixup! drm/gpuvm: Add DRM_GPUVA_REPEAT flag and logic
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/117240fb5f9eaf3a04f3e0c05c3ced38b63ffbd4
+ 117240fb5f9eaf3a04f3e0c05c3ced38b63ffbd4 drm/gpuvm: Add DRM_GPUVA_REPEAT flag and logic
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b0a0a795ca8b47d9a59aae169afae46013fed333
+ b0a0a795ca8b47d9a59aae169afae46013fed333 drm/gpuvm: Add a flags field to drm_gpuva_op_map
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0f911beecb74727f289cbcf69b07123002f0cff2
+ 0f911beecb74727f289cbcf69b07123002f0cff2 drm/gpuvm: Add a helper to check if two VA can be merged
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a74d757b1c5584d26e98aaa61023f46c96292435
+ a74d757b1c5584d26e98aaa61023f46c96292435 drm/gpuvm: Add drm_gpuvm_bo_unmap()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b8295099d73562c10476d7ea10a6cfd5e5ab7f9e
+ b8295099d73562c10476d7ea10a6cfd5e5ab7f9e rust: drm: sched: Add GPU scheduler abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/db061dee67a352a71e6b6e1444d835c58c77d8d5
+ db061dee67a352a71e6b6e1444d835c58c77d8d5 drm/scheduler: Fix UAF in drm_sched_fence_get_timeline_name
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/aec5c860b2e91faaf320a9016b2f24606986a759
+ aec5c860b2e91faaf320a9016b2f24606986a759 rust: drm: syncobj: Add DRM Sync Object abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/450ac41a113e8da0f2e3064081ac841d12691eb1
+ 450ac41a113e8da0f2e3064081ac841d12691eb1 rust: dma_fence: Add DMA Fence abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fe7f84dffacd5e4aaf9891d0a6c67306abd65abc
+ fe7f84dffacd5e4aaf9891d0a6c67306abd65abc rust: drm: mm: Add DRM MM Range Allocator abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7acbd9a486b5f8a29c2b0b5c2bcf4e67c17349f4
+ 7acbd9a486b5f8a29c2b0b5c2bcf4e67c17349f4 rust: Add dma_buf stub bindings
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/79885e4cf6f76fd58c429dd0c35be9770b19ad0c
+ 79885e4cf6f76fd58c429dd0c35be9770b19ad0c rust: drm: gem: Add BaseObject::prime_export()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/81270528ea1020422e2ab046f386c512656ab659
+ 81270528ea1020422e2ab046f386c512656ab659 rust: drm: gem: Add export() callback
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/729bc1fe9448cfdf5e2e05b5dec8d7698d0437f9
+ 729bc1fe9448cfdf5e2e05b5dec8d7698d0437f9 rust: drm/gem: Add vmap functions to shmem bindings
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/407d18279af1ce4abfe60b025132582ec32c3969
+ 407d18279af1ce4abfe60b025132582ec32c3969 rust: drm: gem: Introduce shmem::SGTable
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5b556dbb5c610424261ad444d815d1704a18f2cc
+ 5b556dbb5c610424261ad444d815d1704a18f2cc rust: drm: gem: shmem: Add sg_table() from previous series
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/749943ef83b87b0ee90b401e8cda88097a4bf3b6
+ 749943ef83b87b0ee90b401e8cda88097a4bf3b6 rust: drm: file: Add as_raw()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4e545090d4e558d7caadff9a7d7db4d5f767d8b6
+ 4e545090d4e558d7caadff9a7d7db4d5f767d8b6 HACK: rust: drm: Leak the DRM device in release
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9c19df150cc57a890d8f8a5de5d54530df6a771c
+ 9c19df150cc57a890d8f8a5de5d54530df6a771c rust: drm: Move FEATURES back to drivers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/73917af3fac9ff87c20fb84b0a8ded3a36df051f
+ 73917af3fac9ff87c20fb84b0a8ded3a36df051f rust: drm: driver: Add feature flags used by asahi
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b7b1788da5105a027d5986cd580d7cb841636461
+ b7b1788da5105a027d5986cd580d7cb841636461 rust: lock: guard: Remove T: Unpin bound to DerefMut"
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/581daa2610de26bb5267cf5d8f54bf1c28820597
+ 581daa2610de26bb5267cf5d8f54bf1c28820597 fixup! drm: apple: Handle differences in surface positions between SoCs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b264ab138512a460431a83fc06bbcde35dc2e9ce
+ b264ab138512a460431a83fc06bbcde35dc2e9ce fixup! drm: apple: Handle differences in surface positions between SoCs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ee4c9e4672c2afd1fb86aee2f0f496cc6076e67c
+ ee4c9e4672c2afd1fb86aee2f0f496cc6076e67c drm: apple: Handle differences in surface positions between SoCs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c7d7875c197cac5c4e1af9a6ccfe399469cdb88b
+ c7d7875c197cac5c4e1af9a6ccfe399469cdb88b fixup! drm: apple: dptx: Fix get_drive_settings retcode
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/94e769fa5524bc77cda1a7df47f77252b7270059
+ 94e769fa5524bc77cda1a7df47f77252b7270059 fixup! drm: apple: dptxep: Implement drive settings stuff
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8d4a0d6e04da99be1bf7059c3ba86450220a1a0b
+ 8d4a0d6e04da99be1bf7059c3ba86450220a1a0b HACK: drm/apple: depend on BACKLIGHT_CLASS_DEVICE to break x86 Kconfig cycles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7febe6cca5a1c9f6a29a5fe49a6af228eb986865
+ 7febe6cca5a1c9f6a29a5fe49a6af228eb986865 drm: apple: parser: Handle min/max varable refresh rate
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/76995c235a7c2e74ba450af97d1b83f9587e3c75
+ 76995c235a7c2e74ba450af97d1b83f9587e3c75 drm: apple: Define IOMFB parameter for Adaptive Sync
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c59c84235511ad70acfbfe8c6a491af7f354d122
+ c59c84235511ad70acfbfe8c6a491af7f354d122 drm/apple: Power DCP off when HDMI port is not connected
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/44b60eee58573b3939174b3d559830375d967f05
+ 44b60eee58573b3939174b3d559830375d967f05 drm/apple: select APPLE_PMP_REPORT
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dbedfccd7ce8c8ba7da8455163e0758c483d197e
+ dbedfccd7ce8c8ba7da8455163e0758c483d197e drm/apple: Increase poweron timeout to 10 seconds
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/57b954775d6e6c234f0fedf17f0644595d21686f
+ 57b954775d6e6c234f0fedf17f0644595d21686f drm: apple: Explicitly set identity matrix when CTM blob is not set
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/723426236f8d0a265f52b91f0fdba3b05fe3a86e
+ 723426236f8d0a265f52b91f0fdba3b05fe3a86e drm: apple: Force colour management changes on CRTC enable
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fc2b1e2e905808b96fa9d85e8753fadcf566705b
+ fc2b1e2e905808b96fa9d85e8753fadcf566705b drm/asahi: Do not use l10r for 12.3 DCP firmware
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9f8226120363417889e4c810001932a91103d347
+ 9f8226120363417889e4c810001932a91103d347 drm/apple: Only assume RGB planes on internal displays are sRGB
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c9fb7de047cb33da430061426d22dbebd71589ab
+ c9fb7de047cb33da430061426d22dbebd71589ab drm/apple: Add device link between display-subsystem and each dcp*
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/28aa8dbb5d64bb2d53c523172844a573e289d44c
+ 28aa8dbb5d64bb2d53c523172844a573e289d44c drm/apple: dcp: Do not call dcp_dptx_connect() from resume()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/81e6ca7ee697900f0f5ac33850e63410613ad08d
+ 81e6ca7ee697900f0f5ac33850e63410613ad08d drm/apple: Send HPD event on disconnect only connector is cconected
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6c63a52b5ac53e27e705e7c1d8a1bb5176870251
+ 6c63a52b5ac53e27e705e7c1d8a1bb5176870251 drm/apple: Relax locking for back light updates
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c3950753ccd8793981f1158b9c1cb2fc33466c18
+ c3950753ccd8793981f1158b9c1cb2fc33466c18 drm: apple: Assume all RGB planes are sRGB
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a0485958769c7bcee40592858ddc496dbee79087
+ a0485958769c7bcee40592858ddc496dbee79087 drm: apple: Support YCbCr formats
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8006ae9c705651fd1cabe41ea688d3053e8c01dd
+ 8006ae9c705651fd1cabe41ea688d3053e8c01dd drm: apple: Advertise ARGB2101010 support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/37468828bc3b6dc4ad5ed4b3c983d71218b7550c
+ 37468828bc3b6dc4ad5ed4b3c983d71218b7550c drm: apple: get framebuffer iova in atomic_plane_update
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/64591b3fde4c715771905c8bdfc5467c4b866e5d
+ 64591b3fde4c715771905c8bdfc5467c4b866e5d drm: apple: Use defines for dcp's fourcc formats
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0baf34908ef7433fa9273908ef707fcc7f28e01e
+ 0baf34908ef7433fa9273908ef707fcc7f28e01e drm: apple: move dcp rectangle creation to atomic_plane_update
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9f05dec538869b35a8f7c3b9e5df2b070d7c44d2
+ 9f05dec538869b35a8f7c3b9e5df2b070d7c44d2 drm: apple: Move plane bits out of apple_drv/iomfb_flush
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/eec4b74e5197067c8f520585efa4d42812cbae61
+ eec4b74e5197067c8f520585efa4d42812cbae61 drm: apple: Switch link status to BAD if power on fails
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d9065ffc7d239a6b11d9d2143d0ce666905a3e68
+ d9065ffc7d239a6b11d9d2143d0ce666905a3e68 drm: apple: Increase timeout for dcp_set_power_state_req to 5000ms
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e6c0de3b7da0737de6dd06535ab3c69507ec56e3
+ e6c0de3b7da0737de6dd06535ab3c69507ec56e3 fixup! drm: apple: Brightness control via atomic commits
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/412b995c0d8a48c23d2c161b22d961456384ea75
+ 412b995c0d8a48c23d2c161b22d961456384ea75 drm: apple: Use typec mux to switch atc-phy into DP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/de38cca24dab74ef901514bc101d32ff19d5fd34
+ de38cca24dab74ef901514bc101d32ff19d5fd34 drm/apple: Unify driver into a single module
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e1db717659931de952bde784f780748f361ed0af
+ e1db717659931de952bde784f780748f361ed0af drm: apple: set timestamps for 120hz
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/33c9bc34fdb91e3a8781b9d7ab196b26045f1816
+ 33c9bc34fdb91e3a8781b9d7ab196b26045f1816 HACK: ALSA: Export 'snd_pcm_known_rates'
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/04032488bdabe6cfcabc8d2139dcc2e87ea874d2
+ 04032488bdabe6cfcabc8d2139dcc2e87ea874d2 drm: apple: Remove conflicting devices as late as possible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/272b482ad46e035cb5c0c5679e988f1cab3eb6ea
+ 272b482ad46e035cb5c0c5679e988f1cab3eb6ea drm: apple: Support sync objects
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e278858f1af88c0fa671381e51f50ee210d202cb
+ e278858f1af88c0fa671381e51f50ee210d202cb drm: dcp: Adjust .mode_valid signature
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e19161cc96536209e0e6abd7a9d21896abe945d4
+ e19161cc96536209e0e6abd7a9d21896abe945d4 drm: apple: Use piodma default iommu domain
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/52ecf9ba9c6478d8a6c9c8b11a5e94cb5e5f5093
+ 52ecf9ba9c6478d8a6c9c8b11a5e94cb5e5f5093 drm/apple: fix audioless build
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ad4699eedce04461f809b008abb2622f560ce62a
+ ad4699eedce04461f809b008abb2622f560ce62a drm: apple: dptx: Issue HPD event early on gpio/type-c disconnect
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/04b0312ea616fdb7bf496634be470db25a978f5b
+ 04b0312ea616fdb7bf496634be470db25a978f5b drm: apple: dptx: Configure number of lanes for dptx-phy
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8ba608a59d43b85e13bde552f56e68f13f57da5a
+ 8ba608a59d43b85e13bde552f56e68f13f57da5a drm: apple: HDMI: Check HPD state before enabling the IRQ
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a16f2a22c3bd40606811d9b1fdffcb301d24cfc0
+ a16f2a22c3bd40606811d9b1fdffcb301d24cfc0 drm: apple: dptx: Rework/document get_max_lane_count()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e46b481710d5b8c979b9614a6f6d4da9cea4ea16
+ e46b481710d5b8c979b9614a6f6d4da9cea4ea16 drm: apple: iomfb: Adapt `IOMFB_METHOD` for gcc 15
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bb107fa2573f396b1569ef3f8d498562e7fb0f35
+ bb107fa2573f396b1569ef3f8d498562e7fb0f35 drm: apple: audio: Rework audio service handling
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e4d4ba16e3d8a9dfd54bf095ed32e854629a7899
+ e4d4ba16e3d8a9dfd54bf095ed32e854629a7899 drm: apple: afk: Allow replies after service 'teardown'
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8acab99ed848ac8601675c402242bf55976ca811
+ 8acab99ed848ac8601675c402242bf55976ca811 drm: apple: dptx: Tidy up lane count handling
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2f53409c557b9baa8c8122fd5e4468525bcf83f2
+ 2f53409c557b9baa8c8122fd5e4468525bcf83f2 drm: apple: dptx: Silence DPTX_APCALL_{GET,SET}_DOWN_SPREAD
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a51669edf2cd2219882298016ad76f9085f733f8
+ a51669edf2cd2219882298016ad76f9085f733f8 drm: apple: Handle dcps with "phys" property as dcpext
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bb386225d6f90393e70bd00e150fb05fa6d80248
+ bb386225d6f90393e70bd00e150fb05fa6d80248 drm: apple: Support up to 3 DCP instances.
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/543a7e92400a249d3908f6af0fbc893a355db381
+ 543a7e92400a249d3908f6af0fbc893a355db381 drm: apple: Call dptxport_set_hpd in dcp_dptx_connect
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/650000e2b500b016b3b815de88b29b0c1da2ee80
+ 650000e2b500b016b3b815de88b29b0c1da2ee80 drm: apple: iomfb: Clear non-visible planes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ef8b352cb122829c75754671bc3d653d9667a794
+ ef8b352cb122829c75754671bc3d653d9667a794 drm: apple: Use dest rct in offscreen test
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7a22ba9378f776a1df717efa8e05237470021b09
+ 7a22ba9378f776a1df717efa8e05237470021b09 drm: apple: refactor apple_plane_atomic_check
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0ed5cbe43ed330866f7b6f92770c906bf52a917b
+ 0ed5cbe43ed330866f7b6f92770c906bf52a917b drm: apple: make plane zpos immutable
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c9a831a4cf0128971372bab823ec3b1d94f061c7
+ c9a831a4cf0128971372bab823ec3b1d94f061c7 drm: apple: warn about broken sw cursor fallback
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4a152edd594a3e317b4ea0d14f848af9aedc6e18
+ 4a152edd594a3e317b4ea0d14f848af9aedc6e18 drm: apple: use correct min/max plane scaling factors
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5ac16768b811e3e7abddc2c443ea06a331edc288
+ 5ac16768b811e3e7abddc2c443ea06a331edc288 drm: apple: add support for overlay planes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/248bd37a71d1080c2abc5cb1697c5b651da4bb8c
+ 248bd37a71d1080c2abc5cb1697c5b651da4bb8c drm: apple: reject plane commit if it will crash DCP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d83f3dd1da3f9f113d068fa2d8a70aedf36591d7
+ d83f3dd1da3f9f113d068fa2d8a70aedf36591d7 drm: apple: constrain swaps to maximum blendable surfaces
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0bdfd399ef286f9317aa5f140f4743c41c666668
+ 0bdfd399ef286f9317aa5f140f4743c41c666668 drm: apple: respect drm_plane_state zpos
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cfbf605822aa4af961f5cf15f8a353c7ac836671
+ cfbf605822aa4af961f5cf15f8a353c7ac836671 drm: apple: Add .get_scanout_buffer for drm_panic support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/404a8a47c887de0d2667985e0a6c0c501502f5d3
+ 404a8a47c887de0d2667985e0a6c0c501502f5d3 drm: apple: Add CRTC CRC support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/07663fb29681d4c8c0e79ff1519b15349efba2b7
+ 07663fb29681d4c8c0e79ff1519b15349efba2b7 drm: apple: audio: Implement runtime PM support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/72ae6635f4a53c7da81896b4ee301ec03d88eb03
+ 72ae6635f4a53c7da81896b4ee301ec03d88eb03 drm: apple: Enable EDID support by default
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2ff4dcb38c5ed01a71cfd022642153ea68c0e42a
+ 2ff4dcb38c5ed01a71cfd022642153ea68c0e42a ALSA: Introduce 'snd_interval_rate_bits'
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/46d1ad17c3049e8e8ed618c35a292b6c3f15e208
+ 46d1ad17c3049e8e8ed618c35a292b6c3f15e208 drm: apple: iomfb: Provide the EDID as connector property
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a2d80792d32eff79b60cc04fda450e86c4cdc09b
+ a2d80792d32eff79b60cc04fda450e86c4cdc09b drm: apple: Add dcpav-service-ep
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e37a36ac0ed127f7a021b6f695aae57e1f605aa2
+ e37a36ac0ed127f7a021b6f695aae57e1f605aa2 drm: apple: afk: Optionally match against EPICName
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/95ca1ebc680d673a8fbdd1abd06b70f1805513f8
+ 95ca1ebc680d673a8fbdd1abd06b70f1805513f8 Revert "drm: apple: HACK: Do not delete piodma platform device"
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4baaf554af97c7caa821dde0654f19ebe7523602
+ 4baaf554af97c7caa821dde0654f19ebe7523602 drm: apple: iomfb: Align buffer size on unmap/free as well
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/16f6524764b80de1745a99d9239bfe69eb0d3e90
+ 16f6524764b80de1745a99d9239bfe69eb0d3e90 drm: apple: dptxport: get_max_lane_count: Retrieve lane count from phy
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/77c3bb49ab294545a6fe4bdf4572f70ef51271de
+ 77c3bb49ab294545a6fe4bdf4572f70ef51271de drm: apple: dptx: Fix get_drive_settings retcode
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3877fa1c9a4d90900883d404692c8d013bf55bdd
+ 3877fa1c9a4d90900883d404692c8d013bf55bdd drm: apple: Add oob hotplug event
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/10b76d2213db9e8a4ca914c4ac84c5db1248306f
+ 10b76d2213db9e8a4ca914c4ac84c5db1248306f drm/apple: audio: Fix hotplug notifications
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/12f997317e9c067cbf9ea15b4c29940ed17ef5bd
+ 12f997317e9c067cbf9ea15b4c29940ed17ef5bd drm/apple: audio: Defer DMA channel acquisition to device open
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/44dde2380978e7ef896c1c78550ac0c13aca51c1
+ 44dde2380978e7ef896c1c78550ac0c13aca51c1 drm/apple: audio: Create a device link to the DMA device
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/35cb3a51e3a98e275ad579145405d563456cd564
+ 35cb3a51e3a98e275ad579145405d563456cd564 drm/apple: Explicitly stop AFK endpoints on shutdown
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ba3a40888f292edb87b0154409a6139120b27a68
+ ba3a40888f292edb87b0154409a6139120b27a68 drm: apple: Override drm_vblank's page flip event handling [HACK]
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c9d66677fab695a28fee1ba897551e51bd5c2255
+ c9d66677fab695a28fee1ba897551e51bd5c2255 drm: apple: disable HDMI audio by default
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d151dfe5421665ba646e7b13dcbbe6737ad8e682
+ d151dfe5421665ba646e7b13dcbbe6737ad8e682 drm: apple: av: Warn only once about failed calls
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c35c9b34a79fbd909ff03361bee8a714c00895e5
+ c35c9b34a79fbd909ff03361bee8a714c00895e5 drm: apple: Reduce log spam about busy command channel
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5baec0d5daf248bfce42c18cebb32311bfd73868
+ 5baec0d5daf248bfce42c18cebb32311bfd73868 drm: apple: Fix broken MemDescRelay::release_descriptor callback number
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3aa207e3ea717f5705d4e1cabe4f2fb1dbb98fcc
+ 3aa207e3ea717f5705d4e1cabe4f2fb1dbb98fcc drm: apple: Switch back to drm_atomic_helper_commit_tail_rpm()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7d693bf63d14bccda5c70be7c852ab8380392a1a
+ 7d693bf63d14bccda5c70be7c852ab8380392a1a drm: apple: backlight: release lock in error path
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cdbac6ea94cc49b1063cc9b76a4c4c5dac81a565
+ cdbac6ea94cc49b1063cc9b76a4c4c5dac81a565 drm/apple: fix double words in comments
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e3f8d02e3efcc9cd46b51e77f48958ab68b41eee
+ e3f8d02e3efcc9cd46b51e77f48958ab68b41eee drm: apple: audio: Avoid probe errors
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/472caea18c40b316b6539e9d6d5a0df4f77b8f4b
+ 472caea18c40b316b6539e9d6d5a0df4f77b8f4b drm: apple: audio: Make the DP/HDMI audio driver a full driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/41509910f8f0801d84d4b7e90951fad03c53c4bd
+ 41509910f8f0801d84d4b7e90951fad03c53c4bd drm: apple: audio: move the audio driver into the DCP module
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fec81295cccc922a554a700dd0babacb944f18f5
+ fec81295cccc922a554a700dd0babacb944f18f5 drm: apple: av: Use a workqueue
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/648fc33df4d9d47cd756d66a840c6af74034778e
+ 648fc33df4d9d47cd756d66a840c6af74034778e drm: apple: audio: init AV endpoint later
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a4335f2e0903a4f5ba683f0ed03bf5d4c8ba363e
+ a4335f2e0903a4f5ba683f0ed03bf5d4c8ba363e drm: apple: dptx: Remove DPTX disconnect/connect on init
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fbfc00a343c07b60a96e80dbb482b5c83d7f707d
+ fbfc00a343c07b60a96e80dbb482b5c83d7f707d gpu: drm: apple: Add DCP audio driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1c6d4f344b6374f2f3fc53be92592a2d5259ffe5
+ 1c6d4f344b6374f2f3fc53be92592a2d5259ffe5 drm: apple: av: Do not open AV service from afk receive handler
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d11954651e1ba8ae31307f3a05f0cbb25c4cec0f
+ d11954651e1ba8ae31307f3a05f0cbb25c4cec0f drm: apple: av: Support macOS 12.3 and 13.5 firmware APIs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e1f3efda16846bc2f570375362e9587b0e4165de
+ e1f3efda16846bc2f570375362e9587b0e4165de gpu: drm: apple: Set up client of AV endpoint
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2b12b50abe96142ee0aaba8655910594051b059b
+ 2b12b50abe96142ee0aaba8655910594051b059b gpu: drm: apple: Expose injecting of EPIC calls via debugfs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8bc0af36435455aedf91b821552359897c10a96e
+ 8bc0af36435455aedf91b821552359897c10a96e drm: apple: iomfb: export property dicts in connector debugfs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/467ea8d190763800dbe70e8cc438afbb928c8f3f
+ 467ea8d190763800dbe70e8cc438afbb928c8f3f drm: apple: Add Kconfig option for audio
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2642db14c58df26fe0b276602eddd28e7c151dfb
+ 2642db14c58df26fe0b276602eddd28e7c151dfb drm: apple: dptx: Debounce HPD by simple msleep()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/379b10d534c00c5b635eabb5e556e2cceb524ea5
+ 379b10d534c00c5b635eabb5e556e2cceb524ea5 drm: apple: Fix/remove log messages
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d56d26b4831002d2e2258c479815834404186ccd
+ d56d26b4831002d2e2258c479815834404186ccd drm: apple: backlight: force backlight update after resume
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fc61a4b806b0c50f2de6e5152111e231836e77f9
+ fc61a4b806b0c50f2de6e5152111e231836e77f9 drm/apple: spelling fixes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/eb1d9d0ef7a4e6dabb551b90c24866918a434057
+ eb1d9d0ef7a4e6dabb551b90c24866918a434057 drm/apple: Add missing RTKit Kconfig dependency
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/aff20819e048ac4c18a051b5db57d49fb20c3051
+ aff20819e048ac4c18a051b5db57d49fb20c3051 drm: apple: mark local functions static
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/307d7d9bf0e866b5bdffb6f96967e7529b9e5fc1
+ 307d7d9bf0e866b5bdffb6f96967e7529b9e5fc1 drm: apple: epic: systemep: Parse "mNits" log events
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4f2a06b761ec79da143dd2e15ddf37dc7d6b3801
+ 4f2a06b761ec79da143dd2e15ddf37dc7d6b3801 drm: apple: epic: Pass full notfiy/report payload to handler
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/877e0a11cba320195a1ca0de951569f6c5e4725e
+ 877e0a11cba320195a1ca0de951569f6c5e4725e drm: apple: parser: constify parser data
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6eda77a498ac9c22de799b6dc1939372f8a3f415
+ 6eda77a498ac9c22de799b6dc1939372f8a3f415 drm: apple: iomfb: Always parse DisplayAttributes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/51571882e53d580d7bcecfe2921fdb7cdfa79ef8
+ 51571882e53d580d7bcecfe2921fdb7cdfa79ef8 drm: apple: Prefer RGB SDR modes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e6a6652ccb90008c52ff02fc37445dc0c09e70a8
+ e6a6652ccb90008c52ff02fc37445dc0c09e70a8 drm: apple: dptx: Wait for link config on connect
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/273393197858a041ab2d5fa93064ba8aa896d37a
+ 273393197858a041ab2d5fa93064ba8aa896d37a drm: apple: Be less noisy about teardown notifies without service
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/eaae17a9cd77d11fc0b02697ac81d22651f805dd
+ eaae17a9cd77d11fc0b02697ac81d22651f805dd drm: apple: dcp: Fix resume with DPTX based display outputs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3ab353e5d470e0a464182e6c19768813a1e0b8a9
+ 3ab353e5d470e0a464182e6c19768813a1e0b8a9 drm: apple: Adjust startup sequence and timing for dptx
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d708686f872fb58de447e3579a217111230e0f67
+ d708686f872fb58de447e3579a217111230e0f67 drm: apple: iomfb: Extend hotplug/mode parsing logging
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/de21c823f177430cec1819f290d10c3767fe5666
+ de21c823f177430cec1819f290d10c3767fe5666 drm: apple: iomfb: Handle OOB ASYNC/CB context
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ac118e638079ec4dc6bc2b4992f943b0e3de77a9
+ ac118e638079ec4dc6bc2b4992f943b0e3de77a9 drm: apple: iomfb: Use drm_kms_helper_connector_hotplug_event
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d51f848fa6e81f4cb9c5a9217744af5cb371a4e5
+ d51f848fa6e81f4cb9c5a9217744af5cb371a4e5 drm: apple: Fix DPTX hotplug handling
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ed51feedd3f9c4d57d22d5a389956c0f247db8ba
+ ed51feedd3f9c4d57d22d5a389956c0f247db8ba drm: apple: Move modeset into drm_crtc's atomic_enable
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/28d648ae7c275af3cf2d1d2a2082ba941b6da547
+ 28d648ae7c275af3cf2d1d2a2082ba941b6da547 drm: apple: dptx: Log connect/disconnect calls
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1955e99cd0f5ab4ed32ff438e3101fa337a294c4
+ 1955e99cd0f5ab4ed32ff438e3101fa337a294c4 drm: apple: Extract modeset crtc's atomic_flush()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/941ee4ca38df16502e556af4cd318c07f5c64e3b
+ 941ee4ca38df16502e556af4cd318c07f5c64e3b drm: apple: iomfb: Improve hotplug related logging
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/47b6a4b70ee2a9063f63c8fbd26f112043526490
+ 47b6a4b70ee2a9063f63c8fbd26f112043526490 drm: apple: HPD: Only act on connect IRQs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/220a49014e7b0493e8dd6e2e66f11a79eb9c5191
+ 220a49014e7b0493e8dd6e2e66f11a79eb9c5191 drm: apple: dptx: Wait for completion of dptx_connect.
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/611109189c585531eae83fe9eff4f4c58f96db77
+ 611109189c585531eae83fe9eff4f4c58f96db77 drm: apple: Disconnect dptx When the CRTC is powered down
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3b3a2ddfc53700a7e947f0054591c3a27db017ad
+ 3b3a2ddfc53700a7e947f0054591c3a27db017ad drm: apple: dptx: Implement APCALL_DEACTIVATE and reset the phy
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9cffc218e03923635c0b16ab5d1fedd0764b01b2
+ 9cffc218e03923635c0b16ab5d1fedd0764b01b2 Revert "drm: apple: iomfb: Do not match/create PMU service for dcpext"
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b6abe97951c285534b5667fef68b6c4bb5288022
+ b6abe97951c285534b5667fef68b6c4bb5288022 drm: apple: Keep information at which swap_id fb are still referenced
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/96ec4886eeaa56db65255b3f3a36dd8e450dd8c3
+ 96ec4886eeaa56db65255b3f3a36dd8e450dd8c3 drm: apple: Implement D592 callback
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a026a0da043bb1df41e0bdfc3ca0d7f08e194515
+ a026a0da043bb1df41e0bdfc3ca0d7f08e194515 drm: apple: afk: Update read pointer before processing message
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/05c08671b8f8e2d0e59fcfcfc09d08e5c3de16f7
+ 05c08671b8f8e2d0e59fcfcfc09d08e5c3de16f7 drm: apple: HACK: Do not delete piodma platform device
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c806f59644a1ef720ebf8f6a847a81ff3d063438
+ c806f59644a1ef720ebf8f6a847a81ff3d063438 drm: apple: dptxep: Implement drive settings stuff
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e9b7f7287b54b402efce8521b01e08bc6f841f4d
+ e9b7f7287b54b402efce8521b01e08bc6f841f4d drm: apple: dptxep: Fix reply size check
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/80e9afe0d3a6cbfc1e4fdd4c4479dea499e6e39e
+ 80e9afe0d3a6cbfc1e4fdd4c4479dea499e6e39e drm: apple: Fix missing unlock path in dcp_dptx_connect
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dda24e7a8653b5171eb875827453782386b3a0a0
+ dda24e7a8653b5171eb875827453782386b3a0a0 drm: apple: afk: Clear commands before sending them
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dbf6df89725a16f0ca55fe701885fae72a959db2
+ dbf6df89725a16f0ca55fe701885fae72a959db2 drm: apple: dptx: Adapt dptxport_connect() to observed behavior
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b19590f7e23fd97cf2c7be28498af15972634172
+ b19590f7e23fd97cf2c7be28498af15972634172 drm: apple: dptx: Add DPTX_APCALL_ACTIVATE
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5ac3e7323d0b0f0da3039ba4e9933fff78440fbb
+ 5ac3e7323d0b0f0da3039ba4e9933fff78440fbb drm: apple: dptx: Add set_active_lanes APCALL
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b2f65b5e8c3187c4372340e836da5c1072d20321
+ b2f65b5e8c3187c4372340e836da5c1072d20321 drm: apple: dptx: port interface to macOS 13.5 firmware
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ccdeb0efc9cde583594b6da2a5d0c67befc3b8cc
+ ccdeb0efc9cde583594b6da2a5d0c67befc3b8cc drm: apple: dptx: Port APCALL to macOS 13.3 firmware
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5d9516fbf13ef0ad9a31853b2ab3e9df82303753
+ 5d9516fbf13ef0ad9a31853b2ab3e9df82303753 drm: apple: afk: Adapt to macOS 13.3 firmware
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5d9ea553433f3bc09b2c04e6ca9fcfa879a301a3
+ 5d9ea553433f3bc09b2c04e6ca9fcfa879a301a3 drm: apple: iomfb: Do not match/create PMU service for dcpext
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5ba5615b6161f4ef2dc161866df6cd68f80ec1d8
+ 5ba5615b6161f4ef2dc161866df6cd68f80ec1d8 drm: apple: Move offsets for rt_bandwidth callback to DT
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3888741626cb7d3f4420139df50ec33753dbaf14
+ 3888741626cb7d3f4420139df50ec33753dbaf14 drm: apple: Add DPTX support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f927c38c5d106eb4fe1a604151ddf82b5579f9d3
+ f927c38c5d106eb4fe1a604151ddf82b5579f9d3 drm: apple: afk: Use linear array of services
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e76b8212ef4744436e0f327b15338ae263c3ce6d
+ e76b8212ef4744436e0f327b15338ae263c3ce6d drm: apple: DCP AFK/EPIC support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bdd198adf09fa6246b7c4fc71e60685c3fce3261
+ bdd198adf09fa6246b7c4fc71e60685c3fce3261 drm: apple: Add sound mode parsing
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/167d45b6ea8e8d14440a9906c635e7aa85c932fb
+ 167d45b6ea8e8d14440a9906c635e7aa85c932fb drm: apple: Add 'parse_blob'
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/abc1787df1c165ec2641db56df0f87d8f645a79a
+ abc1787df1c165ec2641db56df0f87d8f645a79a drm: apple: Add utility functions for matching on dict keys
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/63aa57a23d702722785a56d559a1701ea8c53a6c
+ 63aa57a23d702722785a56d559a1701ea8c53a6c mux: apple dp crossbar: Support t602x DP cross bar variant
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c8cc4d64e26b7fa7ab08b433e6a89a31996541a3
+ c8cc4d64e26b7fa7ab08b433e6a89a31996541a3 mux: apple dp crossbar: Read UNK_TUNABLE before and after writing it
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/daac64dcf09249ddbb6666be9a080abe5332d713
+ daac64dcf09249ddbb6666be9a080abe5332d713 mux: apple dp crossbar: FIFO_RD_UNK_EN seems to use 2 bits per dispext*
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/384daec7892aaca69357f10c866c6a31fe8730e1
+ 384daec7892aaca69357f10c866c6a31fe8730e1 mux: apple dp crossbar: Support t8112 varient
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fdec4668a3453347c947209d9e7929f2e4088197
+ fdec4668a3453347c947209d9e7929f2e4088197 mux: apple DP xbar: Add Apple silicon DisplayPort crossbar
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a315a267f53af75b007aa5adc5338d27bdc9b2c0
+ a315a267f53af75b007aa5adc5338d27bdc9b2c0 drm: apple: Remove explicit asc-dram-mask handling
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/21316f759eae14b02bdaafab66717905365351ba
+ 21316f759eae14b02bdaafab66717905365351ba drm: apple: iomfb: Increase modeset tiemout to 8.5 seconds
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8f5fba5a7d694b249bfadff58691c25c60ea9277
+ 8f5fba5a7d694b249bfadff58691c25c60ea9277 drm: apple: iomfb: implement abort_swaps_dcp
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b86965b8ab0972a7cfcdffa4851886cc427e7ee8
+ b86965b8ab0972a7cfcdffa4851886cc427e7ee8 drm: apple: dcp: Remove cargo-culted devm_of_platform_populate
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1007281a75c64b6cadbbf5944f84cbecc0aefd06
+ 1007281a75c64b6cadbbf5944f84cbecc0aefd06 drm: apple: dcp: Port over to DEFINE_SIMPLE_DEV_PM_OPS
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/379293f6887632c119b4a62f1d6521a1ede1174a
+ 379293f6887632c119b4a62f1d6521a1ede1174a drm: apple: Update supported firmware versions to 12.3 and 13.5
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/06ac190cf0501dc26eb9e6f232dcbc279f4c4ec5
+ 06ac190cf0501dc26eb9e6f232dcbc279f4c4ec5 drm: apple: Add D129 allocate_bandwidth iomfb callback
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/919eb728a03e9af33b985fd9f75e307c6bb314c0
+ 919eb728a03e9af33b985fd9f75e307c6bb314c0 drm: apple: Align PIODMA buffers to SZ_16K
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dc38851ef00a3c54fb6243cfe255cf90b0c45c2f
+ dc38851ef00a3c54fb6243cfe255cf90b0c45c2f drm/apple: Use iommu domain for piodma maps
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6fefba3bd838e87b21c6e1ef9f29da18f159e645
+ 6fefba3bd838e87b21c6e1ef9f29da18f159e645 drm/apple: Get rid of the piodma dummy driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d12dd8716f66c32d62833ce5eb69b05bbeb59330
+ d12dd8716f66c32d62833ce5eb69b05bbeb59330 drm: apple: backlight: avoid updating the brightness with a commit
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e5f4683fed15cdf24ae9c7d4e23497c9f04314db
+ e5f4683fed15cdf24ae9c7d4e23497c9f04314db drm: apple: iomfb: limit backlight updates to integrated panels
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b6333535d15cb662cf05d85d76970160ce5abd09
+ b6333535d15cb662cf05d85d76970160ce5abd09 drm: apple: Only match backlight service on DCP with panel
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7d5ab3738ddd1e9a9b9f6e4532891e7cdf6057e5
+ 7d5ab3738ddd1e9a9b9f6e4532891e7cdf6057e5 drm: apple: iomfb: Increase modeset timeout to 2.5 seconds
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/23c986c513d211d869ef44b74ecc254fd1d29956
+ 23c986c513d211d869ef44b74ecc254fd1d29956 drm/apple: Mark DCP as being in the wakeup path
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d63e893053fdc548687c43e0840312b62029b939
+ d63e893053fdc548687c43e0840312b62029b939 drm/apple: Remove simpledrm framebuffer before DRM device alloc
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/75af518d626adc4c51d16e940ebe4e0ff2c53c28
+ 75af518d626adc4c51d16e940ebe4e0ff2c53c28 WIP: drm/apple: Port to incompatible V13.3 firmware interface
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/665641f54079ac90a01cf3faf8100775997032e3
+ 665641f54079ac90a01cf3faf8100775997032e3 dcp: Warn if DMA mapping fails
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a5ad20a92d1f5780c941bdc047025c42c860a3b4
+ a5ad20a92d1f5780c941bdc047025c42c860a3b4 dcp: T602X bwreq support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a9a2788b23f0a55279907ca8f8ddf1e80169ef5c
+ a9a2788b23f0a55279907ca8f8ddf1e80169ef5c dcp: 42-bit DMA masks
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/233c46139a70f81257d11454d64b58401ef6906b
+ 233c46139a70f81257d11454d64b58401ef6906b dcp: Add get_tiling_state
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/243898b826c594673c65b2c9a1d81d4f5e0290c9
+ 243898b826c594673c65b2c9a1d81d4f5e0290c9 dcp: Allow unused trampolines
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1df95caac1d3c650873befa73890052571809748
+ 1df95caac1d3c650873befa73890052571809748 drm/apple: Drop unsupported DRM_FORMAT_ARGB2101010
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4eb9f962269e1facd13084b7b37215eb0daa5bc4
+ 4eb9f962269e1facd13084b7b37215eb0daa5bc4 drm/apple: Support color transformation matrices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b22773be88a30c760afddd30bab6d867da6b838f
+ b22773be88a30c760afddd30bab6d867da6b838f drm/apple: ignore surf[3] in clear swap calls
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/471382a096dcb8098394c3dbf57030c7ac2d8550
+ 471382a096dcb8098394c3dbf57030c7ac2d8550 drm/apple: Add support for the macOS 13.2 DCP firmware
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0cdbbce94079c8d58eb2468ee695176636b2471b
+ 0cdbbce94079c8d58eb2468ee695176636b2471b drm/apple: Add callbacks triggered by last_client_close_dcp()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bd8939d37f34ab4e089a4f9cfbe20d9fd1db6c8b
+ bd8939d37f34ab4e089a4f9cfbe20d9fd1db6c8b drm/apple: purge unused dcp_update_notify_clients_dcp
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bb93e9d83e684df75a47fd4dc6e2aa0fc4239a55
+ bb93e9d83e684df75a47fd4dc6e2aa0fc4239a55 drm/apple: Add DCP display driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/932fc893cd4658ff7138be7c9276101f5dc9ccc1
+ 932fc893cd4658ff7138be7c9276101f5dc9ccc1 rust: kernel: iosys_map: Wrap iosys_map_memset()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d1db46b2727c6135d9c72c1731941c650fffe4b1
+ d1db46b2727c6135d9c72c1731941c650fffe4b1 rust: Introduce iosys_map bindings
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/906e2630f53788fbb41956605b8ad14368f9280b
+ 906e2630f53788fbb41956605b8ad14368f9280b rust: helpers: Add dma_mapping_error() helper
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b76af8fa5228f1a59d1923923d6c2350de3b8906
+ b76af8fa5228f1a59d1923923d6c2350de3b8906 rust: io: Add memcpy_{from,to}io wrappers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/92e8dc92646a9bf1257c97255d9788cff36ca94d
+ 92e8dc92646a9bf1257c97255d9788cff36ca94d rust: Add Ownable/Owned types
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2ec084b06a9050a57397908e66c8b3ea092fa491
+ 2ec084b06a9050a57397908e66c8b3ea092fa491 rust: of: Discourage us of "of" properties
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0031dfcedf3ee47270e142153e579ab58686dcbf
+ 0031dfcedf3ee47270e142153e579ab58686dcbf rust: of: Add reserved_mem_region_to_resource_byname()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b285a12acaee4f4a379ac4a1c1b0ba86ac8c0b59
+ b285a12acaee4f4a379ac4a1c1b0ba86ac8c0b59 rust: io: resource: Add owned Resource initialiser
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3d77bac11c9d5b66ba672c179adeb60e511ebda2
+ 3d77bac11c9d5b66ba672c179adeb60e511ebda2 rust: of: Add OF node abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/18528d84e81a10b8b4cd946b4f07dfcfd25acb22
+ 18528d84e81a10b8b4cd946b4f07dfcfd25acb22 rust: soc: apple: rtkit: Add Apple RTKit abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/07d4cf8e939169ab28bfdccad8b90b0536c7d852
+ 07d4cf8e939169ab28bfdccad8b90b0536c7d852 rust: xarray: Add xarray::remove() convenience function
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7309571f7bddaf6c1e3e783a0cc5c407f5f805b9
+ 7309571f7bddaf6c1e3e783a0cc5c407f5f805b9 rust: kernel: xarray: Implement XArray::find()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5d8933e7804857e0e804af189c916a1c78927fbf
+ 5d8933e7804857e0e804af189c916a1c78927fbf rust: xarray: add `insert` and `reserve`
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ba693b9cbca85a7475faae4b82e621fa9c2c3cb2
+ ba693b9cbca85a7475faae4b82e621fa9c2c3cb2 rust: xarray: implement Default for AllocKind
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a6096c923edeb6677693f3846dcdc9ae14c7fa6e
+ a6096c923edeb6677693f3846dcdc9ae14c7fa6e rust: xarray: use the prelude
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/87f1b165ae6903a5eadd85e0a914de9679286c98
+ 87f1b165ae6903a5eadd85e0a914de9679286c98 rust: kernel: lock: Add Lock::pin_init()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a060357e70304684d1a42bc96a0df36cf6cd641f
+ a060357e70304684d1a42bc96a0df36cf6cd641f rust: alloc: Flags: Switch to declare_flags_type!() macro.
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5983c5996acd2ad1069981241b6bfb32eb7e039b
+ 5983c5996acd2ad1069981241b6bfb32eb7e039b rust: types: Add declare_flags_type()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/46123d8e4b1b2fc2b3b0db7a1c21e217634b2d9c
+ 46123d8e4b1b2fc2b3b0db7a1c21e217634b2d9c rust: alloc: vec: Import .drain() / Drain from rust library
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8242648909c886993a38069c824098f837e5faec
+ 8242648909c886993a38069c824098f837e5faec rust: alloc: vec: Add dropped `set_len()` for ::drain()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/35a4def9e124386d849897a31f18cfcbc22a304d
+ 35a4def9e124386d849897a31f18cfcbc22a304d rust: alloc: vec: Add TryFrom trait
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/af41a06c65e698ee7806f6245bca660d1b09979e
+ af41a06c65e698ee7806f6245bca660d1b09979e rust: alloc: kbox: Add AsRef implementation to Box
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/047c691c57aed6a732a24da84bc12744f561cfd2
+ 047c691c57aed6a732a24da84bc12744f561cfd2 rust: allocator: Disable clippy::undocumented_unsafe_blocks lint
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/49507740d8a5e1815b9d45ff998afbffeac03004
+ 49507740d8a5e1815b9d45ff998afbffeac03004 rust: error: Add ENOSYS from uapi/asm-generic/errno.h
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7cedd09f0870acd416582e8ca9ec9a589279e4d9
+ 7cedd09f0870acd416582e8ca9ec9a589279e4d9 rust: error: Add ECANCELED from uapi/asm-generic/errno.h
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/776fc863da1ab55ecc9cec2832bc2099811a7157
+ 776fc863da1ab55ecc9cec2832bc2099811a7157 rust: error: Add ENODATA from uapi/asm-generic/errno.h
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2a306f89cc3ea435babb34e8557231858f0adaa0
+ 2a306f89cc3ea435babb34e8557231858f0adaa0 rust: init: Add default() utility function
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/df6bbcc42b432001b67e4eed1647048488afb566
+ df6bbcc42b432001b67e4eed1647048488afb566 amend! rust: io: mem: Add Mem abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/88c9b60834f6dafa4a7bc6639d2f05eeb402bcc4
+ 88c9b60834f6dafa4a7bc6639d2f05eeb402bcc4 rust: io: mem: Add Mem abstraction
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e4faa74784fab00827dd0b91aad7f68f393393ab
+ e4faa74784fab00827dd0b91aad7f68f393393ab dmaengine: apple-admac: Select DMA_VIRTUAL_CHANNELS
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bf3cdea52e647d661800f29342374b77afbda175
+ bf3cdea52e647d661800f29342374b77afbda175 dmaengine: apple-sio: Implement runtime PM
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3717246b0254ded17e74ac2412131693116d4b0c
+ 3717246b0254ded17e74ac2412131693116d4b0c dmaengine: apple-sio: Fix chan freeing in error path
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4d459409ae5ee52c9067e01e08c7f61f7f151d72
+ 4d459409ae5ee52c9067e01e08c7f61f7f151d72 dmaengine: apple-sio: Add Apple SIO driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/90cb15fad0c5704de6e54e85762974e22ccea66f
+ 90cb15fad0c5704de6e54e85762974e22ccea66f dt-bindings: dma: apple,sio: Add schema
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0dc7f8be134f865135e1ce38e4998d8098680d7a
+ 0dc7f8be134f865135e1ce38e4998d8098680d7a phy: apple: Add DP TX phy driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ca31eb95bd095f769d51029ad0e665f555703675
+ ca31eb95bd095f769d51029ad0e665f555703675 phy: apple: atc: Add initial M3 series support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/51c41dad14d69114d70f9640f9e17bc5367f471a
+ 51c41dad14d69114d70f9640f9e17bc5367f471a phy: apple: atc: Handle dummy pipehandler transisions
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ff2359cf5486f6d33d7850c11fae792d3fc96e9e
+ ff2359cf5486f6d33d7850c11fae792d3fc96e9e xhci-pci: asmedia: Add a firmware loader for ASM2214a chips
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/859a7c1e1e92ffd80f52a43de752525ad256439d
+ 859a7c1e1e92ffd80f52a43de752525ad256439d PCI: apple: Add depends on PAGE_SIZE_16KB
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7704ca726f4117784081972843939c1f1b8d95e6
+ 7704ca726f4117784081972843939c1f1b8d95e6 NOT-FOR-UPSTREAM: PCI: apple: Use up to 4 "reset-gpios"
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8ed5eeafae0fb7413f4673efbd31579aa1198c74
+ 8ed5eeafae0fb7413f4673efbd31579aa1198c74 PCI: apple: Avoid PERST# deassertion through gpiod initialization
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b42ae66893d94a0cb3a414c09913857b091725b2
+ b42ae66893d94a0cb3a414c09913857b091725b2 PCI: apple: Log the time it takes for links to come up
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b6e971f7f9c247d55efe500adc8e8766864cfecd
+ b6e971f7f9c247d55efe500adc8e8766864cfecd PCI: apple: Reorder & improve link-up logic
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d6a1ba32aaa673d8750e4e055d61f080e75d5952
+ d6a1ba32aaa673d8750e4e055d61f080e75d5952 PCI: apple: Make link up timeout configurable, default to 500ms
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/07df52c70eed12c8e654298a974b1198e8f8951b
+ 07df52c70eed12c8e654298a974b1198e8f8951b PCI: apple: Skip controller port setup for online links
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4a17fedacb3a672ae05abdf410b28ccbe4af672c
+ 4a17fedacb3a672ae05abdf410b28ccbe4af672c PCI: apple: Add support for optional PWREN GPIO
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7e662aeca60ef717dc347f89163158e72ff7e034
+ 7e662aeca60ef717dc347f89163158e72ff7e034 PCI: apple: Probe all GPIOs for availability first
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9410938699b3e390b590070b061ed16c54e9cb81
+ 9410938699b3e390b590070b061ed16c54e9cb81 dt-bindings: pci: apple,pcie: Add subnode binding, pwren-gpios property
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a5b6a2d83c4fed58177a84f5a47265fdd86bde91
+ a5b6a2d83c4fed58177a84f5a47265fdd86bde91 power: supply: macsmc_power: Add CHWA / CHLS charge thresholds
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/294ac97a0ff68ea6eeb2362fc91204396a4fdb4e
+ 294ac97a0ff68ea6eeb2362fc91204396a4fdb4e input: macsmc-input: Prefer `true` as boolean literal
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ea1cd608d7a0561dfe73f07094a5d78ef1891886
+ ea1cd608d7a0561dfe73f07094a5d78ef1891886 input: macsmc-input: Fix wakeup from s2idle
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/25013f544b1bb8120f01616c2f5da13c98a5248d
+ 25013f544b1bb8120f01616c2f5da13c98a5248d power: supply: macsmc_power: Add a debug mode to print power usage
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/52f2de8408658c3ad78570fbea078fd5e4d3b4b3
+ 52f2de8408658c3ad78570fbea078fd5e4d3b4b3 power: reset: macsmc-reboot: Prevent probing without of_node
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/00f34f7f9ee27aed1fc745ca7c46ce5a2bbb31a9
+ 00f34f7f9ee27aed1fc745ca7c46ce5a2bbb31a9 input: macsmc-input: New driver to handle the Apple Mac SMC buttons/lid
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9610846e43096d3ef97cee96d785f7b4bc247c7d
+ 9610846e43096d3ef97cee96d785f7b4bc247c7d dt-bindings: hwmon: Add Apple System Management Controller hwmon schema
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a2b52760b4af46c613360ce0f864743d4e2dd90a
+ a2b52760b4af46c613360ce0f864743d4e2dd90a soc: apple: Add RTKit helper driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7da5ff67cd91ec25c6d81c4987e04239ff364cd4
+ 7da5ff67cd91ec25c6d81c4987e04239ff364cd4 HID: Add Apple DockChannel HID transport driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6242645db5a97e02cb2740ce904f0204a1a6b4ea
+ 6242645db5a97e02cb2740ce904f0204a1a6b4ea soc: apple: Add DockChannel driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2caf68ca06260928aae2cf1734bd33c0198d5c8f
+ 2caf68ca06260928aae2cf1734bd33c0198d5c8f WIP: HID: transport: spi: add Apple SPI transport
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7a8249e3f9f5da3519992e7e3331650065b61957
+ 7a8249e3f9f5da3519992e7e3331650065b61957 HID: magicmouse: Query device dimensions via HID report
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/066ae73af0330620806918b5f38fc1607593dca1
+ 066ae73af0330620806918b5f38fc1607593dca1 HID: magicmouse: Handle touch controller resets on SPI devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e1031b4626b4cb2307229a83cb8f617d0b8dd2b0
+ e1031b4626b4cb2307229a83cb8f617d0b8dd2b0 HID: magicmouse: Add .reset_resume for SPI trackpads
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b6e5406264a55d28d5c709f74807194b7876cafb
+ b6e5406264a55d28d5c709f74807194b7876cafb HID: magicmouse: Add MTP multi-touch device support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c40e5de700d2476a8fed1fbfbe1fda3d95020889
+ c40e5de700d2476a8fed1fbfbe1fda3d95020889 HID: magicmouse: add support for Macbook trackpads
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c0f943f34a0f91cd2e90cc408f3a555d5ea2224e
+ c0f943f34a0f91cd2e90cc408f3a555d5ea2224e HID: magicmouse: use ops function pointers for input functionality
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9dfb4513808cfd14cc1d0a28cf57152e45c7e23a
+ 9dfb4513808cfd14cc1d0a28cf57152e45c7e23a HID: magicmouse: use struct input_mt_pos for X/Y
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a06a2cea04f9eb723d6f63c69fe373cc3ac75ee0
+ a06a2cea04f9eb723d6f63c69fe373cc3ac75ee0 HID: magicmouse: use a define of the max number of touch contacts
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/eded6c938dff066664a104ebd66dd34a0eaf910f
+ eded6c938dff066664a104ebd66dd34a0eaf910f DO NOT MERGE: HID: apple: Add fnmode which ignores function keys
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c473726a223d97a5ac39dd89f397b25425eba27a
+ c473726a223d97a5ac39dd89f397b25425eba27a HID: apple: Bind to HOST devices for MTP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/27ca1ac1816aad8b4ec63bb4b6542815c89430f3
+ 27ca1ac1816aad8b4ec63bb4b6542815c89430f3 HID: apple: Bind Apple silicon SPI devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dc49625f3eb80f7f3deeef79b9e22bc4208d26d7
+ dc49625f3eb80f7f3deeef79b9e22bc4208d26d7 HID: Bump maximum report size to 16384
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/da970dd85016a1b189deec882c0766f793ae8cd9
+ da970dd85016a1b189deec882c0766f793ae8cd9 HID: core: Handle HOST bus type when announcing devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/036b3eb6b274c22f9a9e58c9159794dc5dd3a7fd
+ 036b3eb6b274c22f9a9e58c9159794dc5dd3a7fd HID: add HOST vendor/device IDs for Apple MTP devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c04906e6298253bd526609fc5eac8527cf51aaf7
+ c04906e6298253bd526609fc5eac8527cf51aaf7 HID: add device IDs for Apple SPI HID devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/06d55ac46c53cd08a952539ee259f79775bd924d
+ 06d55ac46c53cd08a952539ee259f79775bd924d [brcmfmac] Clean up and common interface creation handling
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c7e304cd07df077ff8f627da610001da2b05cdab
+ c7e304cd07df077ff8f627da610001da2b05cdab [brcmfmac] Support bandwidth caps for all bands
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/595fdfa597ffe6438ddbe74150814b9e5796e5f2
+ 595fdfa597ffe6438ddbe74150814b9e5796e5f2 [brcmfmac] Add support for more rate info in station dumps
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6120ce702b70407e51262c7c8003993d523a481b
+ 6120ce702b70407e51262c7c8003993d523a481b [brcmfmac] Set chanspec during join.
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3a2050c9541d4500d7d00c7ff73986022c295162
+ 3a2050c9541d4500d7d00c7ff73986022c295162 [brcmfmac] Add support for more auth suites in roaming offload
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3dd8ddc678399c1155b4dca386eb04710ebfc449
+ 3dd8ddc678399c1155b4dca386eb04710ebfc449 [brcmfmac] Let feature attachment fail, and fail if we can't handle the interface versions we find.
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5025247c7e537a44900fd03031a8da57d550194d
+ 5025247c7e537a44900fd03031a8da57d550194d [brcmfmac] Support new join parameter structure versions
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7c257ce1a8f4f846cc128d545ad0ef911af41361
+ 7c257ce1a8f4f846cc128d545ad0ef911af41361 [brcmfmac] Structurize scan parameter handling
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e27b9a2f745bb28e721d4b31de85bbfcbd163809
+ e27b9a2f745bb28e721d4b31de85bbfcbd163809 [brcmfmac] Structurize PNF scan and add support for latest version
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5e0dbc46c99be83df3877011167a0ee4a4261dfb
+ 5e0dbc46c99be83df3877011167a0ee4a4261dfb fixup! define missing event message extension
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d1f7a68798b35021c01ed8d89f37e3032b53ef66
+ d1f7a68798b35021c01ed8d89f37e3032b53ef66 fixup! fix FWIL definition to use SSID length constant
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d3a25a681417f77ca62f192d839be734760d89a8
+ d3a25a681417f77ca62f192d839be734760d89a8 [brcmfmac] Fix regulatory domain handling to reset bands properly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/00a7ace73e30e09df64cb42f094267f8c348dff3
+ 00a7ace73e30e09df64cb42f094267f8c348dff3 [brcmfmac] Add support for 6G bands and HE
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/072e6ae8d0dc640b135785d3032c72db70c1a65f
+ 072e6ae8d0dc640b135785d3032c72db70c1a65f [brcmfmac] Support high power/low power/etc scan flags
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e4cdab9b40ccc6ead469a6d642f79697221a2f0c
+ e4cdab9b40ccc6ead469a6d642f79697221a2f0c [brcmfmac] Support GCMP cipher suite, used by WPA3.
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4d981918a26e1de49ed437b2112bfd2d17d153d3
+ 4d981918a26e1de49ed437b2112bfd2d17d153d3 [brcmfmac] Compute number of available antennas and set it in wiphy structure.
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e6f364d7991ff1c36dceec7505a762ac7d92c2c9
+ e6f364d7991ff1c36dceec7505a762ac7d92c2c9 [brcmfmac] Dynamically configure VHT settings to match firmware
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e8d3a9e13cb9803726f1a050f53be41c7a7de028
+ e8d3a9e13cb9803726f1a050f53be41c7a7de028 [brcmfmac] Add support for encoding/decoding 6g chanspecs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/49c210c4cb7cf0f5038cf6810d8a279f190130e8
+ 49c210c4cb7cf0f5038cf6810d8a279f190130e8 [brcmfmac] Finish firmware mem map, fix heap start calculation bug.
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/30aa16973c89b4cc89f8498bfe2cf30cebe867ac
+ 30aa16973c89b4cc89f8498bfe2cf30cebe867ac brcmfmac: Fix AP mode
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bbea343e7e58b9652995c281fb8043f349612c8d
+ bbea343e7e58b9652995c281fb8043f349612c8d wifi: brcmfmac: Add BCM4388 support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/928b8512832e639e8c76008e5e6f9a48eabadc6f
+ 928b8512832e639e8c76008e5e6f9a48eabadc6f wifi: brcmfmac: Extend brcmf_wsec_pmk_le
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3777f81118092e6ea3adb024b643efefade0cad2
+ 3777f81118092e6ea3adb024b643efefade0cad2 wifi: brcmfmac: Support bss_info up to v112
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a353097431ff1b68201f6f41a24d9217740815cc
+ a353097431ff1b68201f6f41a24d9217740815cc wifi: brcmfmac: Implement event_msgs_ext
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/de6ad18ae5abf6baceafd42955ce301dd0447477
+ de6ad18ae5abf6baceafd42955ce301dd0447477 wifi: brcmfmac: Add support for SCAN_V3
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/91468fe466474f2b8b39e79f8a212db60b5193e8
+ 91468fe466474f2b8b39e79f8a212db60b5193e8 wifi: brcmfmac: Mask all IRQs before starting firmware
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cb3b00f3818c7731f228b6e79a95caf884b7778a
+ cb3b00f3818c7731f228b6e79a95caf884b7778a wifi: brcmfmac: Do not set reset vector when signatures are in use
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f0273fd7eec1a42ad68b519f75edc467b607806d
+ f0273fd7eec1a42ad68b519f75edc467b607806d wifi: brcmfmac: pcie: Initialize IRQs before firmware boot
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/da8df66cb88ce143d2a877bcc931e56c9f7d80f0
+ da8df66cb88ce143d2a877bcc931e56c9f7d80f0 wifi: brcmfmac: pcie: Access pcie core registers via dedicated window
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/82411bc9c28b71564c4b724773db84f6195b943c
+ 82411bc9c28b71564c4b724773db84f6195b943c wifi: brcmfmac: Handle watchdog properly in newer cores
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fa7a8c8ba0afd40e1168aa8a011e1a8b32d58442
+ fa7a8c8ba0afd40e1168aa8a011e1a8b32d58442 wifi: brcmfmac: chip: ca7: Only disable D11 cores; handle an arbitrary number
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b300eb6925234938a65633b63f8d82eb96f7adfd
+ b300eb6925234938a65633b63f8d82eb96f7adfd wifi: brcmfmac: Increase bandlist size
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/90a294ec062f396452c0af23608ecfdcc9b422be
+ 90a294ec062f396452c0af23608ecfdcc9b422be wifi: brcmfmac: msgbuf: Increase RX ring sizes to 2048
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3b2cca5756ee013340b8f2af6f36cfd7210a190c
+ 3b2cca5756ee013340b8f2af6f36cfd7210a190c wifi: brcmfmac: Add support for firmware signatures
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4c1a3788dd45c2b8c7d81a0020272b229a29061d
+ 4c1a3788dd45c2b8c7d81a0020272b229a29061d wifi: brcmfmac: Add support for SYSMEM corerev >= 12 & fix < 12
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4b4114896a7e325331d920171b06214852a26ea1
+ 4b4114896a7e325331d920171b06214852a26ea1 wifi: brcmfmac: Do not service msgbuf IRQs until ready in MSI mode
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/69d93b3f73dd05b147388b4292f0b614b99e6055
+ 69d93b3f73dd05b147388b4292f0b614b99e6055 wifi: brcmfmac: Shut up p2p unknown frame error
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a032a0d8c0f6d67d741a16682f43b5c68a71cb75
+ a032a0d8c0f6d67d741a16682f43b5c68a71cb75 wifi: brcmfmac: Support exchanging power mailbox messages via commonring
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/88dd6f7912adb617b734426fe65c70f409504183
+ 88dd6f7912adb617b734426fe65c70f409504183 wifi: brcmfmac: Implement the H2D/D2H mailbox data commonring messages
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/75e8a88b188b22ee7d32152008691d7ca3f1dae2
+ 75e8a88b188b22ee7d32152008691d7ca3f1dae2 wifi: brcmfmac: Add a new bus op for D2H mailbox message handling
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ee5c8f4e8ed947fd0351a1d21f2f4d39579d8424
+ ee5c8f4e8ed947fd0351a1d21f2f4d39579d8424 wifi: brcmfmac: Add newer msgbuf packet types up to 0x2e
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ad155838b386db0c54fe78a610d883ff0a99192a
+ ad155838b386db0c54fe78a610d883ff0a99192a wifi: brcmfmac: Support v6+ flags and set host_cap properly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2f131cd76dd65c29b7ef5d6753228d4024f6991a
+ 2f131cd76dd65c29b7ef5d6753228d4024f6991a wifi: brcmfmac: Fix logic for deciding which doorbell registers to use
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8e4eebda0c4fc193f8cd216de61a984eaed4ef98
+ 8e4eebda0c4fc193f8cd216de61a984eaed4ef98 wifi: brcmfmac: Handle PCIe MSI properly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ad1c1bfbb274b96ef59a827b4fd9d4388bf3290f
+ ad1c1bfbb274b96ef59a827b4fd9d4388bf3290f wifi: brcmfmac: Add missing shared area defines to pcie.c
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/65a810be74ee2443c4f7f12ea6206542fd13ba51
+ 65a810be74ee2443c4f7f12ea6206542fd13ba51 Revert "ASoC: tas2770: Drop dummy regulator"
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9073da3f8d71a4c181fb81bff347f105a4967b92
+ 9073da3f8d71a4c181fb81bff347f105a4967b92 ASoC: tas2770: Drop dummy regulator
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3125340dceafa69f56b1a5e6c54d663c52d4f1c4
+ 3125340dceafa69f56b1a5e6c54d663c52d4f1c4 Revert "ASoC: tas2764: Drop dummy regulator use"
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/476b9052db4afb5f6979bce558a9de299fa9c9b9
+ 476b9052db4afb5f6979bce558a9de299fa9c9b9 ASoC: tas2764: Drop dummy regulator use
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/76831e40eb3495a4e651343d357e55c1ba1c116f
+ 76831e40eb3495a4e651343d357e55c1ba1c116f ASoC: tas2770: Initialise SDZ GPIO as low
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/23df367158c52a88d6fa649a7507a94abb0d7b5e
+ 23df367158c52a88d6fa649a7507a94abb0d7b5e ASoC: tas2764: Initialise SDZ GPIO low
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b7e040ea77b54f03f375e39818164222033bbda2
+ b7e040ea77b54f03f375e39818164222033bbda2 dmaengine: apple-admac: Add M3 generation ADMACs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/18a8aa3856e74d12327684b1ce519605d9b6bb9e
+ 18a8aa3856e74d12327684b1ce519605d9b6bb9e dt-bindings: dma: apple,admac: Add M3 generation ADMACs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e1f77d457d73faf9cd7df8cd18c2efe2dc7cc09a
+ e1f77d457d73faf9cd7df8cd18c2efe2dc7cc09a ASoC: macaudio: Add comments for M3 machines
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9b78e86c385a01a9657a890ab64215f514895962
+ 9b78e86c385a01a9657a890ab64215f514895962 fixup! ASoC: apple: Add macaudio machine driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fdbb8263cace36410b8a56d675fafab3869a19a7
+ fdbb8263cace36410b8a56d675fafab3869a19a7 ASoC: macaudio: Use upstreamed bus keeper configuration mechanism
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1eaeeb4f2a7b44eece2a8a4c009bed0fc9171d97
+ 1eaeeb4f2a7b44eece2a8a4c009bed0fc9171d97 ASoC: macaudio: Set long_name during probe()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7a12bb628335ab25c46fa25b45c384a1a7234e2e
+ 7a12bb628335ab25c46fa25b45c384a1a7234e2e fixup! ASoC: apple: Add macaudio machine driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ac105b3ab5584c7d612bc276ef2f95a11abbffe6
+ ac105b3ab5584c7d612bc276ef2f95a11abbffe6 soc: apple: rtkit: Add tracekit endpoint.
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7e40628daf6bdbe1c43861bb4d6238d10b67eb64
+ 7e40628daf6bdbe1c43861bb4d6238d10b67eb64 soc: apple: rtkit: Add apple_rtkit_has_endpoint()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/69a972a3f3e3291e786b34b5991f37d776c2621f
+ 69a972a3f3e3291e786b34b5991f37d776c2621f READ COMMIT MESSAGE! macaudio: Enable second round of models
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a22f228d9a2a87195f6e3eaea165792955898e09
+ a22f228d9a2a87195f6e3eaea165792955898e09 READ COMMIT MESSAGE! macaudio: Enable first round of models
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5483089dad7c163d2f877af92cba002417464657
+ 5483089dad7c163d2f877af92cba002417464657 ALSA: Support nonatomic dmaengine PCMs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cd735955510b86e2232678f0f8ac991004ee0be1
+ cd735955510b86e2232678f0f8ac991004ee0be1 macaudio: Fix missing kconfig requirement
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ae951fb6b4d99c6b4e4d0ae025a63b399467668d
+ ae951fb6b4d99c6b4e4d0ae025a63b399467668d macaudio: Disable j313 and j274
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/959902c06d76e72f7bdc49c1642b330ce5a89d35
+ 959902c06d76e72f7bdc49c1642b330ce5a89d35 ASoC: apple: mca: Add delay after configuring clock
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d1293f4fae8c05dce7af65202f4797950a902e72
+ d1293f4fae8c05dce7af65202f4797950a902e72 macaudio: Avoid matches against cs42l84's controls
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/edead89d5833fd566bba642eb3255300707d9a38
+ edead89d5833fd566bba642eb3255300707d9a38 macaudio: Fix CHECK return condition checking
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0e1de560741e050b5b6a2887b8e2a79efab22620
+ 0e1de560741e050b5b6a2887b8e2a79efab22620 macaudio: Sync all gains with macOS
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/39b5a8f63b070c52638ff004f215a00e38cfc6fe
+ 39b5a8f63b070c52638ff004f215a00e38cfc6fe macaudio: Turn please_blow_up_my_speakers into an int
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/07b4c50a90526c73945ceaa2b126f68a2e4abb7f
+ 07b4c50a90526c73945ceaa2b126f68a2e4abb7f macaudio: Change device ID form Jxxx to AppleJxxx
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f4fe0a00e584f8460d58dcef46a53837bfe3be21
+ f4fe0a00e584f8460d58dcef46a53837bfe3be21 macaudio: Set the card name explicitly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bd8e9731d8b14da88f88fe1da401beadf2e07c78
+ bd8e9731d8b14da88f88fe1da401beadf2e07c78 macaudio: Officially enable j313 speakers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5566b70fabd824732fd58f26fcd95bd6a2feab56
+ 5566b70fabd824732fd58f26fcd95bd6a2feab56 macaudio: Skip speaker sense PCM if no sense or no speakers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e066b47709061d713728c48fcd23e96e0cb96392
+ e066b47709061d713728c48fcd23e96e0cb96392 macaudio: Remove -3dB safety pad from j313
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/34da83ef0c4c02975c4187d1503e8bace7e7340f
+ 34da83ef0c4c02975c4187d1503e8bace7e7340f ASoC: tas2770: Add SDZ regulator
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7ac0c417f696dd66f6f0bfa1ca493ea560289521
+ 7ac0c417f696dd66f6f0bfa1ca493ea560289521 macaudio: Rework platform config & add all remaining platforms
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9cf0927747c37d2b4380d1dfcc8e11e96121d32b
+ 9cf0927747c37d2b4380d1dfcc8e11e96121d32b ALSA: dmaengine: Always terminate DMA when a PCM is closed
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7edb13b1d860eb22f26f2ddfbd9febf615df66af
+ 7edb13b1d860eb22f26f2ddfbd9febf615df66af ASoC: apple: mca: Increase reset timeout
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/48f3ae9aa1c7021279638a9175a3c3c47f682a01
+ 48f3ae9aa1c7021279638a9175a3c3c47f682a01 macaudio: Use an explicit mutex for the speaker volume lock
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c697062ce20e93251a68d4ff090faebc5f05ca20
+ c697062ce20e93251a68d4ff090faebc5f05ca20 ASoC: tas2764: Add SDZ regulator
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2e2fb86bd1613d30115d9d6b2ceb9c63849525a0
+ 2e2fb86bd1613d30115d9d6b2ceb9c63849525a0 macaudio: Disable debug
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7594fc8f24e343fc458d4e8dbd1312f611804b40
+ 7594fc8f24e343fc458d4e8dbd1312f611804b40 macaudio: Use the same volume limit for all amps
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1db4ac524a4b843f294465a447d6ab007ea651a3
+ 1db4ac524a4b843f294465a447d6ab007ea651a3 macaudio: Initialize speaker lock properly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1ab8a5a662ed6b3f99516e49951d8459b5ce0aa3
+ 1ab8a5a662ed6b3f99516e49951d8459b5ce0aa3 macaudio: Enable VSENSE switches
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/84b37fc14862c965ad7a5577bb8b150ef7bf9211
+ 84b37fc14862c965ad7a5577bb8b150ef7bf9211 macaudio: Allow DT enabled speakers and gate them off in the driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/07b6d5a5ba63b9eaf739926a2d78b7bca5467a20
+ 07b6d5a5ba63b9eaf739926a2d78b7bca5467a20 ASoC: apple: mca: Do not mark clocks in use for non-providers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/92e4d5e365562f410c6413df3e9919d57b2fb4e8
+ 92e4d5e365562f410c6413df3e9919d57b2fb4e8 macaudio: Add a getter for the interlock
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5a230b5c875fea91091503775b2b9ec4f2b4205e
+ 5a230b5c875fea91091503775b2b9ec4f2b4205e alsa: pcm: Remove the qos request only if active
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9b71f0f98e8d5d75e42a56e98f51699f56fd3f68
+ 9b71f0f98e8d5d75e42a56e98f51699f56fd3f68 macaudio: speaker volume safety interlocks
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b070518618d81afb8ff340b4f8bd3b12247e8ae6
+ b070518618d81afb8ff340b4f8bd3b12247e8ae6 ASoC: ops: Export snd_soc_control_matches()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bde248fdb57907ed1625fa36dc0bbab885191f1b
+ bde248fdb57907ed1625fa36dc0bbab885191f1b ASoC: macaudio: Sense improvements
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/928d4654f8fb257a4cb699f77da22ba2d3e5fe77
+ 928d4654f8fb257a4cb699f77da22ba2d3e5fe77 ASoC: macaudio: Fix PD link double-frees?
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/51df51bcf059c135299f659bc96cce1d365b9cab
+ 51df51bcf059c135299f659bc96cce1d365b9cab ASoC: macaudio: Do not disable ISENSE/VSENSE switches on j314
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1a328e12265865b4d16a9f5773aa3c39c39d6401
+ 1a328e12265865b4d16a9f5773aa3c39c39d6401 ASoC: macaudio: Add 'Speakers Up Indicator' control
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fac7872a8891fa38f822330ab7e388029fbb3261
+ fac7872a8891fa38f822330ab7e388029fbb3261 ASoC: macaudio: Remove stale 'speaker_nchans' fields
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9c5a1bfff5c4042f6de4a0d8cd30707d8f97da41
+ 9c5a1bfff5c4042f6de4a0d8cd30707d8f97da41 ASoC: apple: mca: Support capture on multiples BEs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3c253d021aa0bc9c13a9e350d41fe808be2285d6
+ 3c253d021aa0bc9c13a9e350d41fe808be2285d6 ASoC: macaudio: Tune constraining of FEs, add BCLK
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dd83606bf5ddab9d487087ebf99e80944f7287ce
+ dd83606bf5ddab9d487087ebf99e80944f7287ce NOT UPSTREAMABLE: ASoC: tas2764: Redo I/V sense logic
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d6f7967bb2ca02df4ba1d1c21ea4e559bec4a5dd
+ d6f7967bb2ca02df4ba1d1c21ea4e559bec4a5dd ASoC: macaudio: Do not constrain sense PCM
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0260132a8d353fd946949acb9bd62fb561a59bf6
+ 0260132a8d353fd946949acb9bd62fb561a59bf6 ASoC: macaudio: Tweak "no audio route" message
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/25c6f8af695a0e321d6bb96336f8614041a67234
+ 25c6f8af695a0e321d6bb96336f8614041a67234 ASoC: macaudio: Start speaker sense capture support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0afb155c65fbdd6e17d526be2e0a03fc43008815
+ 0afb155c65fbdd6e17d526be2e0a03fc43008815 ASoC: apple: mca: Fix SYNCGEN enable on FE clock consumers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5c2a86524063fa8611870773d5fe14a1a53ba3f3
+ 5c2a86524063fa8611870773d5fe14a1a53ba3f3 ASoC: apple: mca: Support FEs being clock consumers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e62c264ca1181c2402b6194c5e2c7b4021eb8652
+ e62c264ca1181c2402b6194c5e2c7b4021eb8652 ASoC: apple: mca: Factor out mca_be_get_fe
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9456116520e8f2d39574bddc832d891dcf30f3e8
+ 9456116520e8f2d39574bddc832d891dcf30f3e8 ASoC: apple: mca: Separate data & clock port setup
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/176da6b7d80baf863e64585e79f3c08bd6377496
+ 176da6b7d80baf863e64585e79f3c08bd6377496 ASoC: macaudio: Tune DT parsing error messages
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b6e952589d8614224db77fb583ef7632406f8215
+ b6e952589d8614224db77fb583ef7632406f8215 ASoC: macaudio: Condition selecting NCO driver on COMMON_CLK
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/01d18bd6cd05c884818c52116f0e4b65d0f1c8fa
+ 01d18bd6cd05c884818c52116f0e4b65d0f1c8fa ALSA: control: Add kcontrol callbacks for lock/unlock
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6ad0fa18c5e942bb4f79e28abde274879a0921ad
+ 6ad0fa18c5e942bb4f79e28abde274879a0921ad ASoC: macaudio: alias j415 kcontrols to j314
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ad9d9ca84ea86d1c651bdb023e6af287dc6daa0c
+ ad9d9ca84ea86d1c651bdb023e6af287dc6daa0c ASoC: apple: mca: Move clock shutdown to be shutdown
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/456ec36fdae728583342ddc38976289ecb43c416
+ 456ec36fdae728583342ddc38976289ecb43c416 ASoC: cs42l42: Set a faster digital ramp-up rate
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/183790af50f51324222e742ca39a4fa96903483c
+ 183790af50f51324222e742ca39a4fa96903483c ASoC: macaudio: constrain frontend channel counts
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f49ec00a9e6f4c66c0fbfafb3be118429612f529
+ f49ec00a9e6f4c66c0fbfafb3be118429612f529 ASoC: macaudio: Add initial j313 fixup_controls
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/91024710a973e597a0b87589ef09049ed27d584b
+ 91024710a973e597a0b87589ef09049ed27d584b ASoC: macaudio: Improve message on opening of unrouted PCM devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6831b921a5ff1771cb0fede0b4372b696c9f2a9c
+ 6831b921a5ff1771cb0fede0b4372b696c9f2a9c ASoC: macaudio: Alias f413 fixups to j314
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ffab8ffc3498d9fe2f0c116c9e3b50545a4ba50a
+ ffab8ffc3498d9fe2f0c116c9e3b50545a4ba50a ASoC: macaudio: Gate off experimental platforms
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c0f020c8937e58f7d0707de4b5c615802488ed91
+ c0f020c8937e58f7d0707de4b5c615802488ed91 ASoC: macaudio: s/void_warranty/please_blow_up_my_speakers/
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8d1d6af0d07927b6f1bf83583a54fee7a16d291b
+ 8d1d6af0d07927b6f1bf83583a54fee7a16d291b ASoC: macaudio: s/Freq/Frequency/ in TAS2764 control
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/aa402e51faf21a9b941c19cdac4d2596517bc30f
+ aa402e51faf21a9b941c19cdac4d2596517bc30f ASoC: macaudio: Drop the 'inverse jack' speaker stuff
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/68603f165e16fbf1338a9b7a5ae4ede7a8f562b8
+ 68603f165e16fbf1338a9b7a5ae4ede7a8f562b8 ASoC: macaudio: Rename ALSA driver to simple 'macaudio'
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d4de767497f323575c9cf6a7d87036e5479faeab
+ d4de767497f323575c9cf6a7d87036e5479faeab ASoC: macaudio: Add j493 fixup_controls
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e60e4adcbdce839fb059f11c99cbfb25f3705c87
+ e60e4adcbdce839fb059f11c99cbfb25f3705c87 ASoC: macaudio: Add j375 fixup_controls
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/abc3b56f66a731315293fbe4e3942fbeda973e0f
+ abc3b56f66a731315293fbe4e3942fbeda973e0f ASoC: macaudio: Fix headset routes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c349c28f52781f776718e6eaad777b92674654a1
+ c349c28f52781f776718e6eaad777b92674654a1 ASoC: cs42l42: Do not advertise sample bit symmetry
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/36a58cbfff930dd2d43885caf762391b525e3092
+ 36a58cbfff930dd2d43885caf762391b525e3092 ASoC: cs42l42: Fix typo
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b265fe9a614f9a75b36f070698476653831a35e7
+ b265fe9a614f9a75b36f070698476653831a35e7 ASoC: apple: Add macaudio machine driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3728a7479fd12fe477c879784376ea3ce1e26cbc
+ 3728a7479fd12fe477c879784376ea3ce1e26cbc dt-bindings: sound: Add Apple Macs sound peripherals
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/aba27597209c60fad02c1c9a70e083198ae35e56
+ aba27597209c60fad02c1c9a70e083198ae35e56 ASoC: card: Let 'fixup_controls' return errors
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1729175ec165bc18103da79a2a1c9ec1fda0a6f3
+ 1729175ec165bc18103da79a2a1c9ec1fda0a6f3 ASoC: ops: Introduce 'soc_set_enum_kctl'
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8098cae880f944a0dd2b8205c0365cc69d467a68
+ 8098cae880f944a0dd2b8205c0365cc69d467a68 ASoC: ops: Introduce 'snd_soc_deactivate_kctl'
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/50da726544748304c56662c0e80be70d6a9da4d0
+ 50da726544748304c56662c0e80be70d6a9da4d0 ASoC: ops: Accept patterns in snd_soc_limit_volume
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8e3233b51393c842f9a78ba6b1336cd30c325d65
+ 8e3233b51393c842f9a78ba6b1336cd30c325d65 ASoC: ops: Move guts out of snd_soc_limit_volume
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b180acc6088e0baf72a6f73a5b577ee4b1e1322e
+ b180acc6088e0baf72a6f73a5b577ee4b1e1322e apple-nvme: defer cache flushes by a specified amount
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7601f8fae748edcfb71b1cb82068785507ccc6dc
+ 7601f8fae748edcfb71b1cb82068785507ccc6dc arm64: configs: asahi: Add new configs for v7.1
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3f422ff1028cf97e659836985e9990ebe6b6b287
+ 3f422ff1028cf97e659836985e9990ebe6b6b287 arm64: configs: asahi: Add new configs for v6.19
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/11bc092b3bde0de554bdc39318e6793b70315308
+ 11bc092b3bde0de554bdc39318e6793b70315308 pmdomain: apple: Add PMP reporting interface
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9d6785151573ee850899ff52317bdf17df6caebf
+ 9d6785151573ee850899ff52317bdf17df6caebf power: hibernate: Disable hibernation on Apple Silicon
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8317b46bf19783e342739e596c607eb6f9fe5ec9
+ 8317b46bf19783e342739e596c607eb6f9fe5ec9 arm64: configs: Add asahi.config fragment
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f6a9b0f15304c227dceb51aec52b99a3c67cf437
+ f6a9b0f15304c227dceb51aec52b99a3c67cf437 arm64: Increase kernel stack size to 32K
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6c6828ee0533855bccc341b1566c4430cb80dd86
+ 6c6828ee0533855bccc341b1566c4430cb80dd86 drm/simpledrm: Set DMA and coherency mask
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/93e7a8241a5c9fdf19bae50bb690fec7cc93a838
+ 93e7a8241a5c9fdf19bae50bb690fec7cc93a838 soc: apple: apple-pmgr-pwrstate: Mark on-at-boot PDs as wakeup
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b1dc68b9535af47a549ab24dfbbc7a220179524c
+ b1dc68b9535af47a549ab24dfbbc7a220179524c soc: apple: apple-pmgr-pwrstate: Mark on-at-boot PDs as DEFER_OFF
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7a6968d5153921fbaca057c0fc2151dddd98cb77
+ 7a6968d5153921fbaca057c0fc2151dddd98cb77 PM: domains: Add a flag to defer power-off until all consumers probe
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7b413376aa8fc36f8d793a3b5a6191bc80c30601
+ 7b413376aa8fc36f8d793a3b5a6191bc80c30601 driver core: fw_devlink: Add fw_devlink_count_absent_consumers()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d82075422dda949deb877a8b2106649f021d28aa
+ d82075422dda949deb877a8b2106649f021d28aa firmware_loader: Add /lib/firmware/vendor path
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/60e8831152f96cfa81203506407933f26fc4f32e
+ 60e8831152f96cfa81203506407933f26fc4f32e mmc: sdhci-pci: Support setting CD debounce delay
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f4ef5df92459c4baa6599ede8c820b47f85307eb
+ f4ef5df92459c4baa6599ede8c820b47f85307eb mmc: sdhci-pci: Support external CD GPIO on all OF systems
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bb1975865c7e9b31a51f7c65de04eabee412d22d
+ bb1975865c7e9b31a51f7c65de04eabee412d22d tty: serial: samsung_tty: Mark as wakeup_path on no_console_suspend
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c719d336158991c228facc07fb0e4a736755bf01
+ c719d336158991c228facc07fb0e4a736755bf01 tty: serial: samsung_tty: Support runtime PM
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b2e9662a0fe1f7f3fc8df9c74114717331dcb1fc
+ b2e9662a0fe1f7f3fc8df9c74114717331dcb1fc iommu: apple-dart: Reset hardware when setting up translations
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e3a06ae72abbbc62a0061663956bb7b5a16ec51c
+ e3a06ae72abbbc62a0061663956bb7b5a16ec51c iommu: apple-dart: Revert separate iommu_ops for locked/bypass DARTs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d8f2274d2c05ccd767f4a5f8347bea86fd1792f0
+ d8f2274d2c05ccd767f4a5f8347bea86fd1792f0 iommu: apple-dart: Disallow identity domains for locked DARTs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/466d3e08da82f87025c51c6543f7ddc15a022e55
+ 466d3e08da82f87025c51c6543f7ddc15a022e55 iommu: apple-dart: Support combinations of locked and unlocked DARTs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ddf80379735f5fdf5d6c09f366daeba5e9b20171
+ ddf80379735f5fdf5d6c09f366daeba5e9b20171 iommu/dart: Support locked DARTs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/27fe142bcbfa69133f1a051b5bb58c4a77c3f835
+ 27fe142bcbfa69133f1a051b5bb58c4a77c3f835 iommu/dart: Add iommu_ops for locked DARTs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e59a23ac6b2ffdc468f456c31ab1412db71c849a
+ e59a23ac6b2ffdc468f456c31ab1412db71c849a iommu/dart: Track if the DART is locked
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3481ede92b39479d09837188b614aa832e090678
+ 3481ede92b39479d09837188b614aa832e090678 iommu/dart: Use virtual memory ttbr entries in apple_dart_cfg
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ab24c2ffb5acc380c13a99edaccdeeae59e7eab1
+ ab24c2ffb5acc380c13a99edaccdeeae59e7eab1 iommu/dart: Use separate iommu_ops for DARTs w/o bypass
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/64be001e6703a764e74f6c45736e3bef01f399aa
+ 64be001e6703a764e74f6c45736e3bef01f399aa iommu: Handle translated device firmware mappings
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/60d19062d2a1a0299038971601df2ac386e67177
+ 60d19062d2a1a0299038971601df2ac386e67177 iommu: Rename iommu_create_device_direct_mappings()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/869ae7dc111beca3db687bada0efdeb06cf64349
+ 869ae7dc111beca3db687bada0efdeb06cf64349 iommu: Parse translated reserved regions
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2174f6d511b1d353b2a306db71c91ba69bdedddc
+ 2174f6d511b1d353b2a306db71c91ba69bdedddc iommu: Add IOMMU_RESV_TRANSLATED for non 1:1 mapped reserved regions
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a35371106fbc6dc6c7a65df34757368aafbb886e
+ a35371106fbc6dc6c7a65df34757368aafbb886e iommu/of: Free fwspec on probe deferrel
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/95b10f8d9ca976466b181cafb1bc0b441bd00d85
+ 95b10f8d9ca976466b181cafb1bc0b441bd00d85 iommu: apple-dart: Check for fwspec in the device probe path
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/71bd67a0f62e37aae0b0db40787957b2abe770b1
+ 71bd67a0f62e37aae0b0db40787957b2abe770b1 iommu: apple-dart: Support specifying the DMA aperture in the DT
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4783a6c3730c78d853bbe489147fd4c414756f26
+ 4783a6c3730c78d853bbe489147fd4c414756f26 iommu: apple-dart: Enable runtime PM
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6f99e5177693053b9aab5b5d02e0837b9a73923a
+ 6f99e5177693053b9aab5b5d02e0837b9a73923a iommu: apple-dart: Link to consumers with blanket RPM_ACTIVE
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/34675033d3c392cd804f416c448babcb4a325dbe
+ 34675033d3c392cd804f416c448babcb4a325dbe iommu: apple-dart: Power on device when handling IRQs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/80ae3ca5e0cb1762f869442f00b2e31924bee40c
+ 80ae3ca5e0cb1762f869442f00b2e31924bee40c arm64: Kconfig: Select HAVE_SHARED_GPIOS for Apple Silicon
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/12fbd081fb5258a1cfa0645ac2ec986b2e15b777
+ 12fbd081fb5258a1cfa0645ac2ec986b2e15b777 soc: apple: tunable: Allow passing NULL to tunable_apply
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/08d70fa98f2f94ffe1e53708c7b1839ea02ece51
+ 08d70fa98f2f94ffe1e53708c7b1839ea02ece51 soc: apple: rtkit: Pass 0 as size for a NULL crashlog buffer
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/814cd699b028ec801c276cdf79fd583901579160
+ 814cd699b028ec801c276cdf79fd583901579160 soc: apple: rtkit: Use scope-based cleanup in apple_rtkit_crashlog_rx()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/94af43fdc9d265013dff0eb88709956b885cd542
+ 94af43fdc9d265013dff0eb88709956b885cd542 cpuidle-apple: load on M3 / Pro / Max / Ultra
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4ed155db5e4625a0f4775f38d4848a00a0997e00
+ 4ed155db5e4625a0f4775f38d4848a00a0997e00 cpuidle-apple: only load on machines where it is known to be needed
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9876b8266506ca1a36b7d0a061421c60e805d215
+ 9876b8266506ca1a36b7d0a061421c60e805d215 cpuidle: apple: Add Apple SoC cpuidle driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c2600a9ebb938de1eb3fda1878865ad4105e184b
+ c2600a9ebb938de1eb3fda1878865ad4105e184b soc: apple: pmgr: Add externally-clocked property
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/73ef93ea9f0033deca79e05a28d3f1b58090ed74
+ 73ef93ea9f0033deca79e05a28d3f1b58090ed74 soc: apple: pmgr: Add force-disable/force-reset
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ef6eba8c7fd45bcf337ee79fa748a1aaaf17b87e
+ ef6eba8c7fd45bcf337ee79fa748a1aaaf17b87e dt-bindings: power: apple,pmgr-pwrstate: Add force-{disable,reset}
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5d416f4ff2434c3a9581752850783c869752decd
+ 5d416f4ff2434c3a9581752850783c869752decd soc: apple: Add driver for Apple PMGR misc controls
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cc281cd9385fdfb26b6070c003288888887c8a3a
+ cc281cd9385fdfb26b6070c003288888887c8a3a soc: apple: rtkit: Add devm_apple_rtkit_free()
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9684bd51ecc832e5600cbebaf214e68509e2d2ce
+ 9684bd51ecc832e5600cbebaf214e68509e2d2ce fixup! arm64: dts: apple: t[603x,8122]: Add speaker/jack nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/196d4c5c8eb3825078e59333a50a18b8b737880b
+ 196d4c5c8eb3825078e59333a50a18b8b737880b Revert "arm64: dts: apple: t602x: describe shared SDZ GPIO for tas2764"
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/15aee5b06cf0225bb6dc83d60db8c36e8bb2923c
+ 15aee5b06cf0225bb6dc83d60db8c36e8bb2923c fixup! arm64: dts: apple: t600x-jxxx: Put in audio nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bff85e588c336cbe322a0f95b36a715323b167dd
+ bff85e588c336cbe322a0f95b36a715323b167dd fixup! arm64: dts: apple: t8103*: Put in audio nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/98c1a84deddef94e6978e4094e999ac93c993fa9
+ 98c1a84deddef94e6978e4094e999ac93c993fa9 fixup! arm64: dts: apple: t8112: Put in audio nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/43539f490309babb4d72b61840a37ef0a1302bc2
+ 43539f490309babb4d72b61840a37ef0a1302bc2 arm64: dts: apple: t8112: Add apple,iomfb-surfaces to DCP nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/533506c30405871f45f2b6eb22198244ea8e6ccd
+ 533506c30405871f45f2b6eb22198244ea8e6ccd arm64: dts: apple: t8103: Add apple,iomfb-surfaces to DCP nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/177f467716bc1b9afe8df95156e1b5841541c838
+ 177f467716bc1b9afe8df95156e1b5841541c838 arm64: dts: apple: t600x: Add apple,iomfb-surfaces to DCP nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1f56217d14fbd6b6521ff05c81ece696c671d153
+ 1f56217d14fbd6b6521ff05c81ece696c671d153 arm64: dts: apple: t602x: add apple,iomfb-surfaces to DCP nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/11485f55af8e2e0c5f516e9c8ab553b2ab9c8df6
+ 11485f55af8e2e0c5f516e9c8ab553b2ab9c8df6 arm64: dts: apple: t600x-j314-j316: Change Type-C port label
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cb4c1b0146c8a3d5b1da264ad1409e76dc68de0e
+ cb4c1b0146c8a3d5b1da264ad1409e76dc68de0e arm64: dts: apple: t603x: Add usb/atcphy nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/19282af36e8e9240f6ba04206d3f0b8aff5c9472
+ 19282af36e8e9240f6ba04206d3f0b8aff5c9472 arm64: dts: apple: t8122: Add usb/atcphy nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/672d0528cd48132fa0c829ffdde27d5de3d43186
+ 672d0528cd48132fa0c829ffdde27d5de3d43186 arm64: dts: apple: t603x: Add ACE3 pd controllers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/568be90510c38be7b1a49213471a9e9e9a195298
+ 568be90510c38be7b1a49213471a9e9e9a195298 arm64: dts: apple: t603x: Add usb-related spmi controllers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/66a8cf2963bbf30e749de7b9c91f489375129cfa
+ 66a8cf2963bbf30e749de7b9c91f489375129cfa arm64: dts: apple: t8122: Add ISP nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4d664810e9e632480576f5b262a2ab874dfd564a
+ 4d664810e9e632480576f5b262a2ab874dfd564a arm64: dts: apple: t6030: Add isp nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b0e5801344cafa60675cd769883e472e126613c0
+ b0e5801344cafa60675cd769883e472e126613c0 arm64: dts: apple: t603x: Add aop/admac nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3cd94605016f36db790197506db74a649f2c7661
+ 3cd94605016f36db790197506db74a649f2c7661 arm64: dts: apple: t8122: Add aop/admac nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bb979c0a4a0e047f2a86dcf3c81e9033b43ae02f
+ bb979c0a4a0e047f2a86dcf3c81e9033b43ae02f arm64: dts: apple: t6031: add avd nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/56dc79be49a1aa6140e8927ed3e34409a075def9
+ 56dc79be49a1aa6140e8927ed3e34409a075def9 arm64: dts: apple: t6030: add avd nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2567bb975f2b963d2f7e2ba7687b02f75500ac91
+ 2567bb975f2b963d2f7e2ba7687b02f75500ac91 arm64: dts: apple: t8122: add avd nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d4589dd95d8b07123aad22aa619577c368fd9d9d
+ d4589dd95d8b07123aad22aa619577c368fd9d9d arm64: dts: apple: t602x: add avd nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/421fe208994318402e490ab15a4ede428456210b
+ 421fe208994318402e490ab15a4ede428456210b arm64: dts: apple: t8112: add avd nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/eaced3d71e849a53c40ee0d1ed479bbe7731da65
+ eaced3d71e849a53c40ee0d1ed479bbe7731da65 arm64: dts: apple: t600x: add avd nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e9a9471e0d24899e346103ac84f15ffa08c4c6ab
+ e9a9471e0d24899e346103ac84f15ffa08c4c6ab arm64: dts: apple: t8103: add avd nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/12859663b6d8617cc3326e5d096e8b89f7407e3d
+ 12859663b6d8617cc3326e5d096e8b89f7407e3d dts: apple: t603x: Add t603{1,4} camera nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/64fb32d5c93aead5518eafad56ec9bbe90cf3e70
+ 64fb32d5c93aead5518eafad56ec9bbe90cf3e70 arm64: dts: apple: t8122-j61[35]: Use new codec bus keeper configuration
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8e6262e7365799d6bc2dec639dd2c3b7697ca55d
+ 8e6262e7365799d6bc2dec639dd2c3b7697ca55d arm64: dts: apple: t603x/t8122-j504: Use new codec bus keeper configuration
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c20a373feaaf25194c1fb496627fc779e2fab779
+ c20a373feaaf25194c1fb496627fc779e2fab779 arm64: dts: apple: t[603x,8122]: Add speaker/jack nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4974fde7594cd0a6f874eeee31028c2e660c0a37
+ 4974fde7594cd0a6f874eeee31028c2e660c0a37 arm64: dts: apple: t603x-g514-j516: Active MTP based input
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0c421a57431bc0b28dcc8d4e08577b482e1017a8
+ 0c421a57431bc0b28dcc8d4e08577b482e1017a8 arm64: dts: apple: t6031: Add MTP device nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/faad08d616a6e3a5db9f3a8895afaafd687b6a68
+ faad08d616a6e3a5db9f3a8895afaafd687b6a68 arm64: dts: apple: t6030: Add MTP device nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9a7757e1bbdbe1c17a5d6c5c5552c8ced50de54e
+ 9a7757e1bbdbe1c17a5d6c5c5552c8ced50de54e arm64: dts: apple: t8122: Add MTP device nodes to Macbook board files
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/51347c6150bb551d9d68c45ae44aaa00961b33ee
+ 51347c6150bb551d9d68c45ae44aaa00961b33ee arm64: dts: apple: Add MTP DockChannel to M3 device tree
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c27690bc76d6d260104da4e928c18c88971470a2
+ c27690bc76d6d260104da4e928c18c88971470a2 arm64: dts: t603x-j514-j516: Add PCI power enable GPIOs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/430ed184e841ae1c214ddeed95ea3de9a91e0151
+ 430ed184e841ae1c214ddeed95ea3de9a91e0151 arm64: dts: apple: t8122: Add PCI power enable GPIOs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b73192bb362857d63155dbea9c3d04673e81b73f
+ b73192bb362857d63155dbea9c3d04673e81b73f arm64: dts: apple: t8112: Use new codec bus keeper config
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bd9edca54996775a595e52d074cb9c60b3892e7d
+ bd9edca54996775a595e52d074cb9c60b3892e7d arm64: dts: apple: t8103: Use new codec bus keeper config
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fb0a90cc18958cccab27f094e9fdb11b4ade3e00
+ fb0a90cc18958cccab27f094e9fdb11b4ade3e00 arm64: dts: apple: t600x: Use new codec bus keeper configuration
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e67f301493219dc6a6eb6f7655e2b2e84b62ae56
+ e67f301493219dc6a6eb6f7655e2b2e84b62ae56 arm64: dts: apple: Add PMP nodes and hook up power reporting
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0652011854bd8694573b0931f2d286c1c03c4d41
+ 0652011854bd8694573b0931f2d286c1c03c4d41 arm64: dts: apple: j[34]1[46]: Mark ps_atc3_common as always-on
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b4a6e331ce5a8f2ead778955f167041a16ca2c90
+ b4a6e331ce5a8f2ead778955f167041a16ca2c90 arm64: dts: apple: Connect dcp and atc-phy for dp2hdmi on Macbook Pros
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/04008d768e13390786d59825e00136e84da627fb
+ 04008d768e13390786d59825e00136e84da627fb arm64: dts: apple: t8112: Add ATC display crossbar devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/607dde9b25c0b2977e0a8342adcd8a9f8c452e27
+ 607dde9b25c0b2977e0a8342adcd8a9f8c452e27 arm64: dts: apple: t8103: Add ATC display crossbar devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/db09e53c32d69f2d13e30e45b6cd43366663b2b3
+ db09e53c32d69f2d13e30e45b6cd43366663b2b3 arm64: apple: t602x: Remove disabled status from uat reserved-mem regions
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4a42053510ad09c4fe27cd18f1f239b56bb17248
+ 4a42053510ad09c4fe27cd18f1f239b56bb17248 arm64: dts: apple: Adjust all hwmon sensors for upstream driver
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/91302de8e0b17a243bccdc995fda34b5110dab02
+ 91302de8e0b17a243bccdc995fda34b5110dab02 arm64: dts: apple: Add SMC hwmon node for t600x,t602x,t8103,t8112
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c04d507edfe6cf38a7bbac4a3b486658195a5300
+ c04d507edfe6cf38a7bbac4a3b486658195a5300 arm64: dts: apple: t8112: Add "pm_setting" for smc_reboot
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dcc478dc088e15457d1aae5928410601eaa3f732
+ dcc478dc088e15457d1aae5928410601eaa3f732 arm64: dts: apple: t8103: Add "pm_setting" for smc_reboot
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ccc685dd0632ef7ceb17b0514625446bb8941e4e
+ ccc685dd0632ef7ceb17b0514625446bb8941e4e arm64: dts: apple: t600x: Add "pm_setting" for smc_reboot
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/daff49a442de35fd0ee6e5443e9f2fe89b264da9
+ daff49a442de35fd0ee6e5443e9f2fe89b264da9 arm64: dts: apple: t8112-j493: Enable AOP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/223720fc93b5558e55922b4edf0be82b38dd799f
+ 223720fc93b5558e55922b4edf0be82b38dd799f arm64: dts: apple: t8112-j415: Enable AOP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c9b68c6244f89e870aab1ca1dece9f5dd2d7af6e
+ c9b68c6244f89e870aab1ca1dece9f5dd2d7af6e arm64: dts: apple: t8112-j413: Enable AOP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/60c47ae04469d2a325cd1af15718d3d9e71f5b86
+ 60c47ae04469d2a325cd1af15718d3d9e71f5b86 arm64: dts: apple: t8103-j45x: Enable AOP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0622dc979c2cf5a73abb8c3a39fe9ef2f2d8df48
+ 0622dc979c2cf5a73abb8c3a39fe9ef2f2d8df48 arm64: dts: apple: t8103-j313: Enable AOP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9a9ab633822fcc859165e719bf3976e3a0165f4e
+ 9a9ab633822fcc859165e719bf3976e3a0165f4e arm64: dts: apple: t8103-j293: Enable AOP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/57d875f58c360620aa63defd04b065e2930edac2
+ 57d875f58c360620aa63defd04b065e2930edac2 arm64: dts: apple: t600x-j314-j316: Enable AOP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4b359c351d25fbdb08caef8a17a376859c681dcd
+ 4b359c351d25fbdb08caef8a17a376859c681dcd arm64: dts: apple: Add AOP audio identifiers
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f41c9101eb0a940bc986f655775e0f0cf662abbd
+ f41c9101eb0a940bc986f655775e0f0cf662abbd arm64: dts: apple: Add SEP device tree nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f9f298d634b9bb015aaa818901079c6e59e75853
+ f9f298d634b9bb015aaa818901079c6e59e75853 arm64: dts: apple: Add AOP and subdevices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ad468766ffb35ffa44a939512627afcdf225afa2
+ ad468766ffb35ffa44a939512627afcdf225afa2 arm64: dts: apple: t602x-j4xx: Add SMC hwmon sensors
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a3d9bd89bc5d43f6fcca939abe5c32d6c770a852
+ a3d9bd89bc5d43f6fcca939abe5c32d6c770a852 arm64: dts: apple: t600x-j3xx: Add SMC hwmon sensors
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bf4816ef0661e5ccfbfbfbde73e3a461212b16fa
+ bf4816ef0661e5ccfbfbfbde73e3a461212b16fa arm64: dts: apple: t8112: Add SMC hwmon sensors
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e82a7c39addacca672cd2d29a25e45b89249b82d
+ e82a7c39addacca672cd2d29a25e45b89249b82d arm64: dts: apple: t8103: Add SMC hwmon sensors
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3a5f49dcf30ce3fdee008a49aea252eace7daacb
+ 3a5f49dcf30ce3fdee008a49aea252eace7daacb arm64: dts: apple: add common hwmon keys and fans
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bedcadccc4f1b9581f934490d924dc27f83f9bb5
+ bedcadccc4f1b9581f934490d924dc27f83f9bb5 arm64: dts: apple: t6022-j180d: Enable second HDMI port
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/87819ccccd907e6b83a62e1b007ee485232cd41b
+ 87819ccccd907e6b83a62e1b007ee485232cd41b arm64: apple: t8112-j473: Enable sio explicitly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/480035144ea87c9c2fee34c6e04e73c7490426fe
+ 480035144ea87c9c2fee34c6e04e73c7490426fe arm64: apple: t8103-j274: Enable sio explicitly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/79c96bb24575bec96ee3a93d64296b51d60822d6
+ 79c96bb24575bec96ee3a93d64296b51d60822d6 arm64: apple: t60x0/t60x1: Enable sio explicitly
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/086f29490298c2953f3685046f0e98fe6c769237
+ 086f29490298c2953f3685046f0e98fe6c769237 arm64: apple: t60xx: Enable DP/HMI audio nodes on all devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ef5cc681aa041e2d6c175e616a25c8a149046013
+ ef5cc681aa041e2d6c175e616a25c8a149046013 arm64: apple: t602x: Add sio and dpaudio device nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cd0856c7075b4a682f9c7aa40018fe75ed5c9036
+ cd0856c7075b4a682f9c7aa40018fe75ed5c9036 arm64: apple: t600x: Add sio and dpaudio device nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/47b613b2ca2d0de0e5297e7fdb88c3aa051aa06a
+ 47b613b2ca2d0de0e5297e7fdb88c3aa051aa06a arm64: apple: t600x: Move dart_sio* to dieX
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/85678ae49c4ac6de91a9319cc8c81f21a7e93883
+ 85678ae49c4ac6de91a9319cc8c81f21a7e93883 arm64: apple: t8112: Add SIO, DPA nodes; hook up to DCP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0012b238bc06132de0fffaeacd204d06692ee6ff
+ 0012b238bc06132de0fffaeacd204d06692ee6ff arm64: apple: t8103: Add SIO, DPA nodes; hook up to DCP
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fb63efcbe9a02006be59d3293ef11955671e2b2a
+ fb63efcbe9a02006be59d3293ef11955671e2b2a arm64: apple: t602x: pmgr: SIO: Add audio, spi and uart power-domains
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f0721afad0a689c23ce53f66d5222cee67940110
+ f0721afad0a689c23ce53f66d5222cee67940110 arm64: apple: t600x: pmgr: SIO: Add audio, spi and uart power-domains
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a5bb6cd03cec5ce83d0eb8025fbc8ff49d3f00e9
+ a5bb6cd03cec5ce83d0eb8025fbc8ff49d3f00e9 arm64: apple: t8112-pmgr: SIO: Add audio, spi and uart power-domains
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ae5774598bbf33e55d346b0b4f2d574d6427b653
+ ae5774598bbf33e55d346b0b4f2d574d6427b653 arm64: apple: t8103-pmgr: SIO: Add audio, spi and uart power-domains
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/65e8a05d7e907018feb7d2e117392c1a603e8512
+ 65e8a05d7e907018feb7d2e117392c1a603e8512 arm64: dts: apple: Fill device node for dp2hdmi on Macbook Pros
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6929989d116cb807cda1c7d3161acc20ddc44920
+ 6929989d116cb807cda1c7d3161acc20ddc44920 arm64: dts: apple: t6022-{j180,j475}: Enable dcpext0/dptx-phy/dp2hdmi
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e07b24bf3b268fcf44922a84364c3dc07a1835f3
+ e07b24bf3b268fcf44922a84364c3dc07a1835f3 arm64: dts: apple: t6020-j474,t6021-j475: Enable dcpext0/dptx-phy/dp2hdmi
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b99bae2ed8f984cda699061f091bde3648644997
+ b99bae2ed8f984cda699061f091bde3648644997 arm64: dts: apple: t8112-j473: Enable dcpext0/dptx-phy/dp2hdmi
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/eb9bf6dc8d4e31885bce8b314ea003a458dea56a
+ eb9bf6dc8d4e31885bce8b314ea003a458dea56a arm64: dts: apple: t602x: Add device nodes for atc DP crossbar
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/47b584352a8478819470b6c9bea423644785beb3
+ 47b584352a8478819470b6c9bea423644785beb3 arm64: dts: apple: t600x: Add device nodes for atc DP crossbar
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/03247b48d64d9e47c6c46858b73eb56f737c06fc
+ 03247b48d64d9e47c6c46858b73eb56f737c06fc arm64: dts: apple: t602x: Add lpdptx-phy node
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f5177aec00c665aa7cf773cb4d0c12d5790d9301
+ f5177aec00c665aa7cf773cb4d0c12d5790d9301 arm64: dts: apple: t8112: Add dptx-phy node
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2dfaadfa8e95de217379d93b30857971e22e44bd
+ 2dfaadfa8e95de217379d93b30857971e22e44bd arm64: dts: apple: t602x: Add t6020 dispext device nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ffea3bbb766e2d0a00b4ee03e16020ca06ddbb84
+ ffea3bbb766e2d0a00b4ee03e16020ca06ddbb84 arm64: dts: apple: t600x: Add t6000 dispext device nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/574964dacb4ca0b1a0ceb97050075afbbab11e2e
+ 574964dacb4ca0b1a0ceb97050075afbbab11e2e arm64: dts: apple: t8112: Add dcpext/dispext0 nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/85a739fb11f3d26c90b07f68b68e6786d12fa8b8
+ 85a739fb11f3d26c90b07f68b68e6786d12fa8b8 arm64: dts: apple: t8103: Add dcpext/dispext0 nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/239864eefc35d33b016a82bb0b529b2115dfca53
+ 239864eefc35d33b016a82bb0b529b2115dfca53 arm64: dts: apple: t600x: Add "apple,min-state" to ps_dispextN_cpu0
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/780643b883236c69d789de2cf128de31c0cfcbfb
+ 780643b883236c69d789de2cf128de31c0cfcbfb arm64: dts: apple: t8112: Switch to apple,dma-range
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f98c28b575dedfe9c00e283662f63d0483d35238
+ f98c28b575dedfe9c00e283662f63d0483d35238 arm64: dts: apple: t8103: Switch to apple,dma-range
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f8d07cc2222f2ebd57be685e5c9011d3b51dce85
+ f8d07cc2222f2ebd57be685e5c9011d3b51dce85 arm64: dts: apple: t600x: Switch to apple,dma-range
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4ad9056b3e1e23f199fdce0ad4be8433c454b60e
+ 4ad9056b3e1e23f199fdce0ad4be8433c454b60e arm64: dts: apple: imx558: Add downscaled resolution presets
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8f753324f785e07cab9d46ab0a712b5b6af4dcca
+ 8f753324f785e07cab9d46ab0a712b5b6af4dcca arm64: dts: apple: imx248: Add scaled and cropped presets
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/423c057934880d01167e965eb73b2827e287bee3
+ 423c057934880d01167e965eb73b2827e287bee3 arm64: dts: apple: Disable ps_isp_sys unless it is used
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/f0bfa2f02422309d1e51be2909e7274baf972b3e
+ f0bfa2f02422309d1e51be2909e7274baf972b3e arm64: dts: ISP platform configs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fc36cd22fd05e5a36bfd36fb22b906d56e5fd7cd
+ fc36cd22fd05e5a36bfd36fb22b906d56e5fd7cd arm64: dts: apple: t602x: Add ISP nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/67b0c97fe949ae1c1cebb48b94020160eefb2a96
+ 67b0c97fe949ae1c1cebb48b94020160eefb2a96 arm64: dts: apple: t8112: Add ISP nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/13fafc003608eccdc1b8e002aaba2114d147569b
+ 13fafc003608eccdc1b8e002aaba2114d147569b arm64: dts: apple: t6000: Add ISP nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/22e7a54f0cc05fa4deffdd97987eee8593412fb3
+ 22e7a54f0cc05fa4deffdd97987eee8593412fb3 arm64: dts: apple: t8103: Add ISP nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b6ea33ae67ab4462f2309e471cbcd5c20dd0db72
+ b6ea33ae67ab4462f2309e471cbcd5c20dd0db72 arm64: dts: apple: t8112: add opp-microwatt props to avalanche/blizzard
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/545336ab93505603689e905f82ce2e09e35e844d
+ 545336ab93505603689e905f82ce2e09e35e844d arm64: dts: apple: add opp-microwatt to t8103/t600x
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5ac199cd670920b244c9f05ee125d10b104a8617
+ 5ac199cd670920b244c9f05ee125d10b104a8617 arm64: dts: apple: t6020x: Mark dptx_phy_ps only on laptops always-on
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a30fd18f8b508d1f6c358af9a6df0ff863b45204
+ a30fd18f8b508d1f6c358af9a6df0ff863b45204 arm64: dts: apple: t6022: Add APCIE-GE nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e52f0397fde4d3b701507ffbb0c092c54e3cb55d
+ e52f0397fde4d3b701507ffbb0c092c54e3cb55d arm64: dts: apple: Make ps_msg always-on
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8c3deb79c8da53b6588daa9abcfbc8f921574bc7
+ 8c3deb79c8da53b6588daa9abcfbc8f921574bc7 arm64: dts: apple: Add pmgr-misc nodes to t60xx
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d561f367a3efe452ea3a1640eb34e84def5762a2
+ d561f367a3efe452ea3a1640eb34e84def5762a2 arm64: dts: apple: t602x: Add identity dma-ranges mapping
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5976097ca1f3201b7b3f72d0bbc02f54705766ca
+ 5976097ca1f3201b7b3f72d0bbc02f54705766ca arm64: dts: apple: t602x-j180d: Add I/VMON slots to amps
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4f21e1347074c5ad6ec525fe0703688e55f7ab42
+ 4f21e1347074c5ad6ec525fe0703688e55f7ab42 arm64: dts: apple: t602x: describe shared SDZ GPIO for tas2764
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/43030a6061f0ef82108003a21619df98a26a8de3
+ 43030a6061f0ef82108003a21619df98a26a8de3 arm64: dts: apple: t602x: Mark MCA power states as externally-clocked
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bd1ff7f134bf6f44e245878fea33e7e4ce8926bc
+ bd1ff7f134bf6f44e245878fea33e7e4ce8926bc arm64: dts: apple: Add MTP nodes to t6020x
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/be83988d9426be25d65f1f50150a34d89c1ffe44
+ be83988d9426be25d65f1f50150a34d89c1ffe44 HACK: arm64: dts: apple: t602x: Add generic compatibility
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9d3230f28cc4fe3a131f35f55ccbdcff053116a7
+ 9d3230f28cc4fe3a131f35f55ccbdcff053116a7 arm64: dts: apple: t602x: Add missing devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dcbe12e9b3bbaf83a376a4404d079cfa141a84c5
+ dcbe12e9b3bbaf83a376a4404d079cfa141a84c5 arm64: dts: apple: Add identity dma-ranges mapping
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5fae1f45cb1cb9575bc214bf99eb11d2725d73bc
+ 5fae1f45cb1cb9575bc214bf99eb11d2725d73bc arm64: dts: apple: t8112: Enable turbo CPU p-states
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8e0f1d6aa52a936a580f6d3986d1421f1869557c
+ 8e0f1d6aa52a936a580f6d3986d1421f1869557c arm64: dts: apple: t8103: Enable turbo CPU p-states
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1f58058a6701727998dfdb130a64e4e2ecda45ae
+ 1f58058a6701727998dfdb130a64e4e2ecda45ae arm64: dts: apple: t600x: Enable turbo CPU p-states
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9e91b45ccd060197b503a5f992dcac1805b86c99
+ 9e91b45ccd060197b503a5f992dcac1805b86c99 arm64: dts: apple: t600x: Remove obsolete comment in ans2 power domain
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0bf551a0da21635137a18f01344cea3011d052f5
+ 0bf551a0da21635137a18f01344cea3011d052f5 arm64: dts: apple: t8112: Add downstream gpu properties
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9fcadd0409185524192804ae02f3eeb2449170b8
+ 9fcadd0409185524192804ae02f3eeb2449170b8 arm64: dts: apple: t600x: Add downstream gpu properties
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/85c42016f54f04cf64579f1c492997c00a4d6da5
+ 85c42016f54f04cf64579f1c492997c00a4d6da5 arm64: dts: apple: t8103: Add downstream gpu properties
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cd25582c82e1daaaccbb7194b95779c154329ae3
+ cd25582c82e1daaaccbb7194b95779c154329ae3 scripts/dtc: Add support for floating-point literals
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/518d7fde1ce9d20862991580cca7f0ccd218f60f
+ 518d7fde1ce9d20862991580cca7f0ccd218f60f arm64: dts: apple: t8112: Add DCP power domain to missing devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/dc971a3b8879ba8cf6703cb7d5388335c18a7557
+ dc971a3b8879ba8cf6703cb7d5388335c18a7557 arm64: dts: apple: t8103: Add DCP power domain to missing devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/401f25a954997678b1d19ec4f34199f3f05a751f
+ 401f25a954997678b1d19ec4f34199f3f05a751f arm64: dts: apple: t600x: Add DCP power domain to missing devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/501bcb660f1f07d2171e0a38c19cd7d0d243cb5d
+ 501bcb660f1f07d2171e0a38c19cd7d0d243cb5d arm64: dts: apple: t8112: Add dcp/disp0 nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/65541bbd84638daa799d03f1e732e9102a48a383
+ 65541bbd84638daa799d03f1e732e9102a48a383 arm64: apple: t600x: Add display controller related device tree nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2ef9d03f2f23496d42bee03581ac9da72b641419
+ 2ef9d03f2f23496d42bee03581ac9da72b641419 arm64: apple: t8103: Add display controller related device tree nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1d001d8c3718216fc137f66ea4f114395efe1540
+ 1d001d8c3718216fc137f66ea4f114395efe1540 arm64: dts: apple: t8112: Mark pcie node as dma-coherent
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b844d8a2e356a2681cdaac853d39bbe24a2551ae
+ b844d8a2e356a2681cdaac853d39bbe24a2551ae arm64: dts: apple: t8103: Mark pcie node as dma-coherent
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6d1691f3f7caf58a068f215984dc2dc4c4477283
+ 6d1691f3f7caf58a068f215984dc2dc4c4477283 arm64: apple: t600x: Mark PCIe node as "dma-coherent"
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6268da0e0826d67dd91dcf49ce0156d6b8159240
+ 6268da0e0826d67dd91dcf49ce0156d6b8159240 arm64: apple: Add missing power state deps for display
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3f076b94b7bd581d622034b1aaa46ae27070b7ec
+ 3f076b94b7bd581d622034b1aaa46ae27070b7ec arm64: dts: apple: t6001-j375c: Add USB3 hub GPIO initialization
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/bc615b7e9837138ea876ac91ee1b448d39311626
+ bc615b7e9837138ea876ac91ee1b448d39311626 arm64: dts: apple: t8112: Put in audio nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8ffaa048cf78d0b6a01e8d7a9cae11cbb76cb0fb
+ 8ffaa048cf78d0b6a01e8d7a9cae11cbb76cb0fb arm64: dts: apple: t600x-jxxx: Put in audio nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/280bee5d228c19a9011f47af9cf4b09cbbfa81fb
+ 280bee5d228c19a9011f47af9cf4b09cbbfa81fb arm64: dts: apple: t8103*: Put in audio nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8be781aefc28d988f9b8ad6d5b9f9c2a838187a1
+ 8be781aefc28d988f9b8ad6d5b9f9c2a838187a1 arm64: dts: apple: t8112: Mark MCA power states as externally-clocked
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/83f60f4760bc887c25c61417d67b868b89633b09
+ 83f60f4760bc887c25c61417d67b868b89633b09 arm64: dts: apple: t8103: Mark MCA power states as externally-clocked
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c9c7e00649e1d5359a4a6fbf15b717c6bc207ad5
+ c9c7e00649e1d5359a4a6fbf15b717c6bc207ad5 arm64: dts: apple: t600x: Mark MCA power states as externally-clocked
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/88302eb0aa66f18f4d065e7aa7b6e7317fb5e8e4
+ 88302eb0aa66f18f4d065e7aa7b6e7317fb5e8e4 arm64: dts: apple: Fix t600x mca IRQs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4ab65f2b3cab36da13e2cd4bdec359c040296acc
+ 4ab65f2b3cab36da13e2cd4bdec359c040296acc arm64: dts: apple: t8112: Add mtp device nodes for j413/j493
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b0374879b5f45929021baa7884293164c472880e
+ b0374879b5f45929021baa7884293164c472880e arm64: dts: apple: j31[46]: Add keyboard nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/301263566e00ccf0c1cbad8297a2e65f407c6dd3
+ 301263566e00ccf0c1cbad8297a2e65f407c6dd3 arm64: dts: apple: t8103: Add spi3 keyboard node
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/79f689e239ddc893b38eaf8d4047ff6239bd05c0
+ 79f689e239ddc893b38eaf8d4047ff6239bd05c0 arm64: dts: apple: t8112: Remove always-on from the PMP node
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5603677aaa64368ba0d9a5d6308973e6818a511d
+ 5603677aaa64368ba0d9a5d6308973e6818a511d arm64: dts: apple: t8103: Keep PCIe power domain on
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/34faa94caf537571d7723ac86be6a1f76250184a
+ 34faa94caf537571d7723ac86be6a1f76250184a arm64: dts: apple: t8112: Add PCI power enable GPIOs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d1515fe780edecb4ef3d24e48a70bdfb7c986206
+ d1515fe780edecb4ef3d24e48a70bdfb7c986206 arm64: dts: apple: t8112-j473: Add wlan/bt PCIe device nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/5888058430dab7f402090d516bfb932df03879b3
+ 5888058430dab7f402090d516bfb932df03879b3 arm64: dts: apple: t600x: Add PCI power enable GPIOs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1ebfc67762cec9cbe556279ca31a7580499bba10
+ 1ebfc67762cec9cbe556279ca31a7580499bba10 arm64: dts: apple: t8103: Add PCI power enable GPIOs
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a79939f54621b77e053054e1fa2a688ff745ae63
+ a79939f54621b77e053054e1fa2a688ff745ae63 arm64: dts: apple: t6022-j180d: Add audio nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/461aa0d566b870d5163d5f3ea60fd8bc65e4c64a
+ 461aa0d566b870d5163d5f3ea60fd8bc65e4c64a arm64: dts: apple: t8122: Fix I2C resources
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9d8f5bd4b44b6369fe22782b39d732875c3d529a
+ 9d8f5bd4b44b6369fe22782b39d732875c3d529a dts: apple: t[603x,8122]: Add MCA and supporting nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/82e971b3e8f6d402c289e66bd5a3c09af4ca9ee1
+ 82e971b3e8f6d402c289e66bd5a3c09af4ca9ee1 arm64: dts: apple: t603[124]: Add "capacity-dmips-mhz" properties
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1c200cca05f3a01d55e0d2c75a652e599fc7f161
+ 1c200cca05f3a01d55e0d2c75a652e599fc7f161 arm64: dts: apple: t8122: Add "capacity-dmips-mhz" properties
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/baf9fa8b493ecde17090999e2777b05255e3b36c
+ baf9fa8b493ecde17090999e2777b05255e3b36c arm64: dts: apple: t6030: Add "capacity-dmips-mhz" properties
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/241e633d95c2803e1898bbfa9ce559a32d9e504d
+ 241e633d95c2803e1898bbfa9ce559a32d9e504d dts: arm64: apple: t8122: Add CPU frequency scaling support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cb47340ce77dd595426c79a0a24f135548f504b6
+ cb47340ce77dd595426c79a0a24f135548f504b6 dts: apple: Add SMC hwmon nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6cc4650c125dcc01fab98103eb8460cd728b8731
+ 6cc4650c125dcc01fab98103eb8460cd728b8731 dts: apple: Add SPI and NVRAM nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c7b729d55fa39657170360c531f85802f1778232
+ c7b729d55fa39657170360c531f85802f1778232 dts: arm64: apple: t6030: Add CPU frequency scaling support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/08d54692c1a1b1d5abcf48b0f0a31db61f917ebb
+ 08d54692c1a1b1d5abcf48b0f0a31db61f917ebb arm64: dts: apple: Initial t603[124] cpufreq support
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/171c9b6f545e074e0c73231eb925d63fa218dcbc
+ 171c9b6f545e074e0c73231eb925d63fa218dcbc arm64: dts: t603x-j514-j516: add PCIe WiFi & SD reader nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/56c3cd643165e89baf3020c29e25ea605b673788
+ 56c3cd643165e89baf3020c29e25ea605b673788 arm64: dts: apple: t6030: Add PCIe device nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/319ffc6b4f0aa53d446cefb03047d0313e810d9a
+ 319ffc6b4f0aa53d446cefb03047d0313e810d9a arm64: dts: apple: Add PCIe nodes for t6031
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3adc9709b9933a921a2464bfa7452c8df85dcf94
+ 3adc9709b9933a921a2464bfa7452c8df85dcf94 arm64: dts: apple: Disable some t6034 no_ps pmgr nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a72c2dadf4ab9224e4a92ae63ce3161c8edbd8a4
+ a72c2dadf4ab9224e4a92ae63ce3161c8edbd8a4 arm64: dts: apple: t6031: Add NVMe related device nodes
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/6fb45fa284fb7dd87e1fa8fd92524d659f77d8da
+ 6fb45fa284fb7dd87e1fa8fd92524d659f77d8da arm64: dts: apple: t6031: Add more hardware
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a35ef190aaf07e7763a7ca543500959947ec658f
+ a35ef190aaf07e7763a7ca543500959947ec658f arm64: dts: apple: t6030: Add more hardware
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/881c95e763f5c7044aadaacb9a03c400c8f88e90
+ 881c95e763f5c7044aadaacb9a03c400c8f88e90 arm64: dts: apple: Add spmi stowe pmic
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4d4d0526cb01b39670e5dbd6637af45826dac799
+ 4d4d0526cb01b39670e5dbd6637af45826dac799 arm64: dts: apple: Add PCIe nodes for t8122
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fb0eefc00941a3efdfe217cdc8eb47be5f7c288f
+ fb0eefc00941a3efdfe217cdc8eb47be5f7c288f arm64: dts: apple: Add NVMe nodes to M3 (t8122) device tree
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/11a43d6596d169682801cdb9dd058b714a81d136
+ 11a43d6596d169682801cdb9dd058b714a81d136 arm64: dts: apple: Add SMC to M3 (t8122) device tree
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ef7c320aee9ec2ec1a25157fa6a9decf50e55c91
+ ef7c320aee9ec2ec1a25157fa6a9decf50e55c91 dt-bindings: spmi: apple,spmi: Add t8122-spmi compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/cfd0487863767bb2960fb503bc2ddbae42b53386
+ cfd0487863767bb2960fb503bc2ddbae42b53386 dt-bindings: pci: apple,pcie: Add apple,t8122-pcie compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d81060fa76891e18960b0633be6eef3d6412538b
+ d81060fa76891e18960b0633be6eef3d6412538b dt-bindings: nvme: apple: Add apple,t8122-nvme-ans2 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/c6993544b1f7dc83063bd9fb74d58087215bf84e
+ c6993544b1f7dc83063bd9fb74d58087215bf84e dt-bindings: mfd: apple,smc: Add t8122-smc compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d87ff87c226422481375d97e448f06c95cc7165d
+ d87ff87c226422481375d97e448f06c95cc7165d dt-bindings: mailbox: Add Apple M3 (t8122) compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/eed354f8c0756c2a92bf27fe7ad5a104da89dd88
+ eed354f8c0756c2a92bf27fe7ad5a104da89dd88 dt-bindings: iommu: apple,sart: Add Apple M3 compatibles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e42c9cd8b25cb0001e85fa2d5f7273b1fd16b550
+ e42c9cd8b25cb0001e85fa2d5f7273b1fd16b550 dt-bindings: iommu: apple: Add Apple M3 compatibles to DART
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/b288b37e7886cefae49754d4e4effe854309e382
+ b288b37e7886cefae49754d4e4effe854309e382 arm64: dts: apple: t8122: Keep ps_apcie_phy_sw always-on
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/a484a25e59fcedea934bf506ee41c75fc66a9566
+ a484a25e59fcedea934bf506ee41c75fc66a9566 arm64: dts: apple: Add minimal t8132 (M4) device trees
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d1bc2f86121e25041a5f57c5345c8faf0fd7daa0
+ d1bc2f86121e25041a5f57c5345c8faf0fd7daa0 dt-bindings: arm: apple: Add M4 based devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/73c36e51dc4c17b88577cc90c485b0ad48b5ef84
+ 73c36e51dc4c17b88577cc90c485b0ad48b5ef84 dt-bindings: pwm: apple,s5l-fpwm: Add t8132 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/388cb572915d94cadfd17cc6ed809296904fb9ff
+ 388cb572915d94cadfd17cc6ed809296904fb9ff dt-bindings: i2c: apple,i2c: Add t8132 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/481f0d9edbcde131bd0c65c9fb131cb1d067c9ab
+ 481f0d9edbcde131bd0c65c9fb131cb1d067c9ab dt-bindings: pinctrl: apple,pinctrl: Add t8132 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/d593edfb03d6bac65efe02d045156dba490db5b6
+ d593edfb03d6bac65efe02d045156dba490db5b6 dt-bindings: power: apple,pmgr-pwrstate: Add t8132 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/0f616c95efd68f3f52ea4d32b65f8cf0ac077889
+ 0f616c95efd68f3f52ea4d32b65f8cf0ac077889 dt-bindings: arm: apple: apple,pmgr: Add t8132 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/8efd1012b7f12802e5b69dc0c8be70619c9e25db
+ 8efd1012b7f12802e5b69dc0c8be70619c9e25db dt-bindings: watchdog: apple,wdt: Add t8132 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4c9c300829d5f2fe58a0f1db0adcee5f2af69af0
+ 4c9c300829d5f2fe58a0f1db0adcee5f2af69af0 dt-bindings: interrupt-controller: apple,aic2: Add apple,t8132 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/298b2ba1e7a316bd784374598c600fd0f4c41ba4
+ 298b2ba1e7a316bd784374598c600fd0f4c41ba4 dt-bindings: arm: cpus: Add Apple M4 CPU core compatibles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/75a87d98dc56a66b1e72cb7411696f3108156c39
+ 75a87d98dc56a66b1e72cb7411696f3108156c39 arm64: dts: apple: Initial T6030 (M3 Pro) device trees
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/ed7b30fee0a666fe8150ae37d10efb63e1839179
+ ed7b30fee0a666fe8150ae37d10efb63e1839179 arm64: dts: apple: Initial T603[124] (M3 Max and Ultra) device trees
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1907ad3b5326945274a77cfabec444424b18af04
+ 1907ad3b5326945274a77cfabec444424b18af04 dt-bindings: pwm: apple,s5l-fpwm: Add t6030 and t6031 compatibles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/be3a431d228818082074a8de3e5ad02e4fb1bee9
+ be3a431d228818082074a8de3e5ad02e4fb1bee9 dt-bindings: i2c: apple,i2c: Add t6030 and t6031 compatibles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/80c9d610162700d73271b26880cbe4f3e00fee2b
+ 80c9d610162700d73271b26880cbe4f3e00fee2b dt-bindings: pinctrl: apple,pinctrl: Add t6030 and t6031 compatibles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/1333cfed9efec5385beb4a686d8f7a18d1181eb9
+ 1333cfed9efec5385beb4a686d8f7a18d1181eb9 dt-bindings: watchdog: apple,wdt: Add t6030 and t6031 compatibles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/4fa018bb65c911cfc19f79510a5f1149bc526bbd
+ 4fa018bb65c911cfc19f79510a5f1149bc526bbd dt-bindings: power: apple,pmgr-pwrstate: Add t6030 and t6031 compatibles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/e1612df29059749e15bd7642c1d6de4905ff428f
+ e1612df29059749e15bd7642c1d6de4905ff428f dt-bindings: arm: apple: apple,pmgr: Add t6030 and t6031 compatibles
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/764f5ef6de943d65036ffd26034fc3e2ddd74ca8
+ 764f5ef6de943d65036ffd26034fc3e2ddd74ca8 dt-bindings: interrupt-controller: apple,aic2: Add apple,t6031-aic3 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/fc81b4f78c44387e2652682eecd709c61fec905a
+ fc81b4f78c44387e2652682eecd709c61fec905a dt-bindings: interrupt-controller: apple,aic2: Invert #interrupt-cells condition
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2dfe2935aace8c540d1901c75fabc32520e5b309
+ 2dfe2935aace8c540d1901c75fabc32520e5b309 dt-bindings: arm: apple: Add M3 Pro/Max/Ultra devices (T603x)
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/3e9cc2f351c71f081dcd0cac2dd7c7d64e09d240
+ 3e9cc2f351c71f081dcd0cac2dd7c7d64e09d240 arm64: dts: apple: Initial t8122 (M3) device trees
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7f12a416e5155ea460a02c9dd85c4ce85c949cb0
+ 7f12a416e5155ea460a02c9dd85c4ce85c949cb0 dt-bindings: arm: apple: Add M3 based devices
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/2261907c02e77df68321f62b75de432791ebc83d
+ 2261907c02e77df68321f62b75de432791ebc83d dt-bindings: pwm: apple,s5l-fpwm: Add t8122 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/07d677da8a815869946c640c6f01dc9a2260fd08
+ 07d677da8a815869946c640c6f01dc9a2260fd08 dt-bindings: power: apple,pmgr-pwrstate: Add t8122 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/9fbbcdc6cd2aed2e2168baa934f726835050385c
+ 9fbbcdc6cd2aed2e2168baa934f726835050385c dt-bindings: arm: apple: apple,pmgr: Add t8122 compatible
+
+"https://gitlab.com/fedora-asahi/kernel-asahi/-/commit"/7612c4f0963f13c9a05174c35ffada8d7ebce1c6
+ 7612c4f0963f13c9a05174c35ffada8d7ebce1c6 dt-bindings: watchdog: apple,wdt: Add t8122 compatible
+

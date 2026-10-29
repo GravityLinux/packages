@@ -10,7 +10,7 @@ Gravity-specific RPMs do.
 
 | Source RPM | Main output / role | Packaging baseline |
 | --- | --- | --- |
-| kernel | kernel-16k, core, modules, modules-core, modules-extra, devel | Asahi 7.1.13-403 SRPM |
+| kernel | kernel-16k, core, modules, modules-core, modules-extra, devel | Gravity-owned packaging inputs and pinned Linux tree |
 | mesa | Fedora Mesa libraries, DRI and Vulkan drivers | Fedora 44 dist-git |
 | uboot-tools | uboot-tools, uboot-images-armv8 | Asahi packaging plus six Gravity patches |
 | gravity-bootloader | gravity-bootloader, gravity-bootloader-stage1, gravity-bootloader-tools | Fedora 44 m1n1 packaging, pinned M4 fork |
@@ -70,7 +70,7 @@ Use Fedora 44 for authoritative builds. Install these source-build tools there:
 ```sh
 sudo dnf install python3 git make rpm-build redhat-rpm-config \
   systemd-rpm-macros python3-rpm-macros pyproject-rpm-macros \
-  cargo-rpm-macros rust-srpm-macros cpio gzip xz mock copr-cli
+  cargo-rpm-macros rust-srpm-macros gzip xz mock copr-cli
 make check
 make status
 ```
@@ -84,8 +84,8 @@ git diff -- downloads.lock.json
 
 Commit reviewed download hashes before COPR builds. Later preparations verify
 the hashes. Existing local patches are pinned by the packaging Git revision;
-Git source snapshots are pinned by full commit IDs. The kernel's base SRPM has
-a separately pinned SHA256.
+Git source snapshots are pinned by full commit IDs. Kernel config seeds and
+packaging helpers are checked into `kernel/inputs`, so no base SRPM is fetched.
 
 ```sh
 make srpm PACKAGE=uboot-tools
@@ -100,13 +100,13 @@ Every run gets an isolated `.work/` directory. SRPMs and their input hashes
 are placed in `dist/`. Existing SRPM filenames are never overwritten: bump
 Release or choose another `--outdir` for a test rebuild.
 
-The kernel builder extracts the pinned Asahi SRPM's configs and auxiliary
-sources, generates a diff from the matching Asahi source commit to Gravity's
-commit, and adds that after the Fedora/Asahi patch stack. This preserves Fedora
-kernel-specific changes. `kernel/gravity.config` enables the M4 GPU and built-in
-J773g speaker support, including its dependencies, in both 16K Fedora
-configurations. Keep the kernel SRPM, base_ref, ref, version and config changes
-in sync on each kernel rebase; check the patch stack again.
+The kernel builder stages local `kernel/inputs` and creates the complete source
+archive from the Git pin in `sources.json`. The 7.1 source delta is not applied
+to experimental Linux 7.3. `kernel/gravity.config` enables the unified Asahi GPU
+and built-in J773g speaker support in both 16K configurations. Config seeds are
+rebased in the buildroot and then checked with Fedora's strict comparator.
+Maintain the source pin, spec version, patches and config inputs together on
+each rebase. Historical attribution is in `kernel/inputs/PROVENANCE.md`.
 
 For Mesa, keep Fedora's complete subpackage split and Rust dependency
 packaging. Pinning a new source version may require adapting the Meson options,

@@ -1,5 +1,21 @@
 # Validation — 2026-09-15
 
+## 2026-10-29 self-contained kernel packaging inputs (511.experimental)
+
+- Imported 99 config/helper/spec inputs from the verified cached source RPM;
+  provenance and exclusions are recorded in kernel/inputs/PROVENANCE.md.
+  The old source tarball, Red Hat source patch and upstream spec are excluded.
+- Removed base_srpm from the recipe and removed the downloader/unpacker path.
+  Source preparation no longer requires rpm2cpio or cpio. Config overlays and
+  executable helper modes are preserved by staging the checked-in inputs.
+- Three kernel-input/config tests pass on both the host and Fedora AArch64.
+- Built kernel-7.3.0-511.gravity.experimental.fc44.src.rpm in Fedora using the
+  native-host-generated archive of pinned a0126e3. All auxiliary downloads were
+  blocked during preparation; rpmspec resolved every Source/Patch locally and
+  rpmbuild -bs completed. Git snapshot creation was exercised separately using
+  the real snapshot function; the archive's embedded commit matches the pin.
+- This validates source RPM preparation, not a full binary kernel build.
+
 ## 2026-10-29 experimental Linux 7.3
 
 - Pinned ADevWithAnIdea/linux experimental/integration/apple-silicon-7.3 at

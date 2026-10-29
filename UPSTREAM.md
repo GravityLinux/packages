@@ -53,21 +53,16 @@ Re-export the patches and update this file when that source changes.
 
 ## Kernel
 
-Baseline source:
-https://download.copr.fedorainfracloud.org/results/@asahi/kernel/srpm-builds/10979408/kernel-7.1.13-403.asahi.fc44.src.rpm
+The experimental recipe builds the complete pinned Linux 7.3 integration tree.
+Packaging helpers, config seeds and other spec inputs are maintained in
+`kernel/inputs`. Their initial import came from the previously cached SRPM in
+the table above; its checksum and exclusions are recorded in
+`kernel/inputs/PROVENANCE.md`. Copyright/license notices are retained.
 
-SHA256:
-`b21403621e44d6390c089126afb2c8ee41a9926b4bd7a840b544b39ffd15be9a`
-
-That COPR build's overall state is failed; using its source packaging does not
-establish a successful binary build. Gravity must pass its own aarch64 build.
-
-The Gravity patch is generated against the Asahi source revision
-`3988dac1664c05fa7c8310fcad8eee10428b5f43`, with both endpoints recorded in
-sources.json. The baseline source tarball and Fedora/Asahi patch are preserved.
-No source archive is committed to this repo.
-The generated diff uses two context lines to avoid overlapping Fedora's
-adjacent iomfb-surfaces fix in dcp_platform_probe. Both changes are retained.
+The initial import excludes the old kernel tarball, Red Hat source delta and
+spec. No upstream SRPM is downloaded during source preparation, and no generated
+source archive is committed. The source Git pin, local patches and local
+packaging files are the build inputs. Binary builds still need COPR validation.
 
 ## gravity-bootloader (upstream m1n1)
 

@@ -5,11 +5,7 @@
     "ref": "a0126e3974837d5eed23ea97e4e4dbcc5b9cf08a",
     "archive": "linux-7.3.0.tar.xz",
     "root": "linux-7.3.0",
-    "note": "Full experimental/integration/apple-silicon-7.3 tree. The older SRPM supplies Fedora packaging helpers/config seeds only; do not apply its 7.1 Red Hat or Gravity delta to this tree.",
-    "base_srpm": {
-      "url": "https://download.copr.fedorainfracloud.org/results/@asahi/kernel/srpm-builds/10979408/kernel-7.1.13-403.asahi.fc44.src.rpm",
-      "sha256": "b21403621e44d6390c089126afb2c8ee41a9926b4bd7a840b544b39ffd15be9a"
-    }
+    "note": "Full experimental/integration/apple-silicon-7.3 tree. RPM helpers and config seeds are maintained in kernel/inputs; no baseline SRPM download is required."
   },
   "mesa": {
     "kind": "git",

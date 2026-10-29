@@ -1,0 +1,4 @@
+# Preserve these imported packaging files byte-for-byte, including old whitespace.
+kernel/inputs/kernel.changelog -whitespace
+kernel/inputs/Patchlist.changelog -whitespace
+kernel/inputs/uki_create_addons.py -whitespace

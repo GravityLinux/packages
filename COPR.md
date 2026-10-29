@@ -22,8 +22,9 @@ Current experimental build entries:
 The last package is the separate opt-in repository configuration required by
 KIWI's `Workstation-Sway-Experimental` profile. Its key URL uses COPR's HTTPS
 endpoint. The project signing key must be available before building the image.
-The kernel builds the complete 7.3 integration source and rebases the baseline
-Fedora config seeds against it; it does not apply the previous 7.1 source delta.
+The kernel builds the complete 7.3 integration source and rebases our checked-in
+config seeds against it. Helpers and other RPM inputs live in `kernel/inputs`;
+no baseline SRPM is downloaded, and the previous 7.1 source delta is not applied.
 
 No new U-Boot NVMe implementation is needed for the pinned J700/T8140 tree:
 its NVMe node includes `apple,t8132-nvme-ans2`, which already selects the newer
