@@ -21,7 +21,10 @@
   },
   "uboot-tools": {
     "kind": "spec",
-    "note": "Asahi/Fedora source plus nine checked-in Gravity patches through a2f6913694ff26908c16948af3f8372429782263; see UPSTREAM.md."
+    "upstream_url": "https://github.com/GravityLinux/u-boot.git",
+    "upstream_branch": "neo-bringup",
+    "upstream_ref": "29272e482c6c54409263478436678bbddd31e477",
+    "note": "Asahi/Fedora source plus the existing Gravity patches and a checked-in neo-bringup delta through 29272e482c6c54409263478436678bbddd31e477; see UPSTREAM.md."
   },
   "rust-speakersafetyd": {
     "kind": "git",

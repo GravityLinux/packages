@@ -16,6 +16,7 @@ Current experimental build entries:
 | --- | --- |
 | kernel | `kernel/kernel.spec` |
 | mesa | `mesa/mesa.spec` |
+| uboot-tools | `uboot-tools/uboot-tools.spec` |
 | gravity-repos-experimental | `gravity-repos-experimental/gravity-repos-experimental.spec` |
 
 The last package is the separate opt-in repository configuration required by
@@ -29,7 +30,9 @@ its NVMe node includes `apple,t8132-nvme-ans2`, which already selects the newer
 queue-registration implementation in our U-Boot. The mailbox falls back to
 `apple,asc-mailbox-v4` and SART to `apple,t6000-sart`, both supported. This assumes
 the same compatible strings are present in the DT handed to U-Boot; hardware
-boot remains to be tested. Keep bootloader and U-Boot pins unchanged for now.
+boot remains to be tested. The U-Boot experimental package now imports
+`GravityLinux/u-boot:neo-bringup` through `29272e482c6` for the Neo memory map
+and USB handoff changes. Keep the bootloader pin unchanged.
 
 COPR clones the packaging repository and runs `.copr/Makefile` to prepare
 the SRPM on its own worker, then builds and signs the binary RPMs. There is

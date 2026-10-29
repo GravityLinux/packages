@@ -7,7 +7,7 @@
 Name:     uboot-tools
 Vendor:         Gravity Linux
 Version:  2026.07
-Release:  203.gravity%{?candidate:.%{candidate}}%{?dist}
+Release:  204.gravity.experimental%{?candidate:.%{candidate}}%{?dist}
 Epoch:    1
 Summary:  U-Boot utilities
 # Automatically converted from old format: GPLv2+ BSD LGPL-2.1+ LGPL-2.0+ - review is highly recommended.
@@ -126,6 +126,7 @@ Patch205: gravity-4b738f4f51b.patch
 Patch206: gravity-ddecfb8eb6a.patch
 Patch207: gravity-6e594cafea8.patch
 Patch208: gravity-a2f6913694f.patch
+Patch209: gravity-neo-29272e482c6.patch
 
 BuildRequires:  bc
 BuildRequires:  bison
@@ -392,6 +393,9 @@ install -p -m 0755 builds/tools/env/fw_printenv %{buildroot}%{_bindir}
 %endif
 
 %changelog
+* Thu Oct 29 2026 Gravity Linux maintainers - 1:2026.07-204.gravity.experimental
+- Import GravityLinux/u-boot neo-bringup through 29272e482c6
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 1:2026.07-203.gravity
 - Include the tested 32-bank Apple memory configuration
 - Inject per-radio J773g Wi-Fi and Bluetooth calibration from the ESP

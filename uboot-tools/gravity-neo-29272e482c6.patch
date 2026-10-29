@@ -1,0 +1,742 @@
+From: Gravity Linux maintainers
+Subject: [PATCH] apple: import neo-bringup through 29272e482c6
+
+Delta from the packaged Gravity base a2f6913694ff26908c16948af3f8372429782263
+to GravityLinux/u-boot neo-bringup 29272e482c6c54409263478436678bbddd31e477.
+Includes T8140 memory mapping, Neo USB2 PHY and host takeover/shutdown,
+MTP firmware preservation, longer boot arguments, and bring-up documentation.
+Original commit authorship and history are available at the pinned source URL.
+
+diff --git a/arch/arm/mach-apple/board.c b/arch/arm/mach-apple/board.c
+index 44a5ef25e485ea0c1ce6c0365bd23718d5cd394d..8b8417046cf817cfdf1bb562a9ddbb1f740c8529 100644
+--- a/arch/arm/mach-apple/board.c
++++ b/arch/arm/mach-apple/board.c
+@@ -1164,7 +1164,8 @@ void build_mem_map(void)
+ 		mem_map = t6022_mem_map;
+ 	else if (of_machine_is_compatible("apple,t8122"))
+ 		mem_map = t8122_mem_map;
+-	else if (of_machine_is_compatible("apple,t8132"))
++	else if (of_machine_is_compatible("apple,t8132") ||
++		 of_machine_is_compatible("apple,t8140"))
+ 		mem_map = t8132_mem_map;
+ 	else if (of_machine_is_compatible("apple,t6030") ||
+ 		 of_machine_is_compatible("apple,t6031") ||
+diff --git a/configs/apple_m1_defconfig b/configs/apple_m1_defconfig
+index 2119404455c41f9c8de56cd08ff6054d090acc0e..2e5d098b35c74297a4779636459ef8d79363debd 100644
+--- a/configs/apple_m1_defconfig
++++ b/configs/apple_m1_defconfig
+@@ -11,8 +11,8 @@ CONFIG_BOOTDELAY=1
+ # CONFIG_AUTOBOOT_MENU_SHOW is not set
+ CONFIG_BOOTCOMMAND="bootflow scan -b"
+ CONFIG_USE_PREBOOT=y
+-CONFIG_SYS_CBSIZE=256
+-CONFIG_SYS_PBSIZE=276
++CONFIG_SYS_CBSIZE=2048
++CONFIG_SYS_PBSIZE=2068
+ # CONFIG_DISPLAY_CPUINFO is not set
+ CONFIG_DISPLAY_BOARDINFO_LATE=y
+ CONFIG_BOARD_LATE_INIT=y
+diff --git a/doc/board/apple/neo.rst b/doc/board/apple/neo.rst
+new file mode 100644
+index 0000000000000000000000000000000000000000..07205c1bc2becc6afed3800795ae69008bd278d8
+--- /dev/null
++++ b/doc/board/apple/neo.rst
+@@ -0,0 +1,101 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++
++MacBook Neo (T8140)
++==================
++
++This port uses the existing Apple NVMe, power-domain, pinctrl, mailbox and
++simple-framebuffer drivers. T8140 uses the existing M4-family CPU memory map.
++There is no native DCP firmware driver in U-Boot: m1n1 supplies an initialized
++framebuffer. U-Boot can display its console without renegotiating a display
++link or owning DCP firmware. Mode changes and new display connections remain
++the operating system's responsibility.
++
++Building
++--------
++
++The ``neo-bringup`` branch includes the existing Gravity Apple/NVMe changes
++from ``gravity-alpha-20260925`` and the Neo changes described here. With an
++AArch64 cross compiler installed, build from a fresh checkout on Linux::
++
++    make CROSS_COMPILE=aarch64-linux-gnu- apple_m1_defconfig
++    make CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc) u-boot.bin
++
++On macOS, use GNU Make (``gmake``) and an appropriate AArch64 cross-compiler
++prefix. Standard U-Boot host prerequisites include a compiler, Python 3,
++Bison, Flex, OpenSSL development headers and ``dtc``. This Apple defconfig
++also builds EFI capsule tooling and needs the host GnuTLS development
++package (``libgnutls28-dev`` on Debian/Ubuntu).
++The tested payload is ``u-boot.bin``. It is a U-Boot payload, not a
++standalone Apple boot object. The tested stage 2 concatenates a raw m1n1
++image, the matching ``t8140-j700.dtb``, and gzip-compressed ``u-boot.bin``.
++Use a matching Neo m1n1 handoff implementation: it supplies the initialized
++framebuffer, firmware reservations, calibration and USB tuning metadata.
++
++USB
++---
++
++The T8130-generation ATC driver implements the shared USB2 host path used by
++both connectors. It initializes the dummy PIPE backend, separate PIPE clocks,
++USB2 power and host signals before releasing DWC3 reset. Host selection must
++be programmed while the PHY is off. The DWC3 driver consumes the factory host,
++cfg-host and PIPE tables exported from the live ADT by m1n1; do not substitute
++fixed tables from another machine. All register windows are DT named resources.
++
++The suspend-clock scale fallback and CIO timings match the already-tested
++Linux driver. Shutdown stops xHCI DMA before powering down the PHY, and OS
++handoff invokes shutdown even when the boot source is NVMe.
++
++Only USB2 is implemented by this initial PHY port. The SuperSpeed backend stays
++on dummy; this is not a USB3 or native DisplayPort implementation. SN201202x
++Type-C policy, negotiated orientation and the complete SuperSpeed PHY sequence
++are not ported. A native SuperSpeed port also needs a defined takeover of
++firmware-owned PHY/display state; the simple-framebuffer path does not own
++that firmware interface. Do not force a lane orientation or monitor-specific
++values.
++
++Validation: cross-build, repeated hardware starts enumerating the internal VIA
++USB2 hub, two successive start/stop cycles, and Linux subsequently mounting
++the on-disk ext4 root with all six CPUs online. That handoff test disabled the
++Linux USB/Type-C nodes, so it does not qualify Linux takeover of these devices.
++No external device was present in that test
++on the USB2-only connector (confirmed by SN201202x connection status).
++External mass-storage, external HID, both-connector hotplug and
++SuperSpeed have not been qualified. The USB3-capable connector is occupied
++by the development host during these tests.
++
++Subsequent automatic stage-1 -> stage-2 -> U-Boot -> Linux qualification
++passed twice with Linux USB/Type-C enabled, all six CPUs and an ext4 NVMe
++root. Linux bound both SN201202x controllers, enumerated the attached
++28.9 GiB USB drive, and read 4 MiB from it on each run. Saved kernel logs
++contained no Oops, warning, panic or SError. These runs use Linux callback
++fixes 93cae3f584a6 and 8527bd8a2146 on integration base a0126e397483.
++This verifies connected-device takeover; external U-Boot storage/HID and
++both-port hotplug remain unqualified.
++
++MTP
++---
++
++The Neo's keyboard/trackpad firmware uses a 2 MiB DMA receive ring; the
++existing U-Boot MTP driver understands only the older FIFO transport. The
++Neo is rejected during of_to_plat, before driver-model IOMMU attachment can
++replace the firmware mappings. Other machines retain the existing driver.
++
++The Linux driver documents ring registration and interface initialization,
++but does not provide a bootloader-to-Linux ring-unregister/cold-restart
++protocol. Existing U-Boot shutdown quiesces the helper and replays FIFO init
++messages; that is insufficient to establish the shared ring's lifetime.
++Also, probing the existing U-Boot DART driver replaces all firmware stream
++mappings. Keyboard bring-up would require resolving both issues first.
++
++MTP input is deliberately deferred under the instruction to skip features
++requiring additional reverse engineering of shutdown or OS handoff. No
++ring is registered, no speculative helper reset is attempted, and the
++firmware's mappings are left available for Linux. A USB keyboard can serve
++as boot input once external HID has been hardware-qualified.
++
++Provenance
++----------
++
++The register sequences and transport requirements above come from the
++existing Gravity Linux drivers at a0126e397483 and m1n1's ADT metadata.
++No Apple executable inspection or disassembly was used for this port.
+diff --git a/drivers/input/apple_mtp_kbd.c b/drivers/input/apple_mtp_kbd.c
+index e80e9a01c6f3596579429d09cb56a5a50765a493..51d94e8f768a070990560bd3e3419ac5f0f601c2 100644
+--- a/drivers/input/apple_mtp_kbd.c
++++ b/drivers/input/apple_mtp_kbd.c
+@@ -152,6 +152,19 @@ static int get_rtkit_helper(struct udevice *dev)
+ 	return 0;
+ }
+ 
++/* Refuse unsupported ring firmware before DM probes its IOMMU. The FIFO
++ * handoff below cannot unregister a Neo shared-memory ring, and replacing
++ * the helper's firmware mappings would break the following Linux boot.
++ */
++static int apple_mtp_kbd_of_to_plat(struct udevice *dev)
++{
++	if (device_is_compatible(dev, "apple,t8140-dockchannel-hid")) {
++		dev_warn(dev, "Neo MTP ring handoff is not supported; preserving firmware state\n");
++		return -EOPNOTSUPP;
++	}
++	return 0;
++}
++
+ static int apple_mtp_kbd_probe(struct udevice *dev)
+ {
+ 	struct apple_mtp_kbd_priv *priv = dev_get_priv(dev);
+@@ -240,6 +253,7 @@ U_BOOT_DRIVER(apple_mtp_kbd) = {
+ 	.name = "apple_mtp_kbd",
+ 	.id = UCLASS_KEYBOARD,
+ 	.of_match = apple_mtp_kbd_of_match,
++	.of_to_plat = apple_mtp_kbd_of_to_plat,
+ 	.probe = apple_mtp_kbd_probe,
+ 	.remove = apple_mtp_kbd_remove,
+ 	.priv_auto = sizeof(struct apple_mtp_kbd_priv),
+diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
+index e46c362878db685ba9338b7cbedee428984fd2c2..372ba556ecb6f1db7ba1064ed1ff01e9050ceb40 100644
+--- a/drivers/phy/Makefile
++++ b/drivers/phy/Makefile
+@@ -12,7 +12,7 @@ obj-$(CONFIG_$(PHASE_)PHY) += phy-uclass.o
+ obj-$(CONFIG_$(PHASE_)NOP_PHY) += nop-phy.o
+ obj-$(CONFIG_MIPI_DPHY_HELPERS) += phy-core-mipi-dphy.o
+ obj-$(CONFIG_AB8500_USB_PHY) += phy-ab8500-usb.o
+-obj-$(CONFIG_APPLE_ATCPHY) += phy-apple-atc.o
++obj-$(CONFIG_APPLE_ATCPHY) += phy-apple-atc.o phy-apple-atc-t8130.o
+ obj-$(CONFIG_BCM6318_USBH_PHY) += bcm6318-usbh-phy.o
+ obj-$(CONFIG_BCM6348_USBH_PHY) += bcm6348-usbh-phy.o
+ obj-$(CONFIG_BCM6358_USBH_PHY) += bcm6358-usbh-phy.o
+diff --git a/drivers/phy/phy-apple-atc-t8130.c b/drivers/phy/phy-apple-atc-t8130.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..dee66ed854d2da124f9bb8082bb870b17164437f
+--- /dev/null
++++ b/drivers/phy/phy-apple-atc-t8130.c
+@@ -0,0 +1,318 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * T8130-generation ATC shared USB2 host path.
++ * Ported from the Gravity Linux Apple ATC driver, a0126e397483.
++ * Copyright The Asahi Linux Contributors
++ * Copyright 2026 Cody Ho
++ */
++#include <dm.h>
++#include <dm/device-internal.h>
++#include <generic-phy.h>
++#include <reset-uclass.h>
++#include <apple_tunable.h>
++#include <asm/io.h>
++#include <dt-bindings/phy/phy.h>
++#include <linux/bitfield.h>
++#include <linux/delay.h>
++#include <linux/iopoll.h>
++
++/* pipehandler registers */
++#define PIPEHANDLER_OVERRIDE 0x00
++#define PIPEHANDLER_OVERRIDE_RXVALID BIT(0)
++#define PIPEHANDLER_OVERRIDE_RXDETECT BIT(2)
++#define PIPEHANDLER_OVERRIDE_VALUES 0x04
++#define PIPEHANDLER_OVERRIDE_VAL_RXDETECT0 BIT(1)
++#define PIPEHANDLER_OVERRIDE_VAL_RXDETECT1 BIT(2)
++
++#define PIPEHANDLER_MUX_CTRL 0x0c
++#define PIPEHANDLER_MUX_CTRL_CLK GENMASK(5, 3)
++#define PIPEHANDLER_MUX_CTRL_DATA GENMASK(2, 0)
++#define PIPEHANDLER_MUX_CTRL_CLK_OFF 0
++#define PIPEHANDLER_MUX_CTRL_CLK_DUMMY 4
++
++#define PIPEHANDLER_MUX_CTRL_DATA_DUMMY 2
++
++#define PIPEHANDLER_LOCK_REQ 0x10
++#define PIPEHANDLER_LOCK_ACK 0x14
++#define PIPEHANDLER_LOCK_EN BIT(0)
++
++#define PIPEHANDLER_AON_GEN 0x1C
++#define PIPEHANDLER_AON_GEN_DWC3_FORCE_CLAMP_EN BIT(4)
++#define PIPEHANDLER_AON_GEN_DWC3_RESET_N BIT(0)
++
++#define PIPEHANDLER_NONSELECTED_OVERRIDE 0x20
++#define PIPEHANDLER_DUMMY_PHY_EN BIT(15)
++#define PIPEHANDLER_NATIVE_RESET BIT(12)
++#define PIPEHANDLER_NATIVE_POWER_DOWN GENMASK(3, 0)
++
++#define T8130_PIPEHANDLER_LOCK_ACK_TIMEOUT_US 10000
++
++/* T8130 PIPE clock-block configuration, observed in both native USB2-only
++ * and USB3 host startup. The individual fields are not decoded yet: these
++ * labels identify registers and captured defaults, not inferred bit meanings.
++ */
++#define T8130_PIPE_CLOCK_CFG0 0x80
++#define T8130_PIPE_CLOCK_CFG1 0x84
++#define T8130_PIPE_CLOCK_CFG2 0x88
++#define T8130_PIPE_CLOCK_CFG3 0x8c
++#define T8130_PIPE_CLOCK_CFG0_NATIVE 0x17
++#define T8130_PIPE_CLOCK_CFG1_NATIVE 0xc8
++#define T8130_PIPE_CLOCK_CFG2_NATIVE 0x5
++#define T8130_PIPE_CLOCK_CFG3_NATIVE 0x5
++
++#define USB2PHY_USBCTL 0x00
++#define USB2PHY_USBCTL_USB_MODE 0x7
++#define USB2PHY_USBCTL_RUN 2
++#define USB2PHY_USBCTL_ISOLATION 4
++
++#define USB2PHY_CTL 0x04
++#define USB2PHY_CTL_RESET BIT(0)
++#define USB2PHY_CTL_PORT_RESET BIT(1)
++#define USB2PHY_CTL_APB_RESET_N BIT(2)
++#define USB2PHY_CTL_SIDDQ BIT(3)
++
++#define USB2PHY_SIG 0x08
++#define USB2PHY_SIG_VBUSDET_FORCE_VAL BIT(0)
++#define USB2PHY_SIG_VBUSDET_FORCE_EN BIT(1)
++#define USB2PHY_SIG_VBUSVLDEXT_FORCE_VAL BIT(2)
++#define USB2PHY_SIG_VBUSVLDEXT_FORCE_EN BIT(3)
++#define USB2PHY_SIG_HOST (7 << 12)
++
++#define USB2PHY_MISCTUNE 0x1c
++#define USB2PHY_MISCTUNE_APBCLK_GATE_OFF BIT(29)
++#define USB2PHY_MISCTUNE_REFCLK_GATE_OFF BIT(30)
++
++#define ATCPHY_SETTLE_US 10
++
++struct apple_atc_t8130 {
++	void __iomem *usb2;
++	void __iomem *pipe;
++	void __iomem *clocks;
++	size_t pipe_size;
++	bool usb2_up;
++};
++
++static void atc_usb2_off(struct apple_atc_t8130 *atc)
++{
++	clrsetbits_le32(atc->usb2 + USB2PHY_USBCTL, USB2PHY_USBCTL_USB_MODE,
++			USB2PHY_USBCTL_ISOLATION);
++	udelay(ATCPHY_SETTLE_US);
++	setbits_le32(atc->usb2 + USB2PHY_CTL, USB2PHY_CTL_SIDDQ);
++	udelay(ATCPHY_SETTLE_US);
++	setbits_le32(atc->usb2 + USB2PHY_CTL, USB2PHY_CTL_PORT_RESET);
++	udelay(ATCPHY_SETTLE_US);
++	setbits_le32(atc->usb2 + USB2PHY_CTL, USB2PHY_CTL_RESET);
++	udelay(ATCPHY_SETTLE_US);
++	clrbits_le32(atc->usb2 + USB2PHY_CTL, USB2PHY_CTL_APB_RESET_N);
++	udelay(ATCPHY_SETTLE_US);
++	setbits_le32(atc->usb2 + USB2PHY_MISCTUNE,
++		     USB2PHY_MISCTUNE_APBCLK_GATE_OFF |
++			     USB2PHY_MISCTUNE_REFCLK_GATE_OFF);
++	atc->usb2_up = false;
++}
++
++static void atc_usb2_on(struct apple_atc_t8130 *atc)
++{
++	if (atc->usb2_up)
++		return;
++	setbits_le32(atc->usb2 + USB2PHY_SIG,
++		USB2PHY_SIG_VBUSDET_FORCE_VAL | USB2PHY_SIG_VBUSDET_FORCE_EN |
++			USB2PHY_SIG_VBUSVLDEXT_FORCE_VAL |
++			USB2PHY_SIG_VBUSVLDEXT_FORCE_EN | USB2PHY_SIG_HOST);
++	udelay(ATCPHY_SETTLE_US);
++	clrbits_le32(atc->usb2 + USB2PHY_CTL, USB2PHY_CTL_SIDDQ);
++	udelay(ATCPHY_SETTLE_US);
++	clrbits_le32(atc->usb2 + USB2PHY_CTL, USB2PHY_CTL_RESET);
++	udelay(ATCPHY_SETTLE_US);
++	clrbits_le32(atc->usb2 + USB2PHY_CTL, USB2PHY_CTL_PORT_RESET);
++	udelay(ATCPHY_SETTLE_US);
++	setbits_le32(atc->usb2 + USB2PHY_CTL, USB2PHY_CTL_APB_RESET_N);
++	udelay(ATCPHY_SETTLE_US);
++	clrbits_le32(atc->usb2 + USB2PHY_MISCTUNE,
++		     USB2PHY_MISCTUNE_APBCLK_GATE_OFF |
++			     USB2PHY_MISCTUNE_REFCLK_GATE_OFF);
++	writel(USB2PHY_USBCTL_RUN, atc->usb2 + USB2PHY_USBCTL);
++	atc->usb2_up = true;
++}
++
++static int atc_dummy(struct apple_atc_t8130 *atc)
++{
++	u32 value;
++	int ret;
++	bool running = readl(atc->pipe + PIPEHANDLER_AON_GEN) &
++		       PIPEHANDLER_AON_GEN_DWC3_RESET_N;
++
++	clrbits_le32(atc->pipe + PIPEHANDLER_OVERRIDE_VALUES,
++		     PIPEHANDLER_OVERRIDE_VAL_RXDETECT0 |
++			     PIPEHANDLER_OVERRIDE_VAL_RXDETECT1);
++	setbits_le32(atc->pipe + PIPEHANDLER_OVERRIDE,
++		     PIPEHANDLER_OVERRIDE_RXVALID |
++			     PIPEHANDLER_OVERRIDE_RXDETECT);
++	setbits_le32(atc->pipe + PIPEHANDLER_NONSELECTED_OVERRIDE,
++		     PIPEHANDLER_DUMMY_PHY_EN);
++	if (running) {
++		setbits_le32(atc->pipe + PIPEHANDLER_LOCK_REQ,
++			     PIPEHANDLER_LOCK_EN);
++		ret = readl_poll_timeout(atc->pipe + PIPEHANDLER_LOCK_ACK,
++					 value, value & PIPEHANDLER_LOCK_EN,
++					 T8130_PIPEHANDLER_LOCK_ACK_TIMEOUT_US);
++		if (ret) {
++			clrbits_le32(atc->pipe + PIPEHANDLER_LOCK_REQ,
++				     PIPEHANDLER_LOCK_EN);
++			return ret;
++		}
++	}
++	clrsetbits_le32(atc->pipe + PIPEHANDLER_MUX_CTRL,
++			PIPEHANDLER_MUX_CTRL_CLK,
++			FIELD_PREP(PIPEHANDLER_MUX_CTRL_CLK,
++				   PIPEHANDLER_MUX_CTRL_CLK_OFF));
++	udelay(ATCPHY_SETTLE_US);
++	clrsetbits_le32(atc->pipe + PIPEHANDLER_MUX_CTRL,
++			PIPEHANDLER_MUX_CTRL_DATA,
++			FIELD_PREP(PIPEHANDLER_MUX_CTRL_DATA,
++				   PIPEHANDLER_MUX_CTRL_DATA_DUMMY));
++	udelay(ATCPHY_SETTLE_US);
++	clrsetbits_le32(atc->pipe + PIPEHANDLER_MUX_CTRL,
++			PIPEHANDLER_MUX_CTRL_CLK,
++			FIELD_PREP(PIPEHANDLER_MUX_CTRL_CLK,
++				   PIPEHANDLER_MUX_CTRL_CLK_DUMMY));
++	udelay(ATCPHY_SETTLE_US);
++	clrsetbits_le32(atc->pipe + PIPEHANDLER_NONSELECTED_OVERRIDE,
++			PIPEHANDLER_NATIVE_POWER_DOWN,
++			PIPEHANDLER_NATIVE_RESET |
++				FIELD_PREP(PIPEHANDLER_NATIVE_POWER_DOWN, 2));
++	if (!running)
++		return 0;
++	clrbits_le32(atc->pipe + PIPEHANDLER_LOCK_REQ, PIPEHANDLER_LOCK_EN);
++	return readl_poll_timeout(atc->pipe + PIPEHANDLER_LOCK_ACK, value,
++				  !(value & PIPEHANDLER_LOCK_EN),
++				  T8130_PIPEHANDLER_LOCK_ACK_TIMEOUT_US);
++}
++
++static int atc_reset_xlate(struct reset_ctl *ctl,
++			   struct ofnode_phandle_args *args)
++{
++	return args->args_count ? -EINVAL : 0;
++}
++
++static int atc_assert(struct reset_ctl *ctl)
++{
++	struct apple_atc_t8130 *atc = dev_get_priv(ctl->dev);
++	int ret;
++
++	clrbits_le32(atc->pipe + PIPEHANDLER_AON_GEN,
++		     PIPEHANDLER_AON_GEN_DWC3_RESET_N);
++	setbits_le32(atc->pipe + PIPEHANDLER_AON_GEN,
++		     PIPEHANDLER_AON_GEN_DWC3_FORCE_CLAMP_EN);
++	ret = atc_dummy(atc);
++	atc_usb2_off(atc);
++	return ret;
++}
++
++static int atc_deassert(struct reset_ctl *ctl)
++{
++	struct apple_atc_t8130 *atc = dev_get_priv(ctl->dev);
++
++	atc_usb2_on(atc);
++	writel(T8130_PIPE_CLOCK_CFG0_NATIVE,
++	       atc->clocks + T8130_PIPE_CLOCK_CFG0);
++	writel(T8130_PIPE_CLOCK_CFG1_NATIVE,
++	       atc->clocks + T8130_PIPE_CLOCK_CFG1);
++	writel(T8130_PIPE_CLOCK_CFG2_NATIVE,
++	       atc->clocks + T8130_PIPE_CLOCK_CFG2);
++	writel(T8130_PIPE_CLOCK_CFG3_NATIVE,
++	       atc->clocks + T8130_PIPE_CLOCK_CFG3);
++	clrbits_le32(atc->pipe + PIPEHANDLER_AON_GEN,
++		     PIPEHANDLER_AON_GEN_DWC3_FORCE_CLAMP_EN);
++	setbits_le32(atc->pipe + PIPEHANDLER_AON_GEN,
++		     PIPEHANDLER_AON_GEN_DWC3_RESET_N);
++	return apple_tunable_apply(ctl->dev, "apple,tunable-pipehandler",
++				   atc->pipe, atc->pipe_size);
++}
++
++static int atc_phy_xlate(struct phy *phy, struct ofnode_phandle_args *args)
++{
++	if (args->args_count != 1 ||
++	    (args->args[0] != PHY_TYPE_USB2 && args->args[0] != PHY_TYPE_USB3))
++		return -EINVAL;
++	phy->id = args->args[0];
++	return 0;
++}
++
++static int atc_phy_on(struct phy *phy)
++{
++	struct apple_atc_t8130 *atc = dev_get_priv(phy->dev->parent);
++
++	if (phy->id == PHY_TYPE_USB2)
++		atc_usb2_on(atc);
++	/* USB3 remains on the dummy backend until Type-C negotiates a link. */
++	return 0;
++}
++
++static int atc_phy_off(struct phy *phy)
++{
++	struct apple_atc_t8130 *atc = dev_get_priv(phy->dev->parent);
++
++	if (phy->id == PHY_TYPE_USB2)
++		atc_usb2_off(atc);
++	return 0;
++}
++
++static const struct phy_ops atc_phy_ops = {
++	.of_xlate = atc_phy_xlate,
++	.power_on = atc_phy_on,
++	.power_off = atc_phy_off,
++};
++
++static struct driver atc_phy_driver = {
++	.name = "apple-atc-t8130-phy",
++	.id = UCLASS_PHY,
++	.ops = &atc_phy_ops,
++};
++
++static int atc_probe(struct udevice *dev)
++{
++	struct apple_atc_t8130 *atc = dev_get_priv(dev);
++	struct udevice *child;
++	fdt_addr_t addr;
++	fdt_size_t size;
++
++	addr = dev_read_addr_size_name(dev, "usb2phy", &size);
++	if (addr == FDT_ADDR_T_NONE || size < USB2PHY_MISCTUNE + sizeof(u32))
++		return -EINVAL;
++	atc->usb2 = (void __iomem *)addr;
++	addr = dev_read_addr_size_name(dev, "pipehandler", &size);
++	if (addr == FDT_ADDR_T_NONE ||
++	    size < PIPEHANDLER_NONSELECTED_OVERRIDE + sizeof(u32))
++		return -EINVAL;
++	atc->pipe = (void __iomem *)addr;
++	atc->pipe_size = size;
++	addr = dev_read_addr_size_name(dev, "pipe-clocks", &size);
++	if (addr == FDT_ADDR_T_NONE ||
++	    size < T8130_PIPE_CLOCK_CFG3 + sizeof(u32))
++		return -EINVAL;
++	atc->clocks = (void __iomem *)addr;
++	return device_bind(dev, &atc_phy_driver, "apple-atc-t8130-phy", NULL,
++			   dev_ofnode(dev), &child);
++}
++
++static const struct reset_ops atc_reset_ops = {
++	.of_xlate = atc_reset_xlate,
++	.rst_assert = atc_assert,
++	.rst_deassert = atc_deassert,
++};
++
++static const struct udevice_id atc_ids[] = {
++	{ .compatible = "apple,t8140-atcphy" },
++	{ .compatible = "apple,t8130-atcphy" },
++	{}
++};
++
++U_BOOT_DRIVER(apple_atc_t8130_reset) = {
++	.name = "apple-atc-t8130-reset",
++	.id = UCLASS_RESET,
++	.of_match = atc_ids,
++	.ops = &atc_reset_ops,
++	.probe = atc_probe,
++	.priv_auto = sizeof(struct apple_atc_t8130),
++};
+diff --git a/drivers/usb/host/xhci-dwc3.c b/drivers/usb/host/xhci-dwc3.c
+index 8ad07a4b98c9574a5fa0cbfe83f5567e0f49f364..e5c95d3edb1d3d6c778ef6320714fc109f194dca 100644
+--- a/drivers/usb/host/xhci-dwc3.c
++++ b/drivers/usb/host/xhci-dwc3.c
+@@ -8,6 +8,8 @@
+  */
+ 
+ #include <clk.h>
++#include <apple_tunable.h>
++#include <linux/bitfield.h>
+ #include <dm.h>
+ #include <generic-phy.h>
+ #include <log.h>
+@@ -126,6 +128,12 @@ static int xhci_dwc3_reset_init(struct udevice *dev,
+ 	else if (ret)
+ 		return ret;
+ 
++	/* The Neo USB2 host/device selection latches while powered off. */
++	if (device_is_compatible(dev, "apple,t8140-dwc3")) {
++		ret = reset_assert_bulk(&plat->resets);
++		if (ret)
++			return ret;
++	}
+ 	ret = reset_deassert_bulk(&plat->resets);
+ 	if (ret) {
+ 		reset_release_bulk(&plat->resets);
+@@ -155,6 +163,65 @@ static int xhci_dwc3_clk_init(struct udevice *dev,
+ 	return 0;
+ }
+ 
++/* T8130's suspend-clock handoff is not represented by a clock provider yet.
++ * Use the already-qualified Neo Linux fallback, preserving the other fields.
++ */
++#define APPLE_DWC3_PWRDNSCALE_MASK GENMASK(31, 19)
++#define APPLE_DWC3_PWRDNSCALE_NATIVE 13
++
++/* Existing Linux dwc3-apple.c CIO timing configuration. */
++#define APPLE_DWC3_CIO_LFPS_OFFSET 0x38
++#define APPLE_DWC3_CIO_LFPS_VALUE 0x0f800f80
++#define APPLE_DWC3_CIO_BW_OFFSET 0x3c
++#define APPLE_DWC3_CIO_BW_VALUE 0x0fc00fc0
++#define APPLE_DWC3_CIO_LINK_TIMER 0x40
++#define APPLE_DWC3_CIO_HP_TIMER GENMASK(23, 16)
++#define APPLE_DWC3_CIO_LC_TIMER GENMASK(15, 8)
++#define APPLE_DWC3_CIO_ENTRY_TIMER GENMASK(7, 0)
++#define APPLE_DWC3_CIO_HP_TIMER_VALUE 0x14
++#define APPLE_DWC3_CIO_LC_TIMER_VALUE 0xa
++#define APPLE_DWC3_CIO_ENTRY_TIMER_VALUE 0x10
++
++static int apple_dwc3_host_tunables(struct udevice *dev, struct dwc3 *regs)
++{
++	fdt_addr_t addr;
++	fdt_size_t size;
++	int ret;
++
++	if (!device_is_compatible(dev, "apple,t8140-dwc3"))
++		return 0;
++	addr = dev_read_addr_size_name(dev, "dwc3-core", &size);
++	if (addr == FDT_ADDR_T_NONE || size <= DWC3_REG_OFFSET)
++		return -EINVAL;
++	ret = apple_tunable_apply(dev, "apple,tunable-host", (void *)regs,
++				  size - DWC3_REG_OFFSET);
++	if (ret)
++		return ret;
++	if (dev_read_prop(dev, "apple,tunable-cfg-host", NULL)) {
++		addr = dev_read_addr_size_name(dev, "dwc3-cfg", &size);
++		if (addr == FDT_ADDR_T_NONE)
++			return -EINVAL;
++		ret = apple_tunable_apply(dev, "apple,tunable-cfg-host",
++					  (void *)addr, size);
++		if (ret)
++			return ret;
++	}
++	addr = dev_read_addr_size_name(dev, "dwc3-apple", &size);
++	if (addr == FDT_ADDR_T_NONE || size < APPLE_DWC3_CIO_LINK_TIMER + sizeof(u32))
++		return -EINVAL;
++	writel(APPLE_DWC3_CIO_LFPS_VALUE, (void *)addr + APPLE_DWC3_CIO_LFPS_OFFSET);
++	writel(APPLE_DWC3_CIO_BW_VALUE, (void *)addr + APPLE_DWC3_CIO_BW_OFFSET);
++	clrsetbits_le32((void *)addr + APPLE_DWC3_CIO_LINK_TIMER,
++		APPLE_DWC3_CIO_HP_TIMER | APPLE_DWC3_CIO_LC_TIMER | APPLE_DWC3_CIO_ENTRY_TIMER,
++		FIELD_PREP(APPLE_DWC3_CIO_HP_TIMER, APPLE_DWC3_CIO_HP_TIMER_VALUE) |
++		FIELD_PREP(APPLE_DWC3_CIO_LC_TIMER, APPLE_DWC3_CIO_LC_TIMER_VALUE) |
++		FIELD_PREP(APPLE_DWC3_CIO_ENTRY_TIMER, APPLE_DWC3_CIO_ENTRY_TIMER_VALUE));
++	clrsetbits_le32(&regs->g_ctl, APPLE_DWC3_PWRDNSCALE_MASK,
++			FIELD_PREP(APPLE_DWC3_PWRDNSCALE_MASK,
++				   APPLE_DWC3_PWRDNSCALE_NATIVE));
++	return 0;
++}
++
+ static int xhci_dwc3_probe(struct udevice *dev)
+ {
+ 	struct xhci_hcor *hcor;
+@@ -172,7 +239,7 @@ static int xhci_dwc3_probe(struct udevice *dev)
+ 
+ 	ret = xhci_dwc3_clk_init(dev, plat);
+ 	if (ret)
+-		return ret;
++		goto release_resets;
+ 
+ 	hccr = (struct xhci_hccr *)((uintptr_t)dev_remap_addr(dev));
+ 	hcor = (struct xhci_hcor *)((uintptr_t)hccr +
+@@ -180,11 +247,16 @@ static int xhci_dwc3_probe(struct udevice *dev)
+ 
+ 	ret = dwc3_setup_phy(dev, &plat->phys);
+ 	if (ret && (ret != -ENOTSUPP))
+-		return ret;
++		goto release_clocks;
+ 
+ 	dwc3_reg = (struct dwc3 *)((char *)(hccr) + DWC3_REG_OFFSET);
+ 
+-	dwc3_core_init(dwc3_reg);
++	ret = dwc3_core_init(dwc3_reg);
++	if (ret)
++		goto shutdown_phy;
++	ret = apple_dwc3_host_tunables(dev, dwc3_reg);
++	if (ret)
++		goto shutdown_phy;
+ 
+ 	/* Set dwc3 usb2 phy config */
+ 	reg = readl(&dwc3_reg->g_usb2phycfg[0]);
+@@ -219,21 +291,46 @@ static int xhci_dwc3_probe(struct udevice *dev)
+ 		dr_mode = USB_DR_MODE_HOST;
+ 
+ 	dwc3_set_mode(dwc3_reg, dr_mode);
++	if (device_is_compatible(dev, "apple,t8140-dwc3")) {
++		setbits_le32(&dwc3_reg->g_usb2phycfg[0], DWC3_GUSB2PHYCFG_SUSPHY);
++		setbits_le32(&dwc3_reg->g_usb3pipectl[0], DWC3_GUSB3PIPECTL_SUSPHY);
++	}
+ 
+-	return xhci_register(dev, hccr, hcor);
++	ret = xhci_register(dev, hccr, hcor);
++	if (!ret)
++		return 0;
++shutdown_phy:
++	dwc3_shutdown_phy(dev, &plat->phys);
++release_clocks:
++	clk_release_bulk(&plat->clks);
++release_resets:
++	reset_release_bulk(&plat->resets);
++	return ret;
+ }
+ 
+ static int xhci_dwc3_remove(struct udevice *dev)
+ {
+ 	struct xhci_dwc3_plat *plat = dev_get_plat(dev);
+ 
++	int ret;
++
++	/* Stop DMA before withdrawing its PHY clocks and reset resources. */
++	ret = xhci_deregister(dev);
++	if (ret)
++		return ret;
++	if (device_is_compatible(dev, "apple,t8140-dwc3")) {
++		struct dwc3 *regs = dev_remap_addr(dev) + DWC3_REG_OFFSET;
++
++		setbits_le32(&regs->g_usb2phycfg[0], DWC3_GUSB2PHYCFG_SUSPHY);
++		setbits_le32(&regs->g_usb3pipectl[0], DWC3_GUSB3PIPECTL_SUSPHY);
++	}
+ 	dwc3_shutdown_phy(dev, &plat->phys);
+ 
+ 	clk_release_bulk(&plat->clks);
+ 
+ 	reset_release_bulk(&plat->resets);
+ 
+-	return xhci_deregister(dev);
++	return 0;
+ }
+ 
+ static const struct udevice_id xhci_dwc3_ids[] = {
+@@ -251,6 +348,6 @@ U_BOOT_DRIVER(xhci_dwc3) = {
+ 	.ops = &xhci_usb_ops,
+ 	.priv_auto	= sizeof(struct xhci_ctrl),
+ 	.plat_auto	= sizeof(struct xhci_dwc3_plat),
+-	.flags = DM_FLAG_ALLOC_PRIV_DMA,
++	.flags = DM_FLAG_ALLOC_PRIV_DMA | DM_FLAG_OS_PREPARE,
+ };
+ #endif
+diff --git a/include/apple_tunable.h b/include/apple_tunable.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..b8abc9485e5d45e8d278174db0c161edb9617cbe
+--- /dev/null
++++ b/include/apple_tunable.h
+@@ -0,0 +1,44 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Apple DT tunable triples, as used by Linux drivers/soc/apple/tunable.c. */
++#ifndef _APPLE_TUNABLE_H
++#define _APPLE_TUNABLE_H
++
++#include <dm/device.h>
++#include <dm/read.h>
++#include <asm/io.h>
++#include <linux/errno.h>
++#include <linux/types.h>
++
++static inline int apple_tunable_apply(struct udevice *dev, const char *property,
++				      void __iomem *base, size_t size)
++{
++	const fdt32_t *values;
++	int length, i;
++
++	values = dev_read_prop(dev, property, &length);
++	if (!values)
++		return 0;
++	if (size < sizeof(u32) || length % (3 * sizeof(u32)))
++		return -EINVAL;
++	/* Validate the entire table before writing any registers. */
++	for (i = 0; i < length / sizeof(*values); i += 3) {
++		u32 offset = fdt32_to_cpu(values[i]);
++
++		if (offset % sizeof(u32) || offset > size - sizeof(u32) ||
++		    (fdt32_to_cpu(values[i + 2]) &
++		     ~fdt32_to_cpu(values[i + 1])))
++			return -EINVAL;
++	}
++	for (i = 0; i < length / sizeof(*values); i += 3) {
++		u32 offset = fdt32_to_cpu(values[i]);
++		u32 mask = fdt32_to_cpu(values[i + 1]);
++		u32 value = fdt32_to_cpu(values[i + 2]);
++		u32 old = readl(base + offset);
++		u32 next = (old & ~mask) | value;
++
++		if (next != old)
++			writel(next, base + offset);
++	}
++	return 0;
++}
++#endif
+

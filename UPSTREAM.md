@@ -21,6 +21,14 @@ build the macOS installer archive inside COPR.
 
 ## U-Boot
 
+Experimental revision: `GravityLinux/u-boot:neo-bringup`, pinned at
+`29272e482c6c54409263478436678bbddd31e477` (204.gravity.experimental).
+`gravity-neo-29272e482c6.patch` is the exact binary/full-index Git delta on top
+of the existing packaged `a2f6913694ff26908c16948af3f8372429782263` tree.
+It adds T8140 memory mapping, Neo USB2 PHY/host handoff, preserves Neo MTP ring
+firmware, allows longer command lines, and includes the branch's documentation.
+The existing T8132 NVMe-compatible fallback is retained.
+
 The package retains the Fedora/Asahi tools and patch series. Starting with
 201.gravity, the AArch64 board list is restricted to apple_m1 to shorten builds;
 firmware build dependencies used only by other AArch64 boards are omitted.
