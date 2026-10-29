@@ -16,7 +16,7 @@ m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
 Name:           gravity-bootloader
 Vendor:         Gravity Linux
 Version:        %(echo '%{srcversion}' | tr '-' '~')
-Release:        110.gravity%{?dist}
+Release:        111.gravity.experimental%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
 
 # The M4 fork adds GPL-2.0-only contributions; vendored projects retain their licenses.
@@ -27,7 +27,7 @@ Summary:        Bootloader and experimentation playground for Apple Silicon
 # MIT OR Apache-2.0
 # LICENSE.dependencies contains a full license breakdown of the rust dependencies
 License:        GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND MIT AND (MIT OR Apache-2.0) AND CC-BY-4.0
-URL:            https://github.com/GravityLinux/bootloader
+URL:            https://github.com/ADevWithAnIdea/m1n1
 Source0:        %{name}-%{srcversion}.tar.gz
 Source:         https://github.com/rafalh/rust-fatfs/archive/%{fatfs_commit}/rust-fatfs-%{fatfs_commit}.tar.gz
 # * Vendor git dependency rust-fatfs and ensure its dependencies are
@@ -205,6 +205,9 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 %{_udevrulesdir}/80-m1n1.rules
 
 %changelog
+* Thu Oct 29 2026 Gravity Linux maintainers - 1.6.1-111.gravity.experimental
+- Use ADevWithAnIdea/m1n1 neo-bringup at 128af8965ed8
+
 * Sat Sep 19 2026 Gravity Linux maintainers - 1.6.1-110.gravity
 - Keep DCP firmware compatibility at 26.6.2 instead of translating to 26.6.0
 

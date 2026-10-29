@@ -66,8 +66,9 @@ packaging files are the build inputs. Binary builds still need COPR validation.
 
 ## gravity-bootloader (upstream m1n1)
 
-Gravity's package is named `gravity-bootloader`; its repository remains `bootloader`:
-https://github.com/GravityLinux/bootloader. Upstream binary and runtime paths
+Gravity's package is named `gravity-bootloader`. This experimental branch uses
+https://github.com/ADevWithAnIdea/m1n1, branch `neo-bringup`, pinned in
+`sources.json`. Upstream binary and runtime paths
 retain their m1n1 names for boot-chain compatibility.
 
 The selected M4 fork carries GPL-2.0-only contributions in addition to upstream

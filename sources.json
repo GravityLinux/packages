@@ -32,12 +32,12 @@
   },
   "gravity-bootloader": {
     "kind": "git",
-    "url": "https://github.com/GravityLinux/bootloader.git",
-    "ref": "f64760b501214c749788f89620c078d8b39b0453",
+    "url": "https://github.com/ADevWithAnIdea/m1n1.git",
+    "ref": "128af8965ed89902cf0454b31faeb97b49ab43c7",
     "archive": "gravity-bootloader-1.6.1.tar.gz",
     "omit_submodules": ["artwork"],
     "root": "gravity-bootloader-1.6.1",
-    "note": "Preserve DCP firmware-version and firmware-compat as 26.6.2; pair with the kernel's exact actual-version check. Publish pinned source commits before building."
+    "note": "Experimental neo-bringup branch; pin the tested commit explicitly when refreshing."
   },
   "gravity-scripts": {
     "kind": "git",
