@@ -1,5 +1,20 @@
 # Validation — 2026-09-15
 
+## 2026-10-29 experimental Linux 7.3
+
+- Pinned ADevWithAnIdea/linux experimental/integration/apple-silicon-7.3 at
+  a0126e3974837d5eed23ea97e4e4dbcc5b9cf08a, using its complete source tree.
+  The old Fedora source delta is not applied; its SRPM supplies config seeds,
+  packaging helpers and ABI-list inputs only.
+- Unified CONFIG_DRM_ASAHI=m covers all GPU backends. Disable KASAN in the
+  two 16K GCC variants because 7.3 requires Clang for Rust with KASAN.
+- All 20 Fedora config variants rebase with olddefconfig. All eight AArch64
+  variants subsequently pass listnewconfig and the baseline Fedora mismatch
+  comparator with the kernel's dummy compiler/pahole tools. Required Rust,
+  unified GPU, and NVMe selections are checked again in the actual RPM buildroot.
+- All four modular ARM64 export patches apply cleanly. Package-definition and
+  overlay regression checks pass. A full kernel RPM build remains for COPR.
+
 ## 2026-09-19 DCP actual-version contract (kernel 509 / bootloader 110)
 
 - Linux dea38a96aa86 includes 3c08d26a0bd0's exact 26.6.2 check on T8132

@@ -187,16 +187,16 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.1.13
-%define specversion 7.1.13
-%define patchversion 7.1
-%define pkgrelease 503.gravity
+%define specrpmversion 7.3.0
+%define specversion 7.3.0
+%define patchversion 7.3
+%define pkgrelease 510.gravity.experimental
 %define kversion 7
-%define tarfile_release 7.1.13
+%define tarfile_release 7.3.0
 # This is needed to do merge window version magic
 %define patchlevel 1
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 509.gravity%{?buildid}%{?dist}
+%define specrelease 510.gravity.experimental%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.1.13
 
@@ -1211,6 +1211,7 @@ Source2002: kvm_stat.logrotate
 # source tree, but in the mean time we carry this to support the legacy workflow
 Source3000: merge.py
 Source3001: kernel-local
+Source3003: rebase-experimental-configs.py
 %if %{patchlist_changelog}
 Source3002: Patchlist.changelog
 %endif
@@ -1223,8 +1224,7 @@ Source4002: gating.yaml
 
 %if !%{nopatches}
 
-Patch1: patch-%{patchversion}-redhat.patch
-Patch2: gravity-m4.patch
+# Source0 is the complete experimental integration tree, not a Fedora delta.
 # Temporary modular Apple DRM bring-up exports; retire once carried by Linux fork.
 Patch3: 0003-arm64-export-can-set-direct-map.patch
 Patch4: 0004-arm64-export-set-direct-map-invalid.patch
@@ -2182,13 +2182,7 @@ cd linux-%{KVERREL}
 cp -a %{SOURCE1} .
 
 %{log_msg "Start of patch applications"}
-%if !%{nopatches}
-
-ApplyOptionalPatch patch-%{patchversion}-redhat.patch
-%endif
-
 ApplyOptionalPatch linux-kernel-test.patch
-ApplyOptionalPatch gravity-m4.patch
 ApplyPatch 0003-arm64-export-can-set-direct-map.patch
 ApplyPatch 0004-arm64-export-set-direct-map-invalid.patch
 ApplyPatch 0005-arm64-export-set-direct-map-default.patch
@@ -2344,6 +2338,10 @@ done
 %endif
 
 %{log_msg "Set process_configs.sh $OPTS"}
+# This experimental full-tree snapshot advances the config seeds from 7.1 to
+# 7.3. Resolve Kconfig defaults using the actual buildroot Rust toolchain, then
+# retain Fedora's strict checks below. Never reapply the old source-tree delta.
+python3 %{SOURCE3003} .. %{specrpmversion}
 cp %{SOURCE81} .
 OPTS="-w -n -c"
 %if !%{with_configchecks}
@@ -4880,6 +4878,10 @@ fi\
 #
 #
 %changelog
+* Thu Oct 29 2026 Gravity Linux maintainers - 7.3.0-510.gravity.experimental
+- Build the complete experimental Apple Silicon 7.3 integration tree
+- Select the unified Asahi DRM driver and rebase Fedora config seeds
+
 * Sat Sep 19 2026 Gravity Linux maintainers - 7.1.13-509.gravity
 - Select T8132 DCP protocol using exact actual firmware version 26.6.2
 - Preserve older-platform compatibility handling

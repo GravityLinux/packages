@@ -49,7 +49,7 @@ class KernelConfigTests(unittest.TestCase):
                         self.assertEqual(result.count("CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON="), 1)
                         self.assertIn("CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON=y\n", result)
                         self.assertNotIn("# CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON is not set", result)
-                        self.assertEqual("CONFIG_DRM_ASAHI_M4=m\n" in result,
+                        self.assertEqual("CONFIG_DRM_ASAHI=m\n" in result,
                                          variant.startswith("aarch64-16k"))
                         self.assertEqual("CONFIG_SND_SOC_APPLE_T8132_SPEAKER=y\n" in result,
                                          variant.startswith("aarch64-16k"))
