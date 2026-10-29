@@ -190,13 +190,13 @@ Summary: The Linux kernel
 %define specrpmversion 7.3.0
 %define specversion 7.3.0
 %define patchversion 7.3
-%define pkgrelease 511.gravity.experimental
+%define pkgrelease 512.gravity.experimental
 %define kversion 7
 %define tarfile_release 7.3.0
 # This is needed to do merge window version magic
 %define patchlevel 1
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 511.gravity.experimental%{?buildid}%{?dist}
+%define specrelease 512.gravity.experimental%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.1.13
 
@@ -4878,6 +4878,9 @@ fi\
 #
 #
 %changelog
+* Thu Oct 29 2026 Gravity Linux maintainers - 7.3.0-512.gravity.experimental
+- Disable the unported SEP driver in every AArch64 configuration
+
 * Thu Oct 29 2026 Gravity Linux maintainers - 7.3.0-511.gravity.experimental
 - Maintain RPM helpers and config seeds in this repository; remove baseline SRPM download
 
