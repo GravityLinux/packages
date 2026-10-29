@@ -82,7 +82,7 @@ Name:           mesa
 Vendor:         Gravity Linux
 Summary:        Mesa graphics libraries
 Version:        26.3.0~devel
-Release:        103.gravity%{?dist}
+Release:        104.gravity.experimental%{?dist}
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
 

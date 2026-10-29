@@ -13,11 +13,11 @@
   },
   "mesa": {
     "kind": "git",
-    "url": "https://github.com/GravityLinux/mesa.git",
-    "ref": "87ac51d411f0e58a9433567ec2666f457be89e1d",
+    "url": "https://github.com/niklassheth/mesa-wip.git",
+    "ref": "bc912d70723854d948f56a2465d8d634f44a5858",
     "archive": "mesa-26.3.0-devel.tar.xz",
     "root": "mesa-26.3.0-devel",
-    "note": "Published M4 compiler and driver updates, including automatic Apple9 rendering selection and ordinary varying export for legacy clip vertex."
+    "note": "Experimental wip/apple9-latest snapshot; pinned explicitly so stable builds remain independent."
   },
   "uboot-tools": {
     "kind": "spec",
