@@ -1,0 +1,9 @@
+[gravity-experimental]
+name=Gravity Linux experimental for Fedora $releasever - $basearch
+baseurl=https://download.copr.fedorainfracloud.org/results/adevwithanidea/gravity-experimental/fedora-$releasever-$basearch/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=0
+gpgkey=https://download.copr.fedorainfracloud.org/results/adevwithanidea/gravity-experimental/pubkey.gpg
+skip_if_unavailable=False
+priority=10

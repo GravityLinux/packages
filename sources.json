@@ -63,6 +63,9 @@
   "gravity-repos": {
     "kind": "spec"
   },
+  "gravity-repos-experimental": {
+    "kind": "spec"
+  },
   "gravity-remix-scripts": {
     "kind": "local",
     "archive": "gravity-remix-scripts-20260915.tar.gz",

@@ -3,6 +3,34 @@
 COPR project: `adevwithanidea/gravity`.
 Packaging repository: `https://github.com/GravityLinux/packages.git`.
 
+## Experimental channel
+
+`adevwithanidea/gravity-experimental` builds from the `experimental` packaging
+branch. Keep the same SCM settings below, with committish `experimental`, and
+add stable `copr://adevwithanidea/gravity` as an external build repository.
+Both installed Gravity repositories use priority 10: newer RPM versions win.
+
+Current experimental build entries:
+
+| Package | Spec File |
+| --- | --- |
+| kernel | `kernel/kernel.spec` |
+| mesa | `mesa/mesa.spec` |
+| gravity-repos-experimental | `gravity-repos-experimental/gravity-repos-experimental.spec` |
+
+The last package is the separate opt-in repository configuration required by
+KIWI's `Workstation-Sway-Experimental` profile. Its key URL uses COPR's HTTPS
+endpoint. The project signing key must be available before building the image.
+The kernel builds the complete 7.3 integration source and rebases the baseline
+Fedora config seeds against it; it does not apply the previous 7.1 source delta.
+
+No new U-Boot NVMe implementation is needed for the pinned J700/T8140 tree:
+its NVMe node includes `apple,t8132-nvme-ans2`, which already selects the newer
+queue-registration implementation in our U-Boot. The mailbox falls back to
+`apple,asc-mailbox-v4` and SART to `apple,t6000-sart`, both supported. This assumes
+the same compatible strings are present in the DT handed to U-Boot; hardware
+boot remains to be tested. Keep bootloader and U-Boot pins unchanged for now.
+
 COPR clones the packaging repository and runs `.copr/Makefile` to prepare
 the SRPM on its own worker, then builds and signs the binary RPMs. There is
 no local SRPM upload in this workflow. `sources.json` pins separate source
