@@ -190,13 +190,13 @@ Summary: The Linux kernel
 %define specrpmversion 7.3.0
 %define specversion 7.3.0
 %define patchversion 7.3
-%define pkgrelease 516.gravity.experimental
+%define pkgrelease 517.gravity.experimental
 %define kversion 7
 %define tarfile_release 7.3.0
-# This is needed to do merge window version magic
-%define patchlevel 1
+# Keep the kernel's internal minor version aligned with the RPM version.
+%define patchlevel %{lua:print(string.match(rpm.expand("%{specversion}"), "^[0-9]+[.]([0-9]+)"))}
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 516.gravity.experimental%{?buildid}%{?dist}
+%define specrelease 517.gravity.experimental%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.1.13
 
@@ -2525,6 +2525,13 @@ BuildKernel() {
     %{log_msg "BUILDING A KERNEL FOR ${Variant} %{_target_cpu}..."}
 
     %{make} ARCH=$Arch olddefconfig >/dev/null
+
+    # The image, module vermagic and RPM installation paths must agree.
+    KernelRelease=$(%{make} -s ARCH=$Arch kernelrelease)
+    if [ "$KernelRelease" != "$KernelVer" ]; then
+        echo "Kernel release mismatch: built=$KernelRelease packaged=$KernelVer" >&2
+        exit 1
+    fi
 
     %{log_msg "Setup build-ids"}
     # This ensures build-ids are unique to allow parallel debuginfo
@@ -4878,6 +4885,9 @@ fi\
 #
 #
 %changelog
+* Thu Oct 29 2026 Gravity Linux maintainers - 7.3.0-517.gravity.experimental
+- Derive PATCHLEVEL from the advertised kernel version for matching vermagic and module paths.
+
 * Thu Oct 29 2026 Gravity Linux maintainers - 7.3.0-516.gravity.experimental
 - Pass Fedora compiler hardening flags to the bpftool bootstrap host build.
 

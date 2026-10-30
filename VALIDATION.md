@@ -1,5 +1,23 @@
 # Validation — 2026-09-15
 
+## 2026-10-29 internal kernel version alignment (517.experimental)
+
+- Full RPM procedure review found that InitBuildVars still forced
+  PATCHLEVEL=1 although the package advertises 7.3.0. Module installation
+  explicitly overrides KERNELRELEASE, masking the mismatch during packaging.
+- Derive the minor version from specversion and check the actual kernel
+  release against KernelVer before compiling an image or any modules.
+- Expanded RPM-script regression checks pass for 7.3.0, 7.4.0 and 7.10.2.
+  All five kernel packaging/config tests pass in Fedora 44 AArch64.
+- The bootstrap hardening fix was also checked with actual Fedora AArch64
+  GCC 16.2.1: old flags reproduce the exact R_AARCH64_ADR_PREL_PG_HI21 failure;
+  HOST_EXTRACFLAGS builds a working bootstrap that prints its version.
+- Full default binary RPM validation is in progress on the remote server.
+  Source RPM preparation runs in native Fedora; the binary build runs in
+  Fedora AArch64 with QEMU 10.2.3 in a private user/mount/PID namespace.
+  Ubuntu's existing QEMU 8.2 lacks openat2 required by Fedora tar. The host's
+  binfmt registration is preserved. No packaging features are disabled.
+
 ## 2026-10-29 bpftool bootstrap hardening (516.experimental)
 
 - Copr build 11228917 passes kernel compilation and module splitting, then
