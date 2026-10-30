@@ -190,13 +190,13 @@ Summary: The Linux kernel
 %define specrpmversion 7.3.0
 %define specversion 7.3.0
 %define patchversion 7.3
-%define pkgrelease 513.gravity.experimental
+%define pkgrelease 514.gravity.experimental
 %define kversion 7
 %define tarfile_release 7.3.0
 # This is needed to do merge window version magic
 %define patchlevel 1
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 513.gravity.experimental%{?buildid}%{?dist}
+%define specrelease 514.gravity.experimental%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.1.13
 
@@ -4878,6 +4878,9 @@ fi\
 #
 #
 %changelog
+* Thu Oct 29 2026 Gravity Linux maintainers - 7.3.0-514.gravity.experimental
+- Refresh the experimental integration source pin to 134412ddcf12
+
 * Thu Oct 29 2026 Gravity Linux maintainers - 7.3.0-513.gravity.experimental
 - Refresh the experimental source pin to include Linux 7.3 Rust API fixes
 

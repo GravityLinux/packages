@@ -2,7 +2,7 @@
   "kernel": {
     "kind": "git",
     "url": "https://github.com/ADevWithAnIdea/linux.git",
-    "ref": "4f6a4f8e723e975d68af43bc5ccee8bfe5f4199f",
+    "ref": "134412ddcf12f36ab9023d6856071fd48acb1065",
     "archive": "linux-7.3.0.tar.xz",
     "root": "linux-7.3.0",
     "note": "Full experimental/integration/apple-silicon-7.3 tree. RPM helpers and config seeds are maintained in kernel/inputs; no baseline SRPM download is required."
