@@ -15,8 +15,9 @@ packages:
 
 
 rules:
+  # Tests embedded in normal drivers can require the KUnit runtime in core.
+  # Prefer internal, but let dependency resolution promote shared helpers.
   - .*kunit.*: modules-internal
-    exact_pkg: True
   - .*test[^/]*.ko: modules-internal
 
   - arch/.*: modules-core

@@ -1,5 +1,23 @@
 # Validation — 2026-09-15
 
+## 2026-10-29 KUnit package dependency resolution (515.experimental)
+
+- Build 11228868 compiled and linked successfully, then failed in
+  `filtermods.py`: `hid-hyperv.ko` belongs to modules-core but its embedded
+  KUnit tests depend on `kunit.ko`, which the old rule forced into
+  modules-internal. Reproduced the same failure on the Linux build server.
+- Make the Fedora KUnit rule a preference so dependency resolution can put
+  the runtime in modules-core. Kernel code, source pin and config stay unchanged.
+- Replayed the actual Copr dependency graph: all 4,900 modules are assigned
+  exactly once with complete package dependency closure. Only `kunit.ko`
+  changes placement; all 194 internal test modules retain their package.
+- Generated dependencies from the previously compiled normal 16K variant:
+  all 4,892 modules also have unique, complete assignments and valid package
+  dependencies. Four kernel packaging/config regression tests pass, including
+  a new embedded-KUnit case that keeps separate tests and helpers internal.
+- This validates the failing package-splitting step; a complete new Copr RPM
+  build remains to be run. Existing successful kernel compilation was reused.
+
 ## 2026-10-29 self-contained kernel packaging inputs (511.experimental)
 
 - Imported 99 config/helper/spec inputs from the verified cached source RPM;
