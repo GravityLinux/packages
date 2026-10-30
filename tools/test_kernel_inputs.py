@@ -22,6 +22,8 @@ class KernelInputsTests(unittest.TestCase):
             self.assertIn('CONFIG_DRM_ASAHI=m\n', config)
             self.assertIn('CONFIG_SND_SOC_APPLE_T8132_SPEAKER=y\n', config)
             self.assertTrue((sources / 'rebase-experimental-configs.py').is_file())
+            self.assertEqual((sources / 'host-tool-flags.sh').read_bytes(),
+                             (ROOT / 'kernel/host-tool-flags.sh').read_bytes())
             self.assertFalse(any(p.name.startswith('linux-7.1') for p in sources.iterdir()))
             self.assertFalse((sources / 'patch-7.1-redhat.patch').exists())
         self.assertEqual((inputs / 'kernel-aarch64-16k-fedora.config').read_bytes(), original)

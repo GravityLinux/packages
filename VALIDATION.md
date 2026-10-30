@@ -1,5 +1,29 @@
 # Validation — 2026-09-15
 
+## 2026-10-29 shared host-tool policy (518.experimental)
+
+- Build 11228974 compiled all four kernels and then failed in perf's separate
+  bpftool bootstrap invocation. The release-516 fix covered the standalone
+  invocation but did not reach this recursive make path.
+- Source one host compiler policy at the start of the RPM build. Exported
+  HOST_EXTRACFLAGS survives the CFLAGS reset in perf and reaches all recursive
+  bpftool consumers. Retain Fedora hardening and the existing annobin exclusion;
+  preserve caller-provided host flags when cross-build host flags are absent.
+- Build the bootstrap before any kernel variant, so that failures in this
+  shared policy appear before spending time compiling kernel images.
+- Added tools/check_kernel_host_tools.sh. It reads flags and package metadata
+  from the expanded spec and builds the real standalone, perf and BPF-selftest
+  callers in fresh output directories without building kernel images.
+- All three actual caller paths pass in Fedora 44 AArch64 with GCC 16.2.1:
+  standalone bootstrap, perf bpf-skel-prepare and BPF selftest install-bin.
+  The selftest binary includes LLVM, crypto and skeleton support. Each binary
+  runs and reports its version. The preflight used host BTF for tool generation;
+  the full RPM build still uses the built AArch64 kernel BTF as usual.
+- All seven kernel packaging/config tests pass, including recursive make
+  inheritance, preservation of cross-build host flags and staged helper bytes.
+- Full binary RPM validation is continuing separately; these results are
+  host-tool preflight results rather than a claim that final RPMs exist.
+
 ## 2026-10-29 internal kernel version alignment (517.experimental)
 
 - Full RPM procedure review found that InitBuildVars still forced

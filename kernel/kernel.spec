@@ -190,13 +190,13 @@ Summary: The Linux kernel
 %define specrpmversion 7.3.0
 %define specversion 7.3.0
 %define patchversion 7.3
-%define pkgrelease 517.gravity.experimental
+%define pkgrelease 518.gravity.experimental
 %define kversion 7
 %define tarfile_release 7.3.0
 # Keep the kernel's internal minor version aligned with the RPM version.
 %define patchlevel %{lua:print(string.match(rpm.expand("%{specversion}"), "^[0-9]+[.]([0-9]+)"))}
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 517.gravity.experimental%{?buildid}%{?dist}
+%define specrelease 518.gravity.experimental%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.1.13
 
@@ -1212,6 +1212,7 @@ Source2002: kvm_stat.logrotate
 Source3000: merge.py
 Source3001: kernel-local
 Source3003: rebase-experimental-configs.py
+Source3004: host-tool-flags.sh
 %if %{patchlist_changelog}
 Source3002: Patchlist.changelog
 %endif
@@ -2420,6 +2421,10 @@ cp_vmlinux()
 %define build_hostldflags %{?build_ldflags}
 %endif
 
+# bpftool captures HOST_CFLAGS before EXTRA_CFLAGS. Set its host policy once
+# for standalone builds and every recursive perf/selftest invocation.
+. "%{SOURCE3004}" "%{?build_hostcflags}"
+
 %define make %{__make} %{?cross_opts} %{?make_opts} HOSTCFLAGS="%{?build_hostcflags}" HOSTLDFLAGS="%{?build_hostldflags}"
 
 #  Initialize build environment for a kernel variant
@@ -2476,7 +2481,7 @@ InitBuildVars() {
 BuildBpftool(){
     export BPFBOOTSTRAP_CFLAGS=$(echo "%{__global_compiler_flags}" | sed -r "s/\-specs=[^\ ]+\/redhat-annobin-cc1//")
     export BPFBOOTSTRAP_LDFLAGS=$(echo "%{__global_ldflags}" | sed -r "s/\-specs=[^\ ]+\/redhat-annobin-cc1//")
-    CFLAGS="" LDFLAGS="" make HOST_EXTRACFLAGS="${BPFBOOTSTRAP_CFLAGS}" EXTRA_CFLAGS="${BPFBOOTSTRAP_CFLAGS}" EXTRA_CXXFLAGS="${BPFBOOTSTRAP_CFLAGS}" EXTRA_LDFLAGS="${BPFBOOTSTRAP_LDFLAGS}" %{?make_opts} %{?clang_make_opts} V=1 -C tools/bpf/bpftool bootstrap
+    CFLAGS="" LDFLAGS="" make EXTRA_CFLAGS="${BPFBOOTSTRAP_CFLAGS}" EXTRA_CXXFLAGS="${BPFBOOTSTRAP_CFLAGS}" EXTRA_LDFLAGS="${BPFBOOTSTRAP_LDFLAGS}" %{?make_opts} %{?_smp_mflags} %{?clang_make_opts} V=1 -C tools/bpf/bpftool bootstrap
 }
 
 #  Main function to compile and install a kernel variant
@@ -3307,6 +3312,12 @@ mkdir -p $RPM_BUILD_ROOT/boot
 mkdir -p $RPM_BUILD_ROOT%{_libexecdir}
 
 cd linux-%{KVERREL}
+
+%if %{with_debuginfo} || %{with_perf} || %{with_selftests}
+# Exercise the shared host policy before spending time on kernel variants.
+# Later consumers inherit the same HOST_EXTRACFLAGS through recursive make.
+BuildBpftool
+%endif
 
 %if %{with_debug}
 %if %{with_realtime}
@@ -4885,6 +4896,9 @@ fi\
 #
 #
 %changelog
+* Thu Oct 29 2026 Gravity Linux maintainers - 7.3.0-518.gravity.experimental
+- Export the host compiler policy once for all recursive bpftool builds.
+
 * Thu Oct 29 2026 Gravity Linux maintainers - 7.3.0-517.gravity.experimental
 - Derive PATCHLEVEL from the advertised kernel version for matching vermagic and module paths.
 
