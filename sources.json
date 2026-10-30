@@ -9,11 +9,11 @@
   },
   "mesa": {
     "kind": "git",
-    "url": "https://github.com/niklassheth/mesa-wip.git",
-    "ref": "bc912d70723854d948f56a2465d8d634f44a5858",
+    "url": "https://github.com/ADevWithAnIdea/mesa.git",
+    "ref": "7e6ee44fb6863037d88e0cfc156850fde5130e04",
     "archive": "mesa-26.3.0-devel.tar.xz",
     "root": "mesa-26.3.0-devel",
-    "note": "Experimental wip/apple9-latest snapshot; pinned explicitly so stable builds remain independent."
+    "note": "Experimental integration/g16c-vulkan snapshot; pinned explicitly so stable builds remain independent."
   },
   "uboot-tools": {
     "kind": "spec",
