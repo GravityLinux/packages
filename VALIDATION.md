@@ -1,5 +1,20 @@
 # Validation — 2026-09-15
 
+## 2026-10-29 bpftool bootstrap hardening (516.experimental)
+
+- Copr build 11228917 passes kernel compilation and module splitting, then
+  fails linking bootstrap bpftool: its host objects did not receive Fedora's
+  PIE compiler flags, while its linker received Fedora's hardening flags.
+- Linux 7.3's bpftool Makefile separates host flags before applying
+  EXTRA_CFLAGS. Pass the same Fedora flags through HOST_EXTRACFLAGS so the
+  bootstrap objects and bootstrap libbpf receive matching compiler flags.
+- On the Linux server, reproduced the bootstrap link failure with a compiler
+  explicitly defaulted to non-PIE and a PIE link. The added host flags make
+  the same target build successfully as a PIE executable. The resulting
+  bootstrap dumps the running kernel's BTF to a C header successfully.
+- This targeted check uses native x86_64 GCC; a full Fedora 44 AArch64 RPM
+  build is being set up separately. It does not claim that build has passed.
+
 ## 2026-10-29 KUnit package dependency resolution (515.experimental)
 
 - Build 11228868 compiled and linked successfully, then failed in
