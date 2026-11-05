@@ -42,19 +42,10 @@
   "gravity-scripts": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/scripts.git",
-    "ref": "12418e50125a72749a75917db578db55ea42704c",
+    "ref": "7a8019afc4583aff0163e3bcbafdf9b34f4eb767",
     "archive": "gravity-scripts-20260915.tar.gz",
     "root": "gravity-scripts-20260915",
-    "note": "Publish this locally pinned scripts commit to the Gravity repository."
-  },
-  "gravity-installer": {
-    "kind": "git",
-    "url": "https://github.com/GravityLinux/installer.git",
-    "ref": "34c9ded9e2e4efd9add6bb984d5c50656ea324da",
-    "archive": "gravity-installer-0.9.1.tar.gz",
-    "omit_submodules": ["artwork", "bootloader"],
-    "root": "gravity-installer-0.9.1",
-    "note": "Qualified recovery extraction plus per-radio J773g Wi-Fi and Bluetooth factory calibration."
+    "note": "Scripts and Linux firmware tools share this source; publish the pinned scripts revision before building."
   },
   "gravity-platform-metapackage": {
     "kind": "spec"

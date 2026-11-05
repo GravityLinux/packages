@@ -14,8 +14,7 @@ Gravity-specific RPMs do.
 | mesa | Fedora Mesa libraries, DRI and Vulkan drivers | Fedora 44 dist-git |
 | uboot-tools | uboot-tools, uboot-images-armv8 | Asahi packaging plus six Gravity patches |
 | gravity-bootloader | gravity-bootloader, gravity-bootloader-stage1, gravity-bootloader-tools | Fedora 44 m1n1 packaging, pinned M4 fork |
-| gravity-scripts | gravity-scripts, gravity-fwupdate, dracut-gravity, update-m1n1, linux-firmware-vendor, gravity-battery | Fedora packaging and Gravity consumers |
-| gravity-installer | python3-gravity_firmware and gravity-fwextract | Linux half of installer packaging |
+| gravity-scripts | gravity-scripts, gravity-fwupdate, python3-gravity_firmware (gravity-fwextract), dracut-gravity, update-m1n1, linux-firmware-vendor, gravity-battery | Fedora packaging and Gravity consumers |
 | gravity-platform-metapackage | core, audio, plasma, desktop, fex, mesa integration | Asahi platform dependencies plus Gravity packages |
 | gravity-repos | Gravity repository configuration and signing key | Gravity |
 | gravity-remix-scripts | ESP extra-RPM installation and first-boot swap | Asahi first-boot scripts |
@@ -47,7 +46,8 @@ bundle and bootloader release assets are built separately.
 
 Run `make status` for unresolved inputs:
 
-- Publish the pinned scripts and installer source commits to their Gravity URLs.
+- Publish the pinned scripts source commit to GravityLinux/scripts. It now
+  supplies gravity-fwextract too; gravity-installer is no longer a source package.
 - Mesa is temporarily pinned to Gravity's main at `4bd3d1801ae6` (26.3.0-devel)
   for hardware image testing. Confirm the final release revision with Niklas.
 - Confirm and pin the speakersafetyd fork and reconcile its version, Cargo
@@ -121,12 +121,13 @@ uploading local SRPMs. It includes the exact form settings and webhook setup.
 Create one project with the `fedora-44-aarch64` chroot. Configure that project
 to make already built packages available to subsequent builds.
 
-1. Independent: kernel, Mesa, uboot-tools, gravity-installer, gravity-logos,
+1. Independent: kernel, Mesa, uboot-tools, gravity-logos,
    rust-speakersafetyd (once its source inputs are ready),
    gravity-release, gravity-appstream-metadata, gravity-remix-scripts.
 2. gravity-bootloader after gravity-logos.
-3. gravity-scripts after gravity-bootloader, uboot-images-armv8 and python3-gravity_firmware
-   are available for installation tests.
+3. gravity-scripts after gravity-bootloader and uboot-images-armv8 are available
+   for installation tests. This source also builds python3-gravity_firmware,
+   retaining its binary package name so existing systems upgrade normally.
 4. gravity-repos after project/key configuration; gravity-platform-metapackage
    last, then test the complete image dependency transaction.
 

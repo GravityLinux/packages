@@ -1,7 +1,14 @@
+%global pypi_name gravity_firmware
+%if 0%{?__isa_bits} == 32
+%global libsymbolsuffix %{nil}
+%else
+%global libsymbolsuffix ()(64bit)
+%endif
+
 Name:           gravity-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        102.gravity%{?dist}
+Release:        103.gravity%{?dist}
 Summary:        Miscellaneous admin scripts for Gravity Linux
 
 License:        MIT
@@ -18,6 +25,10 @@ Conflicts:      asahi-scripts
 BuildRequires:  make
 BuildRequires:  sed
 BuildRequires:  systemd-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3dist(setuptools)
+BuildRequires:  python3dist(asn1)
 
 Requires:       bash
 Requires:       coreutils
@@ -33,11 +44,22 @@ This package contains miscellaneous admin scripts for Gravity Linux.
 Summary:        Gravity Linux firmware extractor
 
 Requires:       %{name} = %{version}-%{release}
-# Not using python3dist(gravity-firmware) because its version is fixed
-Requires:       python3-gravity_firmware >= 0.9.1
+Requires:       python3-%{pypi_name} = %{version}-%{release}
 
 %description -n gravity-fwupdate
 Gravity Linux firmware updater.
+
+%package -n     python3-%{pypi_name}
+Summary:        Gravity Linux firmware extraction tools
+Requires:       liblzfse.so.1%{libsymbolsuffix}
+Requires:       python3dist(asn1)
+Requires:       tar
+Conflicts:      python3-asahi_firmware
+
+%description -n python3-%{pypi_name}
+Extract machine-specific firmware saved by the Swift macOS installer using
+gravity-fwextract. This replaces the same binary package formerly built from
+the retired gravity-installer source RPM. No Apple firmware is distributed.
 
 %package -n     dracut-gravity
 Summary:        Dracut config for Apple Silicon Macs
@@ -84,20 +106,32 @@ on system start.
 
 %prep
 %autosetup -p1
+# Use Fedora's ASN.1 library, as in the previous firmware-tool package.
+rm %{pypi_name}/asn1.py
+
+%generate_buildrequires
+%pyproject_buildrequires
 
 %build
-# nothing to do here
+%pyproject_wheel
 
 %install
 %make_install install-fedora \
   PREFIX="%{_prefix}" \
   BIN_DIR="%{_sbindir}" \
+  INSTALL_FIRMWARE=0 \
   CONFIG_DIR="%{_sysconfdir}/sysconfig"
+%pyproject_install
+%pyproject_save_files %{pypi_name}
 
 install -Ddpm0755 %{buildroot}%{_prefix}/lib/firmware/vendor
 install -Dpm0644 %SOURCE1 %{buildroot}%{_sysconfdir}/sysconfig/update-m1n1
 # Install kernel-install script
 install -Dpm0755 -t %{buildroot}%{_kernel_install_dir} %{SOURCE2}
+
+%check
+%pyproject_check_import
+make check PYTHON=%{python3}
 
 %transfiletriggerin -n gravity-fwupdate -- %{_sbindir}/gravity-fwupdate %{_bindir}/gravity-fwextract
 %{_sbindir}/gravity-fwupdate || :
@@ -119,6 +153,11 @@ grep -q 'gravity_firmware' && %{_sbindir}/gravity-fwupdate || :
 %files -n gravity-fwupdate
 %license LICENSE
 %{_sbindir}/gravity-fwupdate
+
+%files -n python3-%{pypi_name} -f %{pyproject_files}
+%license LICENSE
+%doc docs/swift-firmware-handoff.md
+%{_bindir}/gravity-fwextract
 
 %files -n dracut-gravity
 %license LICENSE
@@ -143,6 +182,10 @@ grep -q 'gravity_firmware' && %{_sbindir}/gravity-fwupdate || :
 %ghost %config(noreplace) %{_sysconfdir}/udev/macsmc-battery.conf
 
 %changelog
+* Thu Nov 05 2026 Gravity Linux maintainers - 20260915-103.gravity
+- Build the Linux firmware tools from the scripts repository
+- Retain python3-gravity_firmware upgrades and add j700 archive support
+
 * Tue Sep 15 2026 Gravity Linux maintainers - 20260915-102.gravity
 - Require gravity-bootloader under its final package name
 
