@@ -1,0 +1,53 @@
+From 6de3ccc25f37c6a14a3a8e1d22c207bf8e2cb519 Mon Sep 17 00:00:00 2001
+From: Niklas Sheth <hi@niklassheth.com>
+Date: Sun, 8 Nov 2026 16:22:49 -0500
+Subject: [PATCH] Add the J713 (MacBook Air 13", M4) as an alias of the J413
+
+Same chassis and speaker layout as the J413 and J613 (two woofers, two
+tweeters, SN012776 amps at gain 15). Like the J613, use the J413 graph.
+No mic graph: the J713 has no internal mic support yet.
+---
+ Makefile              |  2 +-
+ conf/wireplumber.conf | 13 +++++++++++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 1166272..3712af4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@ aliases-j316:
+ 	make -f $$PWD/Makefile -C firs/j316 graph-j416.json mic-j416.json graph-j516.json mic-j516.json
+ 
+ aliases-j413:
+-	make -f $$PWD/Makefile -C firs/j413 graph-j613.json mic-j613.json
++	make -f $$PWD/Makefile -C firs/j413 graph-j613.json mic-j613.json graph-j713.json
+ 
+ aliases-j415:
+ 	make -f $$PWD/Makefile -C firs/j415 graph-j615.json mic-j615.json
+diff --git a/conf/wireplumber.conf b/conf/wireplumber.conf
+index 1db7630..b00f26e 100644
+--- a/conf/wireplumber.conf
++++ b/conf/wireplumber.conf
+@@ -421,6 +421,19 @@ node.software-dsp.rules = [
+         }
+     }
+ 
++    # J713 (MacBook Air 13", M4, 2025)
++    {
++        matches = [
++            { api.alsa.path = "hw:AppleJ713,1" }
++        ]
++        actions = {
++            create-filter = {
++                filter-path = "/usr/share/asahi-audio/j413/graph-j713.json"
++                hide-parent = true
++            }
++        }
++    }
++
+     # J615 (MacBook Air 15", M3, 2023)
+     {
+         matches = [
+-- 
+2.55.0
+

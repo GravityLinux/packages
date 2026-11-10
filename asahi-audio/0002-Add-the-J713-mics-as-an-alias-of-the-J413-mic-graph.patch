@@ -1,0 +1,51 @@
+From e9e149975cf3296fc6030cee0bf6c54cad9a3862 Mon Sep 17 00:00:00 2001
+From: Niklas Sheth <hi@niklassheth.com>
+Date: Sun, 8 Nov 2026 19:06:35 -0500
+Subject: [PATCH] Add the J713 mics as an alias of the J413 mic graph
+
+Same chassis and three-mic array as the J613, which already uses the J413
+Triforce graph. Untested on hardware: the T8132 AOP mic path isn't
+verified yet.
+---
+ Makefile              |  2 +-
+ conf/wireplumber.conf | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 3712af4..29e57e0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@ aliases-j316:
+ 	make -f $$PWD/Makefile -C firs/j316 graph-j416.json mic-j416.json graph-j516.json mic-j516.json
+ 
+ aliases-j413:
+-	make -f $$PWD/Makefile -C firs/j413 graph-j613.json mic-j613.json graph-j713.json
++	make -f $$PWD/Makefile -C firs/j413 graph-j613.json mic-j613.json graph-j713.json mic-j713.json
+ 
+ aliases-j415:
+ 	make -f $$PWD/Makefile -C firs/j415 graph-j615.json mic-j615.json
+diff --git a/conf/wireplumber.conf b/conf/wireplumber.conf
+index b00f26e..003db1a 100644
+--- a/conf/wireplumber.conf
++++ b/conf/wireplumber.conf
+@@ -433,6 +433,17 @@ node.software-dsp.rules = [
+             }
+         }
+     }
++    {
++        matches = [
++            { api.alsa.path = "hw:AppleJ713HPAI,0" }
++        ]
++        actions = {
++            create-filter = {
++                filter-path = "/usr/share/asahi-audio/j413/mic-j713.json"
++                hide-parent = true
++            }
++        }
++    }
+ 
+     # J615 (MacBook Air 15", M3, 2023)
+     {
+-- 
+2.55.0
+
