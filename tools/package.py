@@ -148,7 +148,39 @@ def snapshot(recipe, destination, source_dir=None):
         raise ValueError("Failed to create source archive")
 
 
+def verbatim_snapshot(package_dir, recipe, destination):
+    # For packages that keep a complete upstream tree here: subdirectories, the
+    # spec (a test may read it) and executable bits (Git's 0755/0644) are
+    # archived as they are; ownership and times stay fixed.
+    with tempfile.TemporaryFile() as raw:
+        with tarfile.open(fileobj=raw, mode="w") as archive:
+            root = recipe["root"]
+            info = tarfile.TarInfo(root)
+            info.type, info.mode = tarfile.DIRTYPE, 0o755
+            archive.addfile(info)
+            for path in sorted(package_dir.rglob("*")):
+                name = root + "/" + path.relative_to(package_dir).as_posix()
+                if path.is_dir():
+                    info = tarfile.TarInfo(name)
+                    info.type, info.mode = tarfile.DIRTYPE, 0o755
+                    archive.addfile(info)
+                    continue
+                if not path.is_file():
+                    raise ValueError(f"Unsupported entry in {package_dir}: {path}")
+                info = archive.gettarinfo(str(path), name)
+                info.uid = info.gid = info.mtime = 0
+                info.uname = info.gname = ""
+                info.mode = 0o755 if path.stat().st_mode & 0o111 else 0o644
+                with path.open("rb") as stream:
+                    archive.addfile(info, stream)
+        raw.seek(0)
+        with destination.open("wb") as out:
+            subprocess.run(["gzip", "-n", "-c"], stdin=raw, stdout=out, check=True)
+
+
 def local_snapshot(package_dir, recipe, destination):
+    if recipe.get("verbatim"):
+        return verbatim_snapshot(package_dir, recipe, destination)
     # Fixed metadata makes the archive reproducible from package contents.
     with tempfile.TemporaryFile() as raw:
         with tarfile.open(fileobj=raw, mode="w") as archive:
