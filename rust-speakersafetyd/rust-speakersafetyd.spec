@@ -10,10 +10,14 @@ Vendor:         Gravity Linux
 Summary:        Speaker protection daemon for embedded Linux systems
 
 License:        MIT
-URL:            https://github.com/GravityLinux/speakersafetyd
-# Git snapshot assembled by tools/package.py; no crates.io release required.
-Source0:        %{crate}-%{version}.tar.gz
-# Reconcile Fedora's crate-metadata and j504 patches against the selected fork.
+URL:            https://crates.io/crates/speakersafetyd
+Source:         https://crates.io/api/v1/crates/%{crate}/%{version}/download#/%{crate}-%{version}.crate
+# Manually created patch for downstream crate metadata changes (Fedora)
+Patch:          speakersafetyd-fix-metadata.diff
+# backport https://github.com/AsahiLinux/speakersafetyd/pull/34 (j504 config fix, Fedora)
+Patch:          0001-j504-Write-the-full-speaker-names-in-conf.patch
+# Gravity: J713 (MacBook Air 13", M4) profile and udev rule
+Patch:          0001-Add-the-J713-MacBook-Air-13-M4.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 BuildRequires:  systemd-rpm-macros
@@ -33,7 +37,7 @@ Summary:        %{summary}
 License:        (Apache-2.0 OR MIT) AND MIT AND (MIT OR Apache-2.0) AND (MIT OR LGPL-3.0-or-later) AND MPL-2.0
 # LICENSE.dependencies contains a full license breakdown
 Requires:       systemd-udev
-# Require the downstream implementation without renaming its executable/service.
+# Gravity speaker profiles (J713) on top of upstream speakersafetyd.
 Provides:       gravity-speakersafetyd = %{version}-%{release}
 
 %description -n %{crate} %{_description}
@@ -83,5 +87,6 @@ install -d -m 0755 %{buildroot}%{_sharedstatedir}/speakersafetyd/blackbox
 %endif
 
 %changelog
-* Wed Sep 16 2026 Gravity Linux maintainers - 2.0.1-100.gravity
-- Prepare downstream Git-source packaging; source pin and M4 validation pending
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 2.0.1-100.gravity
+- Rebase on Fedora's 2.0.1 package (crates.io source, Fedora's two patches)
+- Add the J713 (MacBook Air 13", M4) profile and udev rule

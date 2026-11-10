@@ -1,55 +1,35 @@
-# Downstream speaker protection packaging
+# Speaker protection packaging
 
 Source RPM / COPR package: `rust-speakersafetyd`.
-Binary RPM, executable and service: `speakersafetyd`.
-COPR spec path: `rust-speakersafetyd/rust-speakersafetyd.spec` in GravityLinux/packages.
+Binary RPM, executable and service: `speakersafetyd` (provides
+`gravity-speakersafetyd`).
 
-This is a preparation scaffold, not a validated M4 build. `sources.json` has no
-source pin, so the shared builder intentionally refuses to build it. The URL
-`https://github.com/GravityLinux/speakersafetyd.git` is the proposed publication
-location and needs confirmation; the fork was not publicly accessible when this
-recipe was prepared. Version 2.0.1 is inherited from Fedora, not an assertion
-about the downstream fork's version.
+## What ships
 
-## Before enabling builds
+Fedora's f44 package of upstream speakersafetyd 2.0.1 (dist-git
+`ce97ff700de0edbb672fc93c209688335bd4e065`): the crates.io source, Fedora's
+crate-metadata patch and its j504 backport, plus one Gravity patch that adds the
+J713 (MacBook Air 13", M4) profile `conf/apple/j713.conf` and its udev rule.
+The patch is commit `27ed8ede2a25` on the `j713-speakers` branch of our
+speakersafetyd checkout (based on upstream's 2.0.1 tag).
 
-1. Confirm the actual fork URL and select a full Git commit hash. A tag is not
-   required. Align spec Version and the archive/root names with Cargo.toml.
-2. Review the fork's license and Cargo dependency changes. Regenerate the binary
-   License expression from its actual dependency set if necessary.
-3. Reconcile the Fedora 44 patches. Its crate-metadata patch relaxes alsa to
-   >=0.10,<0.12 and signal-hook to >=0.4.3,<0.5. That patch targets normalized
-   crates.io Cargo.toml, so it cannot simply be applied to a Git snapshot.
-   Verify supported APIs before relaxing requirements. Its other patch fixes
-   j504 speaker names; retain that fix if the fork does not already include it.
-4. Confirm the fork still supplies the binary, service, udev rules and
-   conf/apple directory used by this spec; adapt file lists for any new layout.
-5. Build in fedora-44-aarch64 and run the Rust tests. Check the generated
-   LICENSE.dependencies and installed model profiles.
+No fork is needed. The J713 uses the macaudio kernel interface (sense PCM 2,
+"Speaker Volume Unlock", "Speaker Sample Rate") like the J413/J613, so stock
+2.0.1 runs it with the profile alone. The earlier plan for a GravityLinux
+fork came from the J773g (Mac mini) playback-energy work; the J773g's speaker
+protection is in its kernel driver and does not use this daemon.
 
-## Release safety and related packages
+## J713 profile
 
-This recipe provides `gravity-speakersafetyd`. The audio metapackage requires
-that capability as well as speakersafetyd, preventing stock Fedora's daemon
-from silently satisfying Gravity's downstream requirement.
+Amp setup and sense slots come from the ADT. The ADT has no speaker thermal
+parameters and the J713 macOS preset has not been decoded, so the profile uses
+the J413/J613 values with t_limit 10 C lower (130 C) on every speaker. Replace
+them with the decoded J713 preset when it is available.
 
-Do not enable speaker output merely because the RPM builds. Have the audio
-developer validate the M4 model profile, amplifier controls, sensing/scaling,
-thermal limits and protection/failure behavior against the matching kernel.
-Never bypass safety controls to make a packaging smoke test pass. Package tests
-must not activate hardware or start the daemon.
+## Safety
 
-Audit the matching ALSA UCM definitions and PipeWire/WirePlumber configuration.
-Our image currently takes alsa-ucm-asahi and asahi-audio from Fedora. If the new
-audio stack needs downstream changes there, those require additional source
-pins and package recipes too; this scaffold does not claim they are sufficient.
-
-## Provenance
-
-Adapted from Fedora's rust-speakersafetyd f44 spec at commit
-`ce97ff700de0edbb672fc93c209688335bd4e065`:
-https://src.fedoraproject.org/rpms/rust-speakersafetyd/tree/ce97ff700de0edbb672fc93c209688335bd4e065
-
-The service scriptlets, runtime directories, configuration installation and
-Cargo build/test macros follow that packaging. Fedora's two source patches
-are deliberately not applied blindly to an unavailable downstream Git tree.
+Do not enable speaker output merely because the RPM builds. Until the daemon
+holds and refreshes the unlock control, macaudio limits the amp volume to its
+lowest step. Validate the profile, sense scaling and failure behaviour on the
+matching kernel before release. Package tests must not activate hardware or
+start the daemon.

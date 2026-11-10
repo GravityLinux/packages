@@ -22,7 +22,7 @@ Gravity-specific RPMs do.
 | gravity-release | common, basic and KDE release identity/defaults | Asahi release packaging |
 | gravity-appstream-metadata | OS identity for software centers | Gravity |
 | gravity-logos | Bootloader and desktop logos | Gravity artwork |
-| rust-speakersafetyd | speakersafetyd (provides gravity-speakersafetyd) | Downstream audio fork; source pin and validation pending |
+| rust-speakersafetyd | speakersafetyd (provides gravity-speakersafetyd) | Fedora 2.0.1 plus the J713 profile |
 
 U-Boot's AArch64 image build is limited to `apple_m1`; host utilities are retained.
 
@@ -50,8 +50,7 @@ Run `make status` for unresolved inputs:
 - Publish the pinned scripts and installer source commits to their Gravity URLs.
 - Mesa is temporarily pinned to Gravity's main at `4bd3d1801ae6` (26.3.0-devel)
   for hardware image testing. Confirm the final release revision with Niklas.
-- Confirm and pin the speakersafetyd fork and reconcile its version, Cargo
-  dependencies and safety profiles with the prepared rust-speakersafetyd spec.
+- Validate the J713 speakersafetyd profile on hardware (rust-speakersafetyd/README.md).
 - COPR is configured as `adevwithanidea/gravity`; its public signing key is
   pinned in `gravity-repos/RPM-GPG-KEY-gravity`.
 - Publish the pinned artwork revision: artwork is CC BY 4.0, the generator is
