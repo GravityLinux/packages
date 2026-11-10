@@ -4,7 +4,7 @@
 Name:           gravity-platform-metapackage
 Vendor:         Gravity Linux
 Version:        0
-Release:        103.gravity%{?dist}
+Release:        110.gravity%{?dist}
 Summary:        Metapackage declaring Asahi platform dependencies
 Group:          Metapackages
 License:        MIT
@@ -12,8 +12,6 @@ URL:            https://pagure.io/fedora-asahi/gravity-platform-metapackage
 ExclusiveArch:  aarch64
 Source1:        FAR_grub2_config_fixup.sh
 Source2:        10-asahi-browser-apple.conf
-Source3:        50-gravity-mesa.conf
-Source4:        50-gravity-plasmalogin-mesa.conf
 
 BuildRequires:  systemd-rpm-macros
 Requires:       %{name}-core = %{version}-%{release}
@@ -44,12 +42,29 @@ software dependencies.
 %package core
 Summary:        Metapackage declaring core Asahi platform dependencies
 Requires:       alsa-ucm-asahi
-Requires:       gravity-fwupdate >= 20260915-100
-Requires:       dracut-gravity >= 20260915-100
-Requires:       kernel-16k
-Requires:       kernel-16k-modules-extra
+# The platform scripts tested with kernel-p3s (E2E upgrade 2026-11-08): the
+# dracut and update-m1n1 fixes, and remix-scripts 105, which moves pre-102
+# installs from the disk swapfile kernel-p3s keeps off to zram. Without it a
+# bare "dnf install steam" on a 20260920 install left the machine with no swap.
+Requires:       gravity-fwupdate >= 20260915-103
+Requires:       dracut-gravity >= 20260915-103
+Requires:       update-m1n1 >= 20260915-103
+Requires:       gravity-remix-scripts >= 20260915-105
+# kernel-p3s is the one Gravity kernel for every supported board (one config,
+# all device trees). With "(kernel-16k or kernel-p3s)" the solver was free to
+# pick the stock 7.1.13 kernel, which has no M4 support.
+Requires:       kernel(p3s)
 Requires:       update-m1n1
 Requires:       tiny-dfr
+# Keep installed sibling subpackages at this release. Installs from the
+# 20260920 image have -core, -desktop, -fex, -mesa and -plasma but not the base
+# package (whose conditional Requires pin them), so a bare "dnf install steam"
+# upgraded only -core and left -mesa 103 with its nocompress session default.
+Requires:       (%{name}-audio = %{version}-%{release} if %{name}-audio)
+Requires:       (%{name}-desktop = %{version}-%{release} if %{name}-desktop)
+Requires:       (%{name}-fex = %{version}-%{release} if %{name}-fex)
+Requires:       (%{name}-mesa = %{version}-%{release} if %{name}-mesa)
+Requires:       (%{name}-plasma = %{version}-%{release} if %{name}-plasma)
 Requires:       (widevine-installer if (chromium or firefox))
 %if 0%{?fedora} >= 43
 %dnl Require the dnf5 backend for PackageKit
@@ -107,6 +122,13 @@ fi
 Summary:        Metapackage declaring audio support Asahi platform dependencies
 Requires:       asahi-audio >= 0.5-1
 # J773g speaker protection is implemented by the kernel driver.
+# J713 (MacBook Air 13", M4): the Gravity builds carry its DSP graphs (speakers
+# and mics), UCM (speakers, headphones, AOP mics) and speakersafetyd profile.
+# speakersafetyd is started by udev only for macaudio cards it has a profile
+# for, so it stays inactive on the mini.
+Requires:       asahi-audio >= 4.1-101.gravity
+Requires:       alsa-ucm-asahi >= 10-102.gravity
+Requires:       speakersafetyd >= 2.0.1-100.gravity
 Conflicts:      pulseaudio
 
 %description audio
@@ -161,6 +183,10 @@ Requires:       grub2-tools-minimal
 Requires:       grub2-tools
 Recommends:     gravity-battery
 Recommends:     mesa-libOpenCL
+# x86 programs out of the box: FEX with 4K pages on P3S kernels (gravity-x86,
+# formerly p3s-fex-4k). It pulls fex-emu, which in turn pulls the -fex
+# subpackage.
+Recommends:     gravity-x86
 
 %description desktop
 This package declares recommeded packages for Desktop Environment Asahi platform installations.
@@ -193,14 +219,10 @@ Summary:        Metapackage shipping Mesa configuration for Asahi systems
 Requires:       mesa-filesystem
 
 %description mesa
-This package contains Asahi-specific Mesa driconf files and environment
-defaults for desktop applications and the Plasma login screen.
+This package contains Asahi-specific Mesa driconf files.
 
 %files mesa
 %{_datadir}/drirc.d/10-asahi-browser-apple.conf
-%{_environmentdir}/50-gravity-mesa.conf
-%dir %{_unitdir}/plasmalogin.service.d
-%{_unitdir}/plasmalogin.service.d/50-gravity-plasmalogin-mesa.conf
 
 
 %dnl -------------------------------------------------------------------
@@ -237,10 +259,37 @@ install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name}-desktop %SOURCE1
 %endif
 
 install -Dpm0644 -t %{buildroot}%{_datadir}/drirc.d %SOURCE2
-install -Dpm0644 -t %{buildroot}%{_environmentdir} %SOURCE3
-install -Dpm0644 -t %{buildroot}%{_unitdir}/plasmalogin.service.d %SOURCE4
 
 %changelog
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-110.gravity
+- core: require the kernel(p3s) capability instead of the kernel-p3s name
+
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-109.gravity
+- core: keep installed -audio, -desktop, -fex, -mesa and -plasma at the same
+  release, so a bare "dnf install steam" on a 20260920 install also moves
+  -mesa off the nocompress default
+- desktop: recommend gravity-x86 (p3s-fex-4k renamed)
+
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-108.gravity
+- audio: require the Gravity asahi-audio, alsa-ucm-asahi and speakersafetyd
+  builds with the J713 (MacBook Air 13", M4) speakers, headphones and mics
+
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-107.gravity
+- mesa: stop setting ASAHI_MESA_DEBUG=nocompress for desktop sessions and
+  Plasma Login; Apple9 Mesa supports lossless compression since 2026-10-03
+
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-106.gravity
+- core: require the platform scripts tested with kernel-p3s: gravity-fwupdate,
+  dracut-gravity and update-m1n1 >= 20260915-103, gravity-remix-scripts >=
+  20260915-105 (zram migration for pre-102 installs)
+
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-105.gravity
+- core: require kernel-p3s, the one Gravity kernel
+- desktop: recommend p3s-fex-4k so desktop installs run x86 programs
+
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-104.gravity
+- core: accept kernel-p3s (the M4 release kernel) in place of kernel-16k
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 0-103.gravity
 - Disable Mesa framebuffer compression for desktop sessions and Plasma Login
 
