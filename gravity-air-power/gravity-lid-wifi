@@ -1,0 +1,113 @@
+#!/usr/bin/python3
+# SPDX-License-Identifier: MIT
+# Copyright (C) 2026 Niklas Sheth
+"""Sleep-free Air standby policy: cached EV_SW/SW_LID -> brcmfmac PM mode.
+
+No periodic polling. Firmware commands occur on startup, lid changes, or a
+NetworkManager reapply signal; only transient failures get bounded retries.
+DCMD transport follows the public Linux brcmfmac vendor.[ch]/fwil.h protocol.
+"""
+import socket,struct,itertools,json,sys
+# Constants generated from Linux UAPI headers; see UAPI-CONSTANTS.txt.
+CTRL_GETFAMILY=3;CTRL_FAMILY_NAME=2;CTRL_FAMILY_ID=1
+NL80211_CMD_VENDOR=103;IFINDEX=3;VENDOR_ID=195;VENDOR_SUBCMD=196;VENDOR_DATA=197
+seq=itertools.count(1)
+def attr(k,b):
+ n=4+len(b);return struct.pack('HH',n,k)+b+b'\0'*((-n)%4)
+def attrs(b):
+ d={};i=0
+ while i+4<=len(b):
+  n,k=struct.unpack_from('HH',b,i)
+  if n<4 or i+n>len(b):raise ValueError('malformed netlink attribute')
+  d[k&0x3fff]=b[i+4:i+n];i+=(n+3)&~3
+ return d
+def exchange(family,command,body):
+ sock=socket.socket(socket.AF_NETLINK,socket.SOCK_RAW,16);sock.settimeout(5);sock.bind((0,0));sid=next(seq);payload=struct.pack('BBH',command,1,0)+body
+ sock.send(struct.pack('IHHII',16+len(payload),family,5,sid,0)+payload);results=[]
+ try:
+  while True:
+   data=sock.recv(65536);i=0
+   while i+16<=len(data):
+    n,t,flags,s,pid=struct.unpack_from('IHHII',data,i);b=data[i+16:i+n];i+=(n+3)&~3
+    if s!=sid:continue
+    if t==2:
+     err=struct.unpack_from('i',b)[0]
+     if err:raise OSError(-err,__import__('os').strerror(-err))
+     return results
+    if t==3:return results
+    results.append(attrs(b[4:]))
+ finally:sock.close()
+def dcmd(cmd,size,payload=b'',write=False):
+ f=exchange(16,CTRL_GETFAMILY,attr(CTRL_FAMILY_NAME,b'nl80211\0'));family=struct.unpack('H',f[0][CTRL_FAMILY_ID])[0]
+ hdr=struct.pack('IiIII',cmd,size,20,int(write),0);body=attr(IFINDEX,struct.pack('I',socket.if_nametoindex(IFACE)))+attr(VENDOR_ID,struct.pack('I',0x001018))+attr(VENDOR_SUBCMD,struct.pack('I',1))+attr(VENDOR_DATA,hdr+payload)
+ out=exchange(family,NL80211_CMD_VENDOR,body);data=b''
+ for q in out:
+  a=attrs(q.get(VENDOR_DATA,b''));data+=a.get(2,b'')
+ return data
+
+import argparse,fcntl,os,select,signal,time
+from pathlib import Path
+IFACE='wld0'
+EVENT=struct.Struct('@llHHi')
+EV_SW=5;SW_LID=0;EVIOCGSW=0x8008451b
+
+def log(**fields):
+ print(json.dumps(dict(monotonic_ns=time.monotonic_ns(),**fields)),flush=True)
+def get_pm():
+ data=dcmd(85,4,bytes(4))
+ if len(data)!=4:raise OSError('short PM reply')
+ return struct.unpack('<I',data)[0]
+def set_pm(mode):
+ assert mode in (1,2)
+ t=time.monotonic_ns();old=get_pm()
+ if old!=mode:dcmd(86,4,struct.pack('<I',mode),True)
+ actual=get_pm()
+ if actual!=mode:raise OSError(f'PM readback {actual}, expected {mode}')
+ log(event='applied',old_mode=old,mode=actual,apply_us=(time.monotonic_ns()-t)//1000)
+def cached_lid(fd):
+ bits=bytearray(8);fcntl.ioctl(fd,EVIOCGSW,bits);return bool(bits[0]&1)
+def find_lid():
+ for p in sorted(Path('/sys/class/input').glob('event*/device/name')):
+  if p.read_text().strip()!='Apple SMC power/lid events':continue
+  # Mini's power-button-only device has no SW_LID capability.
+  if not int((p.parent/'capabilities/sw').read_text().split()[-1],16)&1:continue
+  return '/dev/input/'+p.parts[-3]
+ return None
+
+def main():
+ global IFACE
+ ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--interface',default='wld0');ap.add_argument('--lid-device',default='auto');ap.add_argument('--closed-mode',choices=['max','fast'],default='max');ap.add_argument('--once',choices=['open','closed']);a=ap.parse_args();IFACE=a.interface
+ if a.once:set_pm(1 if a.once=='closed'and a.closed_mode=='max'else 2);return
+ node=find_lid()if a.lid_device=='auto'else a.lid_device
+ if not node:log(event='inactive',reason='no Apple SMC lid input');return
+ fd=os.open(node,os.O_RDONLY|os.O_NONBLOCK);r,w=os.pipe2(os.O_NONBLOCK|os.O_CLOEXEC)
+ for sig in [signal.SIGHUP,signal.SIGTERM,signal.SIGINT]:signal.signal(sig,lambda n,f:os.write(w,bytes([n])))
+ closed=cached_lid(fd);pending=True;tries=0;deadline=0.;buf=b'';running=True
+ log(event='start',device=node,interface=IFACE,closed=closed,closed_mode=a.closed_mode)
+ try:
+  while running:
+   if pending and time.monotonic()>=deadline:
+    try:set_pm(1 if closed and a.closed_mode=='max'else 2);pending=False;tries=0
+    except OSError as e:
+     delays=[.1,.25,.5,1.,2.];log(event='retry',closed=closed,error=str(e),attempt=tries+1)
+     if tries==len(delays):pending=False
+     else:deadline=time.monotonic()+delays[tries];tries+=1
+   ready,_,_=select.select([fd,r],[],[],max(0,deadline-time.monotonic())if pending else None)
+   if r in ready:
+    signs=os.read(r,128)
+    if any(x in signs for x in [signal.SIGTERM,signal.SIGINT]):running=False;continue
+    closed=cached_lid(fd);pending=True;tries=0;deadline=0.;log(event='reapply',closed=closed)
+   if fd in ready:
+    data=os.read(fd,EVENT.size*64)
+    if not data:raise OSError('lid input removed')
+    buf+=data
+    while len(buf)>=EVENT.size:
+     sec,usec,kind,code,value=EVENT.unpack_from(buf);buf=buf[EVENT.size:]
+     if kind==EV_SW and code==SW_LID:
+      if value not in (0,1):continue
+      closed=bool(value);pending=True;tries=0;deadline=0.;log(event='lid',closed=closed,input_sec=sec,input_usec=usec)
+ finally:
+  try:set_pm(2)
+  except OSError as e:log(event='restore_error',error=str(e))
+  os.close(fd);os.close(r);os.close(w)
+if __name__=='__main__':main()

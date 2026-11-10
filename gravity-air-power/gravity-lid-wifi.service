@@ -1,0 +1,19 @@
+[Unit]
+Description=Air Wi-Fi power saving while the lid is closed
+Documentation=file:///usr/share/doc/gravity-air-power/README.md
+After=systemd-udevd.service NetworkManager.service
+ConditionFirmware=device-tree-compatible(apple,j713)
+
+[Service]
+Type=simple
+Environment=GRAVITY_LID_WIFI_INTERFACE=wld0
+Environment=GRAVITY_LID_WIFI_CLOSED_MODE=max
+EnvironmentFile=-/etc/default/gravity-lid-wifi
+ExecStart=/usr/libexec/gravity-lid-wifi --interface ${GRAVITY_LID_WIFI_INTERFACE} --closed-mode ${GRAVITY_LID_WIFI_CLOSED_MODE}
+ExecStopPost=-/usr/libexec/gravity-lid-wifi --interface ${GRAVITY_LID_WIFI_INTERFACE} --once open
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes

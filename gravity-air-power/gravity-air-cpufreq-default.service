@@ -1,0 +1,14 @@
+[Unit]
+Description=Apply the fanless J713 cpufreq boost default
+Documentation=file:///usr/share/doc/gravity-air-power/README.md
+DefaultDependencies=no
+After=local-fs.target systemd-modules-load.service
+Before=sysinit.target display-manager.service
+ConditionFirmware=device-tree-compatible(apple,j713)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/gravity-air-cpufreq-default
+RemainAfterExit=yes
+TimeoutStartSec=10
+

@@ -1,0 +1,2 @@
+# Activate only the Apple SMC device which actually advertises SW_LID.
+ACTION=="add", SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Apple SMC power/lid events", ATTRS{capabilities/sw}=="1", TAG+="systemd", ENV{SYSTEMD_WANTS}+="gravity-lid-wifi.service"

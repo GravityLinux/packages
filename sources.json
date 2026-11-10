@@ -91,5 +91,11 @@
     "verbatim": true,
     "archive": "gravity-x86-0.3.0.tar.gz",
     "root": "gravity-x86-0.3.0"
+  },
+  "gravity-air-power": {
+    "kind": "local",
+    "verbatim": true,
+    "archive": "gravity-air-power-20261104.tar.gz",
+    "root": "gravity-air-power-20261104"
   }
 }

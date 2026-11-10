@@ -1,0 +1,15 @@
+# Started by 90-gravity-usb4-sleep-inhibit.rules for each USB4 domain; the
+# instance is the domain's escaped sysfs path. Removing the domain stops it.
+[Unit]
+Description=Block system sleep while a USB4/Thunderbolt link is up
+Documentation=file:///usr/share/doc/gravity-air-power/README.md
+BindsTo=%i.device
+After=%i.device systemd-logind.service gravity-air-s2idle-default.service
+
+[Service]
+# Only where Gravity enabled sleep for this boot.
+ExecCondition=/usr/libexec/gravity-air-s2idle-default --check
+ExecStart=/usr/bin/systemd-inhibit --what=sleep:handle-lid-switch --mode=block --who=USB4 "--why=USB4 device connected" /usr/bin/sleep infinity
+ExecStopPost=-/usr/libexec/gravity-usb4-sleep-release %f
+Restart=on-failure
+RestartSec=2

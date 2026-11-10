@@ -1,0 +1,19 @@
+[Unit]
+Description=Enable suspend-to-idle on the J713 Air
+Documentation=file:///usr/share/doc/gravity-air-power/README.md
+DefaultDependencies=no
+After=systemd-remount-fs.service
+Before=sysinit.target systemd-logind.service display-manager.service systemd-suspend.service
+ConditionFirmware=device-tree-compatible(apple,j713)
+# gravity.air_s2idle=0 keeps the vendor no-sleep policy for a boot.
+ConditionKernelCommandLine=!gravity.air_s2idle=0
+
+[Service]
+Type=oneshot
+ExecCondition=/usr/libexec/gravity-air-s2idle-default --eligible
+ExecStart=/usr/libexec/gravity-air-s2idle-default
+ExecStartPost=/usr/bin/systemctl daemon-reload
+ExecStop=/usr/libexec/gravity-air-s2idle-default --disable
+ExecStopPost=/usr/bin/systemctl daemon-reload
+RemainAfterExit=yes
+
