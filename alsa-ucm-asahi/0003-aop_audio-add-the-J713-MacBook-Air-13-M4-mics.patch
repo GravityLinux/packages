@@ -1,0 +1,27 @@
+From 4b17869efe1a2587941e1e89ab19e90f0d46a241 Mon Sep 17 00:00:00 2001
+From: Niklas Sheth <hi@niklassheth.com>
+Date: Sun, 8 Nov 2026 19:06:25 -0500
+Subject: [PATCH] aop_audio: add the J713 (MacBook Air 13", M4) mics
+
+Three-mic array like the J613 (ADT audio-hp-mic: imi1..imi3, 48 kHz).
+Untested: the T8132 AOP driver path isn't verified on hardware yet.
+---
+ .../MacBook Air J713 High-Power Audio Interface.conf        | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 ucm2/conf.d/aop_audio/MacBook Air J713 High-Power Audio Interface.conf
+
+diff --git a/ucm2/conf.d/aop_audio/MacBook Air J713 High-Power Audio Interface.conf b/ucm2/conf.d/aop_audio/MacBook Air J713 High-Power Audio Interface.conf
+new file mode 100644
+index 0000000..6391ad5
+--- /dev/null
++++ b/ucm2/conf.d/aop_audio/MacBook Air J713 High-Power Audio Interface.conf	
+@@ -0,0 +1,6 @@
++Syntax 7
++
++SectionUseCase."HiFi" {
++	Comment "Default"
++	File "/conf.d/aop_audio/3chan/HiFi.conf"
++}
+-- 
+2.55.0
+

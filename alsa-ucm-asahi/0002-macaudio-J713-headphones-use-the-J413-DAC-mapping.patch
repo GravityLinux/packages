@@ -1,0 +1,44 @@
+From 0fb2830da9f4260e68d908a7e26af8f24a4e0952 Mon Sep 17 00:00:00 2001
+From: Niklas Sheth <hi@niklassheth.com>
+Date: Sun, 8 Nov 2026 19:21:24 -0500
+Subject: [PATCH] macaudio: J713 headphones: use the J413 DAC mapping
+
+Speculative, pending a listen test. The crossed mapping came from a listen
+test on a kernel whose T8132 MCA serializers started at a random slot of
+the frame (a two-slot frame rotated by one slot sounds like an L/R swap).
+With the serializers aligned at every start (kernel ae1e111ceb53), the
+J413/J613 mapping (DAC A = ASP RX CH1) is most likely right.
+---
+ ucm2/conf.d/macaudio/cs42l84/Headphones-j713.conf | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/ucm2/conf.d/macaudio/cs42l84/Headphones-j713.conf b/ucm2/conf.d/macaudio/cs42l84/Headphones-j713.conf
+index 75c2e9c..b7d702d 100644
+--- a/ucm2/conf.d/macaudio/cs42l84/Headphones-j713.conf
++++ b/ucm2/conf.d/macaudio/cs42l84/Headphones-j713.conf
+@@ -1,17 +1,17 @@
+ # J713 (MacBook Air 13", M4): headphones only, the T8132 card has no headset
+ # capture yet.
+ #
+-# The DAC sources cross: with DAC A on ASP RX CH1 the left channel played in
+-# the right ear (J713 listen test, 2026-11-08). UNVERIFIED until a listen test
+-# with this mapping.
++# Same DAC mapping as the J413/J613. An earlier listen test heard L/R swapped
++# with it, but that kernel still rotated the T8132 TDM frame by one slot at
++# random stream starts. UNVERIFIED until a listen test on a fixed kernel.
+ 
+ SectionDevice."Headphones" {
+ 	Comment "Headphones"
+ 
+ 	EnableSequence [
+ 		cset "name='Headphone Switch' on"
+-		cset "name='Jack DACA Select' 'ASP RX CH2'"
+-		cset "name='Jack DACB Select' 'ASP RX CH1'"
++		cset "name='Jack DACA Select' 'ASP RX CH1'"
++		cset "name='Jack DACB Select' 'ASP RX CH2'"
+ 	]
+ 
+ 	Value {
+-- 
+2.55.0
+

@@ -27,6 +27,10 @@
     "kind": "spec",
     "note": "Fedora f44 rust-speakersafetyd 2.0.1 (dist-git ce97ff700de0edbb672fc93c209688335bd4e065): crates.io source and Fedora's two patches, plus the J713 profile and udev rule (speakersafetyd branch j713-speakers 27ed8ede2a25, on upstream 2.0.1). Upstream speakersafetyd needs only that config for the J713; no fork is needed."
   },
+  "alsa-ucm-asahi": {
+    "kind": "spec",
+    "note": "Fedora f44 alsa-ucm-asahi 10 (dist-git b11b0738875c4f2432549c7204eebc2cb7a17a4c): the upstream v10 tarball plus the J713 profile (alsa-ucm-conf-asahi branch j713 dd9e76c, on v10)."
+  },
   "gravity-bootloader": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/bootloader.git",

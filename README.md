@@ -1,6 +1,6 @@
 # Gravity Linux RPM packaging
 
-Twelve source packages for the first Fedora 44 / aarch64 / KDE release.
+Fourteen source packages for the first Fedora 44 / aarch64 / KDE release.
 Each directory contains one RPM spec and its packaging files. Application and
 driver code remains in separate Git repositories; sources are pinned in
 [sources.json](sources.json). Repository names do not have a Gravity prefix;
@@ -23,6 +23,7 @@ Gravity-specific RPMs do.
 | gravity-appstream-metadata | OS identity for software centers | Gravity |
 | gravity-logos | Bootloader and desktop logos | Gravity artwork |
 | rust-speakersafetyd | speakersafetyd (provides gravity-speakersafetyd) | Fedora 2.0.1 plus the J713 profile |
+| alsa-ucm-asahi | alsa-ucm-asahi (provides gravity-alsa-ucm-asahi) | Fedora 10 plus the J713 profile |
 
 U-Boot's AArch64 image build is limited to `apple_m1`; host utilities are retained.
 
@@ -122,7 +123,8 @@ to make already built packages available to subsequent builds.
 
 1. Independent: kernel, Mesa, uboot-tools, gravity-installer, gravity-logos,
    rust-speakersafetyd (once its source inputs are ready),
-   gravity-release, gravity-appstream-metadata, gravity-remix-scripts.
+   gravity-release, gravity-appstream-metadata, gravity-remix-scripts,
+   alsa-ucm-asahi.
 2. gravity-bootloader after gravity-logos.
 3. gravity-scripts after gravity-bootloader, uboot-images-armv8 and python3-gravity_firmware
    are available for installation tests.

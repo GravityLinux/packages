@@ -8,5 +8,6 @@
   "https://ftp.denx.de/pub/u-boot/u-boot-2026.07.tar.bz2": "78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e",
   "https://gitlab.freedesktop.org/virgl/venus-protocol/-/archive/e94b12f301b9eb27ebead757128a18420b4f7994/venus-protocol-e94b12f301b9eb27ebead757128a18420b4f7994.tar.gz": "7c00e631fc59d849c80e0f44f80d0dfa5a4dbc45061ba11c0f675a5e5ad09caf",
   "https://github.com/rafalh/rust-fatfs/archive/4eccb50d011146fbed20e133d33b22f3c27292e7/rust-fatfs-4eccb50d011146fbed20e133d33b22f3c27292e7.tar.gz": "06302558ed3878e70e51109648e2972faf8ec444c352c31f8272a55d93850e95",
-  "https://crates.io/api/v1/crates/speakersafetyd/2.0.1/download": "30101e673466072a080e321df3b7d1165dd8b79246ba393b82bb09d8325dd814"
+  "https://crates.io/api/v1/crates/speakersafetyd/2.0.1/download": "30101e673466072a080e321df3b7d1165dd8b79246ba393b82bb09d8325dd814",
+  "https://github.com/AsahiLinux/alsa-ucm-conf-asahi/archive/v10/alsa-ucm-conf-asahi-10.tar.gz": "4cbf77e7113dbe3981c1aa271bc12f30c8af1ac3326db8e261ee8aa25cf37295"
 }
