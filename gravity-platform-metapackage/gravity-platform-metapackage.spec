@@ -4,7 +4,7 @@
 Name:           gravity-platform-metapackage
 Vendor:         Gravity Linux
 Version:        0
-Release:        111.gravity%{?dist}
+Release:        112.gravity%{?dist}
 Summary:        Metapackage declaring Asahi platform dependencies
 Group:          Metapackages
 License:        MIT
@@ -127,13 +127,12 @@ fi
 Summary:        Metapackage declaring audio support Asahi platform dependencies
 Requires:       asahi-audio >= 0.5-1
 # J773g speaker protection is implemented by the kernel driver.
-# J713 (MacBook Air 13", M4): the Gravity builds carry its DSP graphs (speakers
-# and mics), UCM (speakers, headphones, AOP mics) and speakersafetyd profile.
-# speakersafetyd is started by udev only for macaudio cards it has a profile
-# for, so it stays inactive on the mini.
-Requires:       asahi-audio >= 4.1-101.gravity
-Requires:       alsa-ucm-asahi >= 10-102.gravity
-Requires:       speakersafetyd >= 2.0.1-100.gravity
+# J713 (MacBook Air 13", M4): gravity-audio-j713 adds its UCM profiles
+# (speakers, headphones, AOP mics), DSP rules and speakersafetyd profile to
+# Fedora's alsa-ucm-asahi, asahi-audio and speakersafetyd, and replaces the
+# Gravity forks of those three. speakersafetyd is started by udev only for
+# macaudio cards it has a profile for, so it stays inactive on the mini.
+Requires:       gravity-audio-j713
 Conflicts:      pulseaudio
 
 %description audio
@@ -266,9 +265,15 @@ install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name}-desktop %SOURCE1
 install -Dpm0644 -t %{buildroot}%{_datadir}/drirc.d %SOURCE2
 
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <niklassheth@gmail.com> - 0-112.gravity
+- audio: require gravity-audio-j713 (J713 files as an add-on to Fedora's
+  asahi-audio, alsa-ucm-asahi and speakersafetyd) instead of Gravity forks of
+  those packages
+
 * Tue Nov 10 2026 Niklas Sheth <niklassheth@gmail.com> - 0-111.gravity
 - core: require kernel-modules-extra-matched, so each installed kernel-16k
   brings its -modules-extra (game controller drivers such as xpad)
+
 
 * Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-110.gravity
 - core: require the kernel(p3s) capability instead of the kernel-p3s name
