@@ -31,15 +31,17 @@ Gravity-specific RPMs do.
 U-Boot's AArch64 image build is limited to `apple_m1`; host utilities are retained.
 
 The package/dependency set retains Asahi's KDE platform dependencies, including
-older Apple hardware support. Ordinary Fedora packages such as alsa-ucm-asahi,
-asahi-audio, tiny-dfr, GRUB, shim, linux-firmware, wireless-regdb,
+older Apple hardware support. Ordinary Fedora packages such as
+tiny-dfr, GRUB, shim, linux-firmware, wireless-regdb,
 muvm and FEX are consumed from Fedora unless we need downstream changes.
 A dependency's presence does not establish M4 hardware support.
 
-Speaker protection must use our downstream fork, not Fedora's stock daemon.
-See [the speakersafetyd preparation checklist](rust-speakersafetyd/README.md).
-Matching UCM and audio-policy forks may also be needed; their requirements
-must be confirmed with the audio developer.
+Speaker protection uses upstream speakersafetyd with our J713 profile, and UCM
+uses Fedora's alsa-ucm-asahi with our J713 profile; see
+[rust-speakersafetyd](rust-speakersafetyd/README.md) and
+[alsa-ucm-asahi](alsa-ucm-asahi/README.md). asahi-audio has no J713 DSP graph
+of its own: our asahi-audio uses the J413 graph for the J713 speakers and
+microphones; see [asahi-audio](asahi-audio/README.md).
 
 AVD firmware packaging is excluded from this release. Bluetooth is not a release
 requirement. Extracted Apple firmware and IPSWs must never enter this repository,
