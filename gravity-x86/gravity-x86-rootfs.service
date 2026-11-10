@@ -1,0 +1,22 @@
+[Unit]
+Description=Mount the x86 root filesystem for FEX with the Apple GPU Mesa
+Documentation=file:///usr/share/doc/gravity-x86/README.md
+After=local-fs.target
+Before=systemd-user-sessions.service
+ConditionArchitecture=arm64
+# Always wanted by multi-user.target (a packaged link): FEX's configuration
+# names the mount.
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# The packaged Fedora image, with gravity-x86-mesa's files over it. Both
+# layers are read-only, as the image is when FEX mounts it itself.
+ExecStartPre=-/usr/bin/umount -lq /run/gravity-x86/rootfs
+ExecStartPre=-/usr/bin/umount -lq /run/gravity-x86/base
+ExecStartPre=/usr/bin/mkdir -p /run/gravity-x86/base /run/gravity-x86/rootfs
+ExecStart=/usr/bin/mount -t erofs -o ro,nodev,nosuid /usr/share/fex-emu/RootFS/default.erofs /run/gravity-x86/base
+ExecStart=/usr/bin/mount -t overlay -o ro,nodev,nosuid,lowerdir=/usr/share/gravity-x86/mesa-x86:/run/gravity-x86/base overlay /run/gravity-x86/rootfs
+# Lazy, so running x86 programs keep their view until they exit.
+ExecStop=/usr/bin/umount -l /run/gravity-x86/rootfs
+ExecStop=/usr/bin/umount -l /run/gravity-x86/base

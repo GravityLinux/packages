@@ -85,5 +85,11 @@
     "archive": "gravity-logos-20260915.tar.gz",
     "root": "gravity-logos-20260915",
     "note": "CC-BY-4.0 artwork, MIT generator, separate trademark policy. Publish this locally pinned revision."
+  },
+  "gravity-x86": {
+    "kind": "local",
+    "verbatim": true,
+    "archive": "gravity-x86-0.3.0.tar.gz",
+    "root": "gravity-x86-0.3.0"
   }
 }
