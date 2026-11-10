@@ -1,0 +1,23 @@
+From: Niklas Sheth <niklassheth@gmail.com>
+Subject: [PATCH] dracut: include gravity-firmware in hostonly builds off-device
+
+Commit 084cbae made check() return 1 when dracut runs hostonly without
+/proc/device-tree/chosen/gravity,efi-system-partition. dracut.conf.d forces
+the module with add_dracutmodules, so every hostonly initramfs built off the
+device (kiwi image builds, chroots, a boot whose stage1 did not forward the
+ESP) fails with "Module 'gravity-firmware' cannot be installed" and
+kernel-install aborts. Restore asahi-scripts' behaviour: include it.
+
+--- a/dracut/modules.d/99gravity-firmware/module-setup.sh
++++ b/dracut/modules.d/99gravity-firmware/module-setup.sh
+@@ -5,9 +5,9 @@
+ check() {
+     if [ -n "$hostonly" ] &&
+        [ ! -e /proc/device-tree/chosen/gravity,efi-system-partition ]; then
+-       return 1
++       return 0
+     elif [ -z "$hostonly" ]; then
+         return 0
+     else
+        return 0
+     fi

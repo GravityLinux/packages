@@ -1,7 +1,7 @@
 Name:           gravity-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        102.gravity%{?dist}
+Release:        104.gravity%{?dist}
 Summary:        Miscellaneous admin scripts for Gravity Linux
 
 License:        MIT
@@ -11,6 +11,8 @@ Source:         update-m1n1.sysconfig
 Source2:        15-update-m1n1.install
 
 Patch02:        0002-fedora-update-m1n1-handle-dangling-boot-dtb-symlinks.patch
+Patch03:        0003-dracut-gravity-firmware-include-when-building-images.patch
+Patch04:        0004-gravity-diagnose-p3s-t8132-package-names.patch
 
 BuildArch:      noarch
 Conflicts:      asahi-scripts
@@ -143,6 +145,15 @@ grep -q 'gravity_firmware' && %{_sbindir}/gravity-fwupdate || :
 %ghost %config(noreplace) %{_sysconfdir}/udev/macsmc-battery.conf
 
 %changelog
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 20260915-104.gravity
+- gravity-diagnose: check the page size and P3S support instead of a "+16k"
+  kernel name, accept T8132 with 26.6.2 firmware and the DEFAULTKERNEL values
+  kernel-16k-core, kernel-p3s and kernel-core, check metapackage-core instead
+  of the base metapackage, and list the current package names
+
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 20260915-103.gravity
+- dracut-gravity: include the firmware module in hostonly builds off-device (image builds failed)
+
 * Tue Sep 15 2026 Gravity Linux maintainers - 20260915-102.gravity
 - Require gravity-bootloader under its final package name
 
