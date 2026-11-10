@@ -262,6 +262,9 @@ def prepare(name, recipe, release, args):
         if "\n" in license_value or "%" in license_value:
             raise ValueError("Expected a single-line SPDX license expression")
         spec.write_text("%global gravity_artwork_license " + license_value + "\n" + spec.read_text())
+    if recipe["kind"] == "git" and recipe.get("ref"):
+        # Lets a spec name its pinned source commit (e.g. Mesa's version string).
+        spec.write_text("%global gravity_git_ref " + recipe["ref"] + "\n" + spec.read_text())
     if name == "gravity-repos":
         owner, project = release["copr_owner"], release["copr_project"]
         if not re.fullmatch(r"@?[A-Za-z0-9_.-]+", owner) or not re.fullmatch(r"[A-Za-z0-9_.-]+", project):
