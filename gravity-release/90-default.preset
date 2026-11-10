@@ -484,6 +484,6 @@ enable authselect-apply-changes.service
 # Enable Intel Low Power Model Daemon
 # https://bugzilla.redhat.com/show_bug.cgi?id=2442391
 enable intel_lpmd.service
-# Gravity first-boot setup (ESP extras and swap).
+# Gravity first-boot setup (ESP extras). Swap is Fedora's default zram
+# (zram-generator-defaults); Gravity no longer sets up a swapfile or zswap.
 enable gravity-extras-firstboot.service
-enable gravity-setup-swap-firstboot.service

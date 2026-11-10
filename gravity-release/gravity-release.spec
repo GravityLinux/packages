@@ -104,7 +104,7 @@ Vendor:         Gravity Linux
 Version:        %{dist_version}
 # The numbering is 0.<r> before a given Fedora Linux release is released,
 # and then just <r>.
-Release:        100.gravity%{?dist}
+Release:        101.gravity%{?dist}
 License:        MIT
 URL:            https://pagure.io/GravityLinux/project
 
@@ -2700,5 +2700,9 @@ EOF
 
 
 %changelog
+* Mon Nov 02 2026 Gravity Linux maintainers - 44-101.gravity
+- Drop the gravity-setup-swap-firstboot.service preset; swap is Fedora's
+  default zram
+
 * Tue Sep 15 2026 Gravity Linux maintainers - 44-100.gravity
 - Derive Gravity KDE identity and defaults from Asahi release packaging
