@@ -1,0 +1,13 @@
+# Started by 90-gravity-usb4-sleep-inhibit.rules for each USB4 domain; the
+# instance is the domain's escaped sysfs path. Removing the domain stops it.
+[Unit]
+Description=Block system sleep while a USB4/Thunderbolt link is up
+Documentation=file:///usr/share/doc/gravity-remix-scripts/SLEEP-POLICY.md
+BindsTo=%i.device
+After=%i.device systemd-logind.service
+
+[Service]
+# handle-lid-switch too: logind ignores sleep inhibitors for the lid.
+ExecStart=/usr/bin/systemd-inhibit --what=sleep:handle-lid-switch --mode=block --who=USB4 "--why=USB4 device connected" /usr/bin/sleep infinity
+Restart=on-failure
+RestartSec=2

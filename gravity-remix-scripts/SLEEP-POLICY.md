@@ -37,6 +37,18 @@ platform suspend cycle the internal USB hub's xHCI controller stops
 responding, so USB hot-plug hangs and every later suspend fails to freeze
 tasks. A connected USB4 device also makes the kernel refuse to suspend.
 
+## USB4 links (temporary)
+
+The kernel's Apple USB4 driver refuses system sleep while a USB4 or
+Thunderbolt link is up. Each refused attempt still freezes and thaws
+userspace and drops Wi-Fi, and the desktop retries while the lid stays
+closed. Until the driver suspends with a link up,
+`90-gravity-usb4-sleep-inhibit.rules` starts
+`gravity-usb4-sleep-inhibit@.service` for each USB4 domain, which holds a
+logind `sleep:handle-lid-switch` block while the link exists. With a USB4
+device attached and the lid closed, the Air stays awake with the panel off;
+after unplugging, close the lid again to sleep.
+
 ## Overrides
 
 - Allow sleep on every machine: `ln -s /dev/null

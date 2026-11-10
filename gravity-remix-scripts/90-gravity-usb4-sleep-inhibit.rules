@@ -1,0 +1,5 @@
+# The Apple USB4 driver refuses system sleep while a USB4/Thunderbolt link is
+# up, and registers its USB4 domain only for that time. Block sleep while a
+# domain exists, so the desktop does not retry suspend all night. Remove
+# this rule and its unit once the kernel suspends with a link up.
+ACTION=="add", SUBSYSTEM=="thunderbolt", ENV{DEVTYPE}=="thunderbolt_domain", TAG+="systemd", ENV{SYSTEMD_WANTS}+="gravity-usb4-sleep-inhibit@.service"

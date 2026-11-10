@@ -33,6 +33,7 @@ Allow suspend-to-idle only on machines whose kernel and board support it.
 
 %install
 install -Dpm0644 -t %{buildroot}%{_unitdir} gravity-*.service
+install -Dpm0644 -t %{buildroot}%{_udevrulesdir} 90-gravity-usb4-sleep-inhibit.rules
 install -Dpm0644 -t %{buildroot}%{_udevhwdbdir} 65-autosuspend-override-asahi.hwdb
 install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name} install-extras.sh setup-swap.sh
 install -Dpm0644 -t %{buildroot}%{_datadir}/%{name} gravity-enable-zswap.conf
@@ -77,6 +78,7 @@ fi
 %license LICENSE
 %doc SLEEP-POLICY.md SWAP-POLICY.md
 %{_unitdir}/gravity-*.service
+%{_udevrulesdir}/90-gravity-usb4-sleep-inhibit.rules
 %{_udevhwdbdir}/65-autosuspend-override-asahi.hwdb
 %{_libexecdir}/%{name}/
 %{_datadir}/%{name}/
@@ -90,6 +92,8 @@ fi
   support suspend-to-idle (J713 with CPU power-down in s2idle). Supported
   machines use systemd's and the desktop's default sleep and lid policy.
 - Obsolete gravity-air-power, whose runtime overrides undid the old block.
+- Block sleep while a USB4 link is up, since the kernel refuses to suspend
+  then (gravity-usb4-sleep-inhibit@.service, started by udev).
 
 * Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 20260915-105.gravity
 - Move installs from before 102 to zram swap: remove the zram-disabling
