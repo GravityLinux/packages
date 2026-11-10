@@ -16,7 +16,7 @@ m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
 Name:           gravity-bootloader
 Vendor:         Gravity Linux
 Version:        %(echo '%{srcversion}' | tr '-' '~')
-Release:        113.gravity%{?dist}
+Release:        114.gravity%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
 
 # The fork's own sources are GPL-2.0-or-later (the SPTM emulator and sapt are
@@ -205,6 +205,9 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 %{_udevrulesdir}/80-m1n1.rules
 
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 1.6.1-114.gravity
+- Use the MacBook Air GPU power curves and limit configured by macOS.
+
 * Mon Nov 09 2026 Niklas Sheth <niklassheth@gmail.com> - 1.6.1-113.gravity
 - Rebase the M4 changes onto the current GravityLinux/bootloader main
   (79ff30c70f06), which adds the SPTM emulator and hypervisor updates, T8140
