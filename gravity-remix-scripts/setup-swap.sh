@@ -51,5 +51,5 @@ systemctl stop systemd-zram-setup@zram0.service || true
 ln -sf /usr/share/gravity-remix-scripts/gravity-enable-zswap.conf /etc/tmpfiles.d/
 systemd-tmpfiles --create /etc/tmpfiles.d/gravity-enable-zswap.conf
 
-# If we got this far, disable it for good measure (even though it should not run again)
-systemctl disable gravity-setup-swap-firstboot.service
+# Releases before 102 ran this from gravity-setup-swap-firstboot.service; disable it if present.
+systemctl disable gravity-setup-swap-firstboot.service 2>/dev/null || true
