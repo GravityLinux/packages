@@ -4,7 +4,7 @@
 Name:           gravity-platform-metapackage
 Vendor:         Gravity Linux
 Version:        0
-Release:        110.gravity%{?dist}
+Release:        111.gravity%{?dist}
 Summary:        Metapackage declaring Asahi platform dependencies
 Group:          Metapackages
 License:        MIT
@@ -55,6 +55,10 @@ Requires:       gravity-remix-scripts >= 20260915-105
 # Requiring the kernel-16k name would accept the 7.1.13 kernel, which has no
 # M4 support.
 Requires:       kernel(p3s)
+# Fedora puts some common device drivers (xpad and other game controllers,
+# among others) in kernel-*-modules-extra. With this marker installed, every
+# kernel-16k pulls in its own -modules-extra.
+Requires:       kernel-modules-extra-matched
 Requires:       update-m1n1
 Requires:       tiny-dfr
 # Keep installed sibling subpackages at this release. Installs from the
@@ -262,6 +266,10 @@ install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name}-desktop %SOURCE1
 install -Dpm0644 -t %{buildroot}%{_datadir}/drirc.d %SOURCE2
 
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <niklassheth@gmail.com> - 0-111.gravity
+- core: require kernel-modules-extra-matched, so each installed kernel-16k
+  brings its -modules-extra (game controller drivers such as xpad)
+
 * Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-110.gravity
 - core: require the kernel(p3s) capability instead of the kernel-p3s name
 
