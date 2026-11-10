@@ -42,10 +42,9 @@ software dependencies.
 %package core
 Summary:        Metapackage declaring core Asahi platform dependencies
 Requires:       alsa-ucm-asahi
-# The platform scripts tested with the P3S kernel (E2E upgrade 2026-11-08): the
-# dracut and update-m1n1 fixes, and remix-scripts 105, which moves pre-102
-# installs from the disk swapfile the P3S kernel keeps off to zram. Without it a
-# bare "dnf install steam" on a 20260920 install left the machine with no swap.
+# Keep platform scripts current, including the exact-match migration from
+# the old automatic disk-swap/zswap setup to Fedora's default zram policy.
+# Disk swap remains supported as an administrator choice.
 Requires:       gravity-fwupdate >= 20260915-103
 Requires:       dracut-gravity >= 20260915-103
 Requires:       update-m1n1 >= 20260915-103
@@ -273,7 +272,6 @@ install -Dpm0644 -t %{buildroot}%{_datadir}/drirc.d %SOURCE2
 * Tue Nov 10 2026 Niklas Sheth <niklassheth@gmail.com> - 0-111.gravity
 - core: require kernel-modules-extra-matched, so each installed kernel-16k
   brings its -modules-extra (game controller drivers such as xpad)
-
 
 * Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 0-110.gravity
 - core: require the kernel(p3s) capability instead of the kernel-p3s name
