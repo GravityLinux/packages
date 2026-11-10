@@ -38,11 +38,11 @@
   "gravity-bootloader": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/bootloader.git",
-    "ref": "f64760b501214c749788f89620c078d8b39b0453",
+    "ref": "f6c017a7090c3256f9b5587417168a9d40ff5af0",
     "archive": "gravity-bootloader-1.6.1.tar.gz",
     "omit_submodules": ["artwork"],
     "root": "gravity-bootloader-1.6.1",
-    "note": "Preserve DCP firmware-version and firmware-compat as 26.6.2; pair with the kernel's exact actual-version check. Publish pinned source commits before building."
+    "note": "M4 bring-up on top of GravityLinux/bootloader main 79ff30c70f06: T8132 GPU calibration and core mask, MTP and AOP DAPF setup, system-level cache, CPU frequency init, ISP heap, NO_DISPLAY build, and m1n1.conf.example restored. Preserve DCP firmware-version and firmware-compat as 26.6.2; pair with the kernel's exact actual-version check."
   },
   "gravity-scripts": {
     "kind": "git",

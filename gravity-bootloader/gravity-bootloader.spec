@@ -16,25 +16,25 @@ m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
 Name:           gravity-bootloader
 Vendor:         Gravity Linux
 Version:        %(echo '%{srcversion}' | tr '-' '~')
-Release:        110.gravity%{?dist}
+Release:        113.gravity%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
 
-# The M4 fork adds GPL-2.0-only contributions; vendored projects retain their licenses.
+# The fork's own sources are GPL-2.0-or-later (the SPTM emulator and sapt are
+# GPL-2.0-only); code from before the relicensing and from upstream m1n1 stays
+# MIT, and vendored projects retain their licenses.
 # See the "License" section in README.md for the breakdown
 #
 # The following breakdown only covers the rust dependencies
 # MIT
 # MIT OR Apache-2.0
 # LICENSE.dependencies contains a full license breakdown of the rust dependencies
-License:        GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND MIT AND (MIT OR Apache-2.0) AND CC-BY-4.0
+License:        GPL-2.0-or-later AND GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND MIT AND (MIT OR Apache-2.0) AND CC-BY-4.0
 URL:            https://github.com/GravityLinux/bootloader
 Source0:        %{name}-%{srcversion}.tar.gz
 Source:         https://github.com/rafalh/rust-fatfs/archive/%{fatfs_commit}/rust-fatfs-%{fatfs_commit}.tar.gz
 # * Vendor git dependency rust-fatfs and ensure its dependencies are
 #   included as well.
 Patch:          m1n1-1.6.1-rust-deps.patch
-# Keep M4 bring-up configuration in packaging, not the source fork.
-Patch:          m1n1-no-display.patch
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -85,7 +85,7 @@ Summary:        %{summary}
 # Apache-2.0 OR MIT
 # MIT
 # MIT OR Apache-2.0
-License:        GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND (Apache-2.0 OR MIT) AND MIT AND (MIT OR Apache-2.0) AND CC-BY-4.0
+License:        GPL-2.0-or-later AND GPL-2.0-only AND MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND (Apache-2.0 OR MIT) AND MIT AND (MIT OR Apache-2.0) AND CC-BY-4.0
 # LICENSE.dependencies contains a full license breakdown of the rust dependencies
 
 # This is vendored and statically linked into m1n1 when building for stage 1
@@ -102,7 +102,7 @@ Obsoletes:      m1n1-tools < %{version}-%{release}
 Provides:       bootloader-tools = %{version}-%{release}
 Obsoletes:      bootloader-tools < %{version}-%{release}
 Summary:        Developer tools for m1n1
-License:        GPL-2.0-only AND MIT
+License:        GPL-2.0-or-later AND MIT
 Requires:       %{name} = %{version}-%{release}
 Requires:       python3
 Requires:       python3dist(construct)
@@ -205,6 +205,30 @@ install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
 %{_udevrulesdir}/80-m1n1.rules
 
 %changelog
+* Mon Nov 09 2026 Niklas Sheth <niklassheth@gmail.com> - 1.6.1-113.gravity
+- Rebase the M4 changes onto the current GravityLinux/bootloader main
+  (79ff30c70f06), which adds the SPTM emulator and hypervisor updates, T8140
+  USB support and framebuffer/memory mapping changes. The M4 boot changes are
+  the same as in 112, and the source keeps m1n1.conf.example, which main had
+  removed, so /etc/m1n1.conf is still installed.
+- The bootloader's own sources moved from MIT to GPL-2.0-or-later; update the
+  License tags (MIT remains for older and upstream m1n1 code).
+
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 1.6.1-112.gravity
+- kboot: program the AOP DART's DAPF on T8132 (m4/t8132-aop-dapf dde1a8ec,
+  on release/m4-bootloader-rc-v4). Without it the AOP never answers and the
+  J713 built-in microphones stay dead.
+- isp: set up the T8132 ISP heap (m4/t8132-isp-20261108 d1055cd7); without it
+  the bootloader disables the J713 camera node. Built from
+  m4/bootloader-112-20261108 0503deb0 (both merged).
+
+* Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 1.6.1-111.gravity
+- Build the M4 release line (release/m4-bootloader-rc-v4 ac499036) from
+  source: the 110.m4.5 kboot fixes and T8132 SLC, plus the T8132 cpufreq
+  init, which 110.m4.5 lacked ("Chip 0x8132 is unsupported"). Sorts above
+  the prebuilt 110.m4.5, which it replaces.
+- Drop m1n1-no-display.patch: the M4 source defines NO_DISPLAY itself.
+
 * Sat Sep 19 2026 Gravity Linux maintainers - 1.6.1-110.gravity
 - Keep DCP firmware compatibility at 26.6.2 instead of translating to 26.6.0
 
