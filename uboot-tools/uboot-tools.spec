@@ -7,7 +7,7 @@
 Name:     uboot-tools
 Vendor:         Gravity Linux
 Version:  2026.07
-Release:  203.gravity%{?candidate:.%{candidate}}%{?dist}
+Release:  204.gravity%{?candidate:.%{candidate}}%{?dist}
 Epoch:    1
 Summary:  U-Boot utilities
 # Automatically converted from old format: GPLv2+ BSD LGPL-2.1+ LGPL-2.0+ - review is highly recommended.
@@ -126,6 +126,8 @@ Patch205: gravity-4b738f4f51b.patch
 Patch206: gravity-ddecfb8eb6a.patch
 Patch207: gravity-6e594cafea8.patch
 Patch208: gravity-a2f6913694f.patch
+# 209 is taken by the Neo patch on experimental
+Patch210: gravity-t8132-mtp-skip.patch
 
 BuildRequires:  bc
 BuildRequires:  bison
@@ -392,6 +394,9 @@ install -p -m 0755 builds/tools/env/fw_printenv %{buildroot}%{_bindir}
 %endif
 
 %changelog
+* Sun Nov 08 2026 Gravity Linux maintainers - 1:2026.07-204.gravity
+- Leave the T8132 MTP to the OS, which cannot restart it after U-Boot
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 1:2026.07-203.gravity
 - Include the tested 32-bank Apple memory configuration
 - Inject per-radio J773g Wi-Fi and Bluetooth calibration from the ESP

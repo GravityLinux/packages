@@ -1,0 +1,55 @@
+From f575d68b1f617aa9699dce465e80b3f79d88696e Mon Sep 17 00:00:00 2001
+From: Niklas Sheth <hi@niklassheth.com>
+Date: Sun, 8 Nov 2026 12:56:38 -0500
+Subject: [PATCH] apple: Leave the T8132 MTP to the OS
+
+The T8132 MTP firmware does not come back after U-Boot quiesces it at
+handoff and the next stage wakes it up: it restarts its RTKit session and
+crashes as soon as the AP powers on. The MTP CPU cannot be reset, so the OS
+ends up without keyboard and trackpad.
+
+Do not bind the MTP keyboard on T8132. The rtkit helper is then never
+probed, U-Boot never starts the MTP, and the OS boots it from cold. The
+internal keyboard is not available in U-Boot on these machines; USB
+keyboards still work.
+
+Signed-off-by: Niklas Sheth <hi@niklassheth.com>
+---
+ drivers/input/apple_mtp_kbd.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/input/apple_mtp_kbd.c b/drivers/input/apple_mtp_kbd.c
+index e80e9a01..6d465618 100644
+--- a/drivers/input/apple_mtp_kbd.c
++++ b/drivers/input/apple_mtp_kbd.c
+@@ -201,6 +201,19 @@ static int apple_mtp_kbd_probe(struct udevice *dev)
+ 	return input_stdio_register(sdev);
+ }
+ 
++static int apple_mtp_kbd_bind(struct udevice *dev)
++{
++	/*
++	 * The T8132 MTP firmware does not survive being quiesced and woken up
++	 * again by the next stage, and the MTP cannot be reset. Leave the MTP
++	 * untouched on T8132 so that the OS can boot it from cold.
++	 */
++	if (of_machine_is_compatible("apple,t8132"))
++		return -ENODEV;
++
++	return 0;
++}
++
+ static int apple_mtp_kbd_remove(struct udevice *dev)
+ {
+ 	struct apple_mtp_kbd_priv *priv = dev_get_priv(dev);
+@@ -240,6 +253,7 @@ U_BOOT_DRIVER(apple_mtp_kbd) = {
+ 	.name = "apple_mtp_kbd",
+ 	.id = UCLASS_KEYBOARD,
+ 	.of_match = apple_mtp_kbd_of_match,
++	.bind = apple_mtp_kbd_bind,
+ 	.probe = apple_mtp_kbd_probe,
+ 	.remove = apple_mtp_kbd_remove,
+ 	.priv_auto = sizeof(struct apple_mtp_kbd_priv),
+-- 
+2.55.0
+

@@ -38,6 +38,9 @@ These committed Gravity patches follow that series:
 - ddecfb8eb6a — record the tested 32-bank Apple memory configuration.
 - 6e594cafea8 — inject per-radio Bluetooth calibration from the ESP.
 - a2f6913694f — inject Wi-Fi calibration through the same bounded loader.
+- gravity-t8132-mtp-skip.patch (no Gravity U-Boot commit yet) — do not bind the
+  MTP keyboard on T8132, so U-Boot never starts the MTP and the OS boots it from
+  cold (204.gravity). No internal keyboard in U-Boot on the M4 Air.
 
 The packaged Gravity U-Boot revision on `gravity-alpha-20260925` is
 `a2f6913694ff26908c16948af3f8372429782263` (RPM release 203.gravity).
