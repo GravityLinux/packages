@@ -21,7 +21,7 @@ fi
 
 [ -n "$1" ] && size="$1"
 
-free_bytes="$(($(stat -f --format="%a*%S" .)))"
+free_bytes="$(($(stat -f --format="%a*%S" /var)))"
 size_bytes="$(numfmt --from=auto "$size")"
 need=$((2 * $size_bytes))
 
@@ -41,15 +41,17 @@ restorecon -v -r '/var/swap'
 
 mkswap /var/swap/swapfile
 swapon /var/swap/swapfile
-grep -q /var/swap/swapfile /etc/fstab || echo '/var/swap/swapfile swap swap sw 0 0' >> /etc/fstab
+# A distinct entry records the administrator's choice; the historical
+# first-boot migration in the RPM scriptlet removes only its old exact line.
+if grep -qx '/var/swap/swapfile swap swap sw 0 0' /etc/fstab; then
+    cp -a /etc/fstab /etc/fstab.rpmsave
+    sed -i '\|^/var/swap/swapfile swap swap sw 0 0$|d' /etc/fstab
+fi
+grep -q '^/var/swap/swapfile[[:space:]]' /etc/fstab || \
+    echo '/var/swap/swapfile swap swap defaults,pri=10 0 0' >> /etc/fstab
 
-# Disable zram (allow this to fail for the running system)
-echo "# disable zram-generator-defaults config in favor of zswap on Apple systems with swap" >/etc/systemd/zram-generator.conf
-systemctl stop systemd-zram-setup@zram0.service || true
-
-# Enable zswap
-ln -sf /usr/share/gravity-remix-scripts/gravity-enable-zswap.conf /etc/tmpfiles.d/
-systemd-tmpfiles --create /etc/tmpfiles.d/gravity-enable-zswap.conf
+# Keep Fedora's higher-priority zram and its zswap policy unchanged.
+# Disk swap is available immediately and from fstab on subsequent boots.
 
 # Releases before 102 ran this from gravity-setup-swap-firstboot.service; disable it if present.
 systemctl disable gravity-setup-swap-firstboot.service 2>/dev/null || true

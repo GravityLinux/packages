@@ -1,7 +1,7 @@
 Name:           gravity-remix-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        106.gravity%{?dist}
+Release:        107.gravity%{?dist}
 Summary:        Fedora-specific Gravity first-boot utilities
 License:        MIT
 URL:            https://github.com/GravityLinux/packages
@@ -50,11 +50,10 @@ if [ $1 -gt 1 ]; then
 fi
 # Move installs made before 102 to the default swap (SWAP-POLICY.md). Their
 # first boot ran setup-swap.sh, which disabled zram-generator-defaults,
-# turned zswap on and put a Btrfs swapfile in fstab. The Gravity kernel
-# (kernel-p3s) keeps that swapfile off, so those installs had no swap at all
-# after upgrading. Undo exactly what setup-swap.sh wrote, keeping backups;
-# zram comes up on the next boot. The swapfile itself stays (unused) under
-# /var/swap; a swapfile that is active now stays active until reboot.
+# turned zswap on and put a Btrfs swapfile in fstab. Undo exactly that old
+# automatic setup to keep Fedora's zram default, with backups. Disk swap is
+# supported; the manual tool now adds it alongside zram with a distinct fstab
+# entry that this migration leaves alone. Active swap stays until reboot.
 zg=%{_sysconfdir}/systemd/zram-generator.conf
 if [ -f $zg ] && [ "$(cat $zg)" = "# disable zram-generator-defaults config in favor of zswap on Apple systems with swap" ]; then
     mv -f $zg $zg.rpmsave
@@ -86,6 +85,11 @@ fi
 %{_systemdgeneratordir}/gravity-sleep-generator
 
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-107.gravity
+- Document validated disk swap with 4K-page processes; keep zram as default.
+- Make the manual swapfile tool add disk swap alongside zram, without
+  enabling zswap or writing the old first-boot configuration.
+
 * Tue Nov 10 2026 Niklas Sheth <niklassheth@gmail.com> - 20260915-106.gravity
 - Replace the sleep block on every machine with gravity-sleep-generator,
   which masks the sleep targets at boot unless the board and running kernel

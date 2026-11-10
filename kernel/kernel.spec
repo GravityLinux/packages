@@ -1179,8 +1179,6 @@ Source4000: README.rst
 Source4001: rpminspect.yaml
 Source4002: gating.yaml
 
-# Gravity: keeps the disk swapfile unit off on P3S kernels (kernel-gravity-common).
-Source5000: 50-m4-p3s-no-disk-swap.conf
 
 ## Patches needed for building this package
 
@@ -1242,22 +1240,6 @@ AutoReq: no\
 AutoProv: yes\
 %{nil}
 
-
-%package -n kernel-gravity-common
-Summary: Files shared by all installed Gravity Apple 16K kernels
-BuildArch: noarch
-# Successor of the unpublished kernel-p3s-common (same drop-in path, older
-# header): replace it on installs that have it, and keep satisfying the
-# Requires of kernel-p3s packages still installed beside this kernel.
-Obsoletes: kernel-p3s-common < 7.3.0-514
-Provides: kernel-p3s-common = %{specversion}-%{release}
-%description -n kernel-gravity-common
-Files that every installed Gravity Apple 16K kernel shares: a drop-in that
-keeps the disk swapfile unit (/var/swap/swapfile) off unless
-m4_p3s.disk_swap=1 is on the kernel command line, since disk swap on a P3S
-kernel has corrupted a root filesystem. zram swap is unaffected. Kept out of
-the installonly kernel packages so that two installed kernels never own the
-same path with different contents.
 
 %package doc
 Summary: Various documentation bits found in the kernel source
@@ -1653,6 +1635,12 @@ This meta package is used to install matching core and devel packages for a give
 %define kernel_modules_extra_matched_package() \
 %package modules-extra-matched\
 Summary: Meta package which requires modules-extra to be installed for all kernels.\
+# Retire the disk-swap guard without breaking older installed kernels' Requires.\
+# This non-installonly metapackage replaces the now empty common packages.\
+Obsoletes: kernel-p3s-common < 7.3.0-514\
+Obsoletes: kernel-gravity-common <= 7.3.0-514.gravity%{?dist}\
+Provides: kernel-p3s-common = %{specversion}-%{release}\
+Provides: kernel-gravity-common = %{specversion}-%{release}\
 %description modules-extra-matched\
 This meta package provides a single reference that other packages can Require to have modules-extra installed for all kernels.\
 %{nil}
@@ -1797,7 +1785,6 @@ Requires: gravity-bootloader >= 1.6.1-112\
 Requires: uboot-images-armv8 >= 1:2026.07-204\
 Requires: grubby\
 Requires: update-m1n1\
-Requires: kernel-gravity-common\
 %endif\
 %{expand:%%kernel_reqprovconf %{?1:%{1}} %{-o:%{-o}}}\
 %if %{?1:1} %{!?1:0} \
@@ -3710,9 +3697,6 @@ find Documentation -type d | xargs chmod u+w
 
 %install
 
-install -D -m 0644 %{SOURCE5000} \
-  $RPM_BUILD_ROOT%{_prefix}/lib/systemd/system/var-swap-swapfile.swap.d/50-m4-p3s-no-disk-swap.conf
-
 cd linux-%{KVERREL}
 
 %if %{with_doc}
@@ -4500,10 +4484,6 @@ fi\
 ### file lists
 ###
 
-%files -n kernel-gravity-common
-%dir %{_prefix}/lib/systemd/system/var-swap-swapfile.swap.d
-%{_prefix}/lib/systemd/system/var-swap-swapfile.swap.d/50-m4-p3s-no-disk-swap.conf
-
 %if %{with_headers}
 %files headers
 /usr/include/*
@@ -4914,9 +4894,9 @@ fi\
 - kernel-16k provides kernel(p3s); kernel-16k-core requires the boot chain the
   kernel was tested with (gravity-bootloader >= 1.6.1-112,
   uboot-images-armv8 >= 1:2026.07-204), grubby and update-m1n1.
-- New kernel-gravity-common: keeps the disk swapfile unit off unless
-  m4_p3s.disk_swap=1 is on the command line (zram swap is unaffected);
-  replaces kernel-p3s-common.
+- Disk swap supports 4K-page processes; remove the swapfile guard and its
+  opt-in. Retire the empty common subpackage through modules-extra-matched,
+  preserving dependencies of older kernels kept as fallback boot entries.
 
 * Fri Nov 06 2026 Justin M. Forbes <jforbes@fedoraproject.org> [7.3.3-200]
 - Default af_alg_restrict to unrestricted for F44 and older (Justin M. Forbes)
