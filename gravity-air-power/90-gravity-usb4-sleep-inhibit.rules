@@ -1,4 +1,0 @@
-# Apple ACIO refuses system sleep (apple_cio_prepare() returns -EBUSY) while a
-# USB4/Thunderbolt link is up, and registers its NHI's USB4 domain only for that
-# time. Block sleep while a domain exists, so lid close does not retry suspend.
-ACTION=="add", SUBSYSTEM=="thunderbolt", ENV{DEVTYPE}=="thunderbolt_domain", TAG+="systemd", ENV{SYSTEMD_WANTS}+="gravity-usb4-sleep-inhibit@.service"

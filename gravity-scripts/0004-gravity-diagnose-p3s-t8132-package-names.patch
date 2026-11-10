@@ -26,7 +26,7 @@ Subject: [PATCH] gravity-diagnose: check page size and P3S, T8132 firmware, curr
 +            gravity-fwupdate python3-gravity_firmware dracut-gravity update-m1n1
 +            asahi-audio speakersafetyd wireplumber pipewire mesa-dri-drivers mesa-vulkan-drivers
 +            fex-emu fex-emu-rootfs-fedora gravity-x86 gravity-x86-mesa fex-guestos-mesa
-+            steam proton-gravity-arm64 gravity-air-power"
++            steam proton-gravity-arm64"
      else
        echo "Distribution not supported"
        return
