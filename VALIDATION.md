@@ -1,5 +1,39 @@
 # Validation — 2026-09-15
 
+## 2026-11-10 x86 Mesa built from source (mesa-fex-guest, gravity-x86-mesa)
+
+- Local stand-in for COPR: `make srpm` of mesa-fex-guest from Mesa 533a2be53fae,
+  then `mock -r fedora-44-x86_64 --rebuild` on an x86_64 host: succeeded, with
+  the build itself taking 4 min on 16 CPUs. mesa-fex-guest-26.3.0~devel-108.gravity.1
+  was repacked with `make srpm PACKAGE=gravity-x86-mesa ARGS='--rpm ...'` and a
+  mock rebuild (noarch).
+- Compared with the 108 prebuilt payloads:
+  - Same file sets (118 and 358 entries), link targets and modes. The RPM file
+    lists match the 107 RPMs.
+  - The guestos tree has the same Fedora package versions and a byte-identical
+    graphics_provider.json, and its ld.so.cache lists the same entries in the
+    same order.
+  - Differences: Mesa is compiled with Fedora's flags (-O2, so libgallium is
+    about 15% smaller), and the i686 libraries also link ld-linux.so.2.
+    gconv-modules.cache is now generated for the tree's modules (it was
+    glibc's empty placeholder).
+- The aarch64 mesa SRPM inputs are byte-identical with the old and new
+  tools/package.py.
+- `make pin` was exercised against the live COPR API with the aarch64 mesa 108
+  build standing in. While the repositories are unpublished, it downloads from
+  the devel repository.
+- Mini (kernel 514, mesa 108 from the COPR devel repository): the new RPMs
+  upgraded 107 cleanly, and `rpm -V` is clean. With mesa 107 installed, dnf
+  refuses them (gravity-mesa-revision), as intended.
+  - x86_64 vulkaninfo from gravity-x86's root filesystem reports Apple M4
+    (G16G B1), Honeykrisp, Mesa 26.3.0-devel (git-533a2be53f).
+  - vkcube ran 300 frames.
+  - Steam with Muck: rendered the menu through fex-guestos-mesa (Unity log:
+    OpenGL 3.3, Mesa 26.3.0-devel git-533a2be53f) for 50 s, with no GPU faults
+    and no cores.
+- Not tested: COPR's own x86_64 builders, i686 programs on hardware, GL outside
+  Steam (the root filesystem has no x86 glxinfo).
+
 ## 2026-09-19 DCP actual-version contract (kernel 509 / bootloader 110)
 
 - Linux dea38a96aa86 includes 3c08d26a0bd0's exact 26.6.2 check on T8132
