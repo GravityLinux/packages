@@ -24,17 +24,9 @@
     "kind": "spec",
     "note": "Asahi/Fedora source plus nine checked-in Gravity patches through a2f6913694ff26908c16948af3f8372429782263; see UPSTREAM.md."
   },
-  "rust-speakersafetyd": {
+  "gravity-audio-j713": {
     "kind": "spec",
-    "note": "Fedora f44 rust-speakersafetyd 2.0.1 (dist-git ce97ff700de0edbb672fc93c209688335bd4e065): crates.io source and Fedora's two patches, plus the J713 profile and udev rule (speakersafetyd branch j713-speakers 27ed8ede2a25, on upstream 2.0.1). Upstream speakersafetyd needs only that config for the J713; no fork is needed."
-  },
-  "alsa-ucm-asahi": {
-    "kind": "spec",
-    "note": "Fedora f44 alsa-ucm-asahi 10 (dist-git b11b0738875c4f2432549c7204eebc2cb7a17a4c): the upstream v10 tarball plus the J713 profile (alsa-ucm-conf-asahi branch j713 dd9e76c, on v10)."
-  },
-  "asahi-audio": {
-    "kind": "spec",
-    "note": "Fedora f44 asahi-audio 4.1 (dist-git 19a447864c512320a55d82cb519c5bacbf2a49c1): the upstream v4.1 tarball plus the J713 alias of the J413 graph (asahi-audio branch j713 6de3ccc25f37, on v4.1)."
+    "note": "J713 (MacBook Air 13\", M4) UCM profiles, WirePlumber DSP rules and speakersafetyd profile, added to Fedora's alsa-ucm-asahi 10, asahi-audio 4.1 and speakersafetyd 2.0.1 without changing them; see gravity-audio-j713/README.md."
   },
   "gravity-bootloader": {
     "kind": "git",

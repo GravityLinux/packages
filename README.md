@@ -1,6 +1,6 @@
 # Gravity Linux RPM packaging
 
-Seventeen source packages for the first Fedora 44 / aarch64 / KDE release.
+Fourteen source packages for the first Fedora 44 / aarch64 / KDE release.
 Each directory contains one RPM spec and its packaging files. Application and
 driver code remains in separate Git repositories; sources are pinned in
 [sources.json](sources.json). Repository names do not have a Gravity prefix;
@@ -22,10 +22,8 @@ Gravity-specific RPMs do.
 | gravity-release | common, basic and KDE release identity/defaults | Asahi release packaging |
 | gravity-appstream-metadata | OS identity for software centers | Gravity |
 | gravity-logos | Bootloader and desktop logos | Gravity artwork |
-| rust-speakersafetyd | speakersafetyd (provides gravity-speakersafetyd) | Fedora 2.0.1 plus the J713 profile |
+| gravity-audio-j713 | J713 UCM profiles, DSP rules and speakersafetyd profile for Fedora's audio packages | Gravity |
 | gravity-x86 | gravity-x86: FEX x86 programs with 4K pages on P3S kernels (rootfs service, binfmt rules) | Gravity |
-| alsa-ucm-asahi | alsa-ucm-asahi (provides gravity-alsa-ucm-asahi) | Fedora 10 plus the J713 profile |
-| asahi-audio | asahi-audio: PipeWire DSP profiles for Apple Silicon | Fedora 4.1 plus the J713 alias of the J413 graph |
 
 U-Boot's AArch64 image build is limited to `apple_m1`; host utilities are retained.
 
@@ -35,12 +33,11 @@ tiny-dfr, GRUB, shim, linux-firmware, wireless-regdb,
 muvm and FEX are consumed from Fedora unless we need downstream changes.
 A dependency's presence does not establish M4 hardware support.
 
-Speaker protection uses upstream speakersafetyd with our J713 profile, and UCM
-uses Fedora's alsa-ucm-asahi with our J713 profile; see
-[rust-speakersafetyd](rust-speakersafetyd/README.md) and
-[alsa-ucm-asahi](alsa-ucm-asahi/README.md). asahi-audio has no J713 DSP graph
-of its own: our asahi-audio uses the J413 graph for the J713 speakers and
-microphones; see [asahi-audio](asahi-audio/README.md).
+Audio uses Fedora's alsa-ucm-asahi, asahi-audio and speakersafetyd unchanged.
+gravity-audio-j713 adds the J713 (MacBook Air 13", M4) UCM profiles, the
+WirePlumber rules that give it the J413 speaker and mic graphs, and its
+speakersafetyd profile, in directories those packages already read; see
+[gravity-audio-j713](gravity-audio-j713/README.md).
 
 AVD firmware packaging is excluded from this release. Bluetooth is not a release
 requirement. Extracted Apple firmware and IPSWs must never enter this repository,
@@ -55,7 +52,7 @@ Run `make status` for unresolved inputs:
 - Publish the pinned scripts and installer source commits to their Gravity URLs.
 - Mesa is temporarily pinned to Gravity's main at `4bd3d1801ae6` (26.3.0-devel)
   for hardware image testing. Confirm the final release revision with Niklas.
-- Validate the J713 speakersafetyd profile on hardware (rust-speakersafetyd/README.md).
+- Validate the J713 speakersafetyd profile on hardware (gravity-audio-j713/README.md).
 - COPR is configured as `adevwithanidea/gravity`; its public signing key is
   pinned in `gravity-repos/RPM-GPG-KEY-gravity`.
 - Publish the pinned artwork revision: artwork is CC BY 4.0, the generator is
@@ -128,9 +125,8 @@ Create one project with the `fedora-44-aarch64` chroot. Configure that project
 to make already built packages available to subsequent builds.
 
 1. Independent: kernel, Mesa, uboot-tools, gravity-installer, gravity-logos,
-   rust-speakersafetyd (once its source inputs are ready),
    gravity-release, gravity-appstream-metadata, gravity-remix-scripts, gravity-x86,
-   alsa-ucm-asahi, asahi-audio.
+   gravity-audio-j713.
 2. gravity-bootloader after gravity-logos.
 3. gravity-scripts after gravity-bootloader, uboot-images-armv8 and python3-gravity_firmware
    are available for installation tests.

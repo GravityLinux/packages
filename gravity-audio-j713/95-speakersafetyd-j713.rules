@@ -1,0 +1,4 @@
+# Start speakersafetyd for the J713 (MacBook Air 13", M4) macaudio card, as
+# speakersafetyd's own 95-speakersafetyd.rules does for the models it ships
+# profiles for. That file already sets ACP_IGNORE on every AppleJ* sense PCM.
+SUBSYSTEM=="sound", KERNEL=="pcmC*D2c", ATTRS{id}=="AppleJ713", TAG+="systemd", ENV{SYSTEMD_WANTS}="speakersafetyd.service"
