@@ -43,6 +43,40 @@ README.md. New builds must use a new RPM Release when package contents change.
 The SRPM preparation worker can fetch sources and install preparation tools;
 binary-build network access can remain disabled.
 
+## x86 Mesa (mesa-fex-guest and gravity-x86-mesa)
+
+The project needs a second chroot for one package. In Settings / Project
+Details, under Chroots, also tick `fedora-44-x86_64` and save. Leave the
+other settings as they are. `fedora-44-i386` is not needed: the i686 Mesa is
+built in the x86_64 chroot.
+
+| Package | Spec File | Chroot |
+| --- | --- | --- |
+| mesa-fex-guest | `mesa-fex-guest/mesa-fex-guest.spec` | `fedora-44-x86_64` only |
+| gravity-x86-mesa | `gravity-x86-mesa/gravity-x86-mesa.spec` | `fedora-44-aarch64` only |
+
+Select only `fedora-44-aarch64` for every other package. (A build of
+mesa-fex-guest in `fedora-44-aarch64` is skipped: its spec is
+`ExclusiveArch: x86_64`.)
+
+For each Mesa update:
+
+1. Build `mesa` (aarch64) and `mesa-fex-guest` (x86_64) from the packaging
+   commit that pins the new Mesa. They are independent.
+2. Once mesa-fex-guest has succeeded, run `make pin` in a Fedora checkout of
+   that commit and commit the changes to `sources.json` and
+   `downloads.lock.json`.
+3. Build `gravity-x86-mesa` (aarch64) from that commit.
+4. Publish the three builds together: `gravity-x86-mesa` and
+   `fex-guestos-mesa` require the matching `mesa-dri-drivers`.
+
+`make pin` reads the build list through COPR's public API (no login) and
+downloads the RPM from the build's result directory, or from the chroot's
+devel repository while the project's repositories are not yet regenerated.
+Keep the pinned build until gravity-x86-mesa has been built from it: COPR's
+automatic pruning only removes builds that a newer successful build of the
+same package has replaced.
+
 ## Repeat builds and automation
 
 Save each package's SCM configuration in COPR so subsequent builds can be

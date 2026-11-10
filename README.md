@@ -1,6 +1,6 @@
 # Gravity Linux RPM packaging
 
-Fourteen source packages for the first Fedora 44 / aarch64 / KDE release.
+Sixteen source packages for the first Fedora 44 / aarch64 / KDE release.
 Each directory contains one RPM spec and its packaging files. Application and
 driver code remains in separate Git repositories; sources are pinned in
 [sources.json](sources.json). Repository names do not have a Gravity prefix;
@@ -12,6 +12,8 @@ Gravity-specific RPMs do.
 | --- | --- | --- |
 | kernel | kernel-16k, core, modules, modules-core, modules-extra, devel (provides kernel(p3s)): the one release kernel for every board (Linux 7.3 + P3S, M4) | Fedora 7.3.3-200.fc44 SRPM on Linux 7.3 |
 | mesa | Fedora Mesa libraries, DRI and Vulkan drivers | Fedora 44 dist-git |
+| mesa-fex-guest | x86_64 and i686 builds of the same Mesa source, assembled into the two x86 trees below (built in the fedora-44-x86_64 chroot only) | Gravity |
+| gravity-x86-mesa | gravity-x86-mesa and fex-guestos-mesa: the x86 trees of the pinned mesa-fex-guest build, repacked as noarch packages for gravity-x86's FEX root filesystem and Steam's FEX tool | Gravity |
 | uboot-tools | uboot-tools, uboot-images-armv8 | Asahi packaging plus six Gravity patches |
 | gravity-bootloader | gravity-bootloader, gravity-bootloader-stage1, gravity-bootloader-tools | Fedora 44 m1n1 packaging, pinned M4 fork |
 | gravity-scripts | gravity-scripts, gravity-fwupdate, dracut-gravity, update-m1n1, linux-firmware-vendor, gravity-battery | Fedora packaging and Gravity consumers |
@@ -116,18 +118,57 @@ packaging. Pinning a new source version may require adapting the Meson options,
 vendored dependency versions and file lists. A source pin alone is not a build
 test.
 
+## x86 Mesa for FEX
+
+x86 programs run through FEX need x86_64 and i686 builds of the system Mesa's
+source. Every x86 binary in the packages that carry them is built by COPR:
+
+- `mesa-fex-guest` builds the `mesa` entry's source (its `sources.json` entry
+  names `"source": "mesa"`, and `tools/package.py` takes its Version and
+  Release from `mesa/mesa.spec`) in the `fedora-44-x86_64` chroot. It builds
+  x86_64 and, with `-m32` against Fedora's i686 packages from the same
+  repositories, i686 Mesa, and assembles the two trees with Fedora's x86
+  libraries installed in that build root
+  ([mesa-fex-guest/README.md](mesa-fex-guest/README.md)).
+- `gravity-x86-mesa` (noarch, built in `fedora-44-aarch64`) carries that RPM
+  in its SRPM, fetched from the COPR result directory by the URL and SHA256
+  recorded in `sources.json` and `downloads.lock.json`, and installs its
+  trees as `gravity-x86-mesa` and `fex-guestos-mesa`. Its Version and Release
+  are those of the `mesa-fex-guest` build. It requires `gravity-mesa-revision`
+  = the commit both were built from, which `mesa-dri-drivers` provides.
+
+On a Mesa update, change the `mesa` ref and `mesa.spec` as before. After COPR
+has built `mesa` and `mesa-fex-guest` from that commit:
+
+```sh
+make pin
+git diff -- sources.json downloads.lock.json
+```
+
+`make pin` asks COPR's public API for the newest successful
+`mesa-fex-guest` build of mesa.spec's Version and Release, downloads its
+RPM, checks that it was built from the `mesa` ref, and records the URL and
+hash. `make status` reports a stale pin, and `make srpm
+PACKAGE=gravity-x86-mesa` refuses to use one. For a local test build, pass
+the RPM directly: `make srpm PACKAGE=gravity-x86-mesa ARGS='--rpm
+path/to/mesa-fex-guest-....x86_64.rpm'`.
+
 ## COPR and build order
 
 Use [Git-backed COPR builds](COPR.md) to build directly from GitHub without
 uploading local SRPMs. It includes the exact form settings and webhook setup.
 
-Create one project with the `fedora-44-aarch64` chroot. Configure that project
-to make already built packages available to subsequent builds.
+Create one project with the `fedora-44-aarch64` and `fedora-44-x86_64`
+chroots. Configure that project to make already built packages available to
+subsequent builds. Build `mesa-fex-guest` in `fedora-44-x86_64` only (its
+spec is `ExclusiveArch: x86_64`) and every other package in
+`fedora-44-aarch64` only.
 
-1. Independent: kernel, Mesa, uboot-tools, gravity-installer, gravity-logos,
-   gravity-release, gravity-appstream-metadata, gravity-remix-scripts, gravity-x86,
-   gravity-audio-j713.
-2. gravity-bootloader after gravity-logos.
+1. Independent: kernel, Mesa, mesa-fex-guest, uboot-tools, gravity-installer,
+   gravity-logos, gravity-release, gravity-appstream-metadata,
+   gravity-remix-scripts, gravity-x86, gravity-audio-j713.
+2. gravity-bootloader after gravity-logos. gravity-x86-mesa after Mesa and
+   mesa-fex-guest succeeded and `make pin` was committed.
 3. gravity-scripts after gravity-bootloader, uboot-images-armv8 and python3-gravity_firmware
    are available for installation tests.
 4. gravity-repos after project/key configuration; gravity-platform-metapackage
