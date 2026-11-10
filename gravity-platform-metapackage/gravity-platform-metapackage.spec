@@ -58,6 +58,12 @@ Requires:       kernel(p3s)
 # among others) in kernel-*-modules-extra. With this marker installed, every
 # kernel-16k pulls in its own -modules-extra.
 Requires:       kernel-modules-extra-matched
+# Also retire the guard when the same-version modules marker is already
+# installed; an upgrade cannot replace that marker by NEVRA alone.
+Obsoletes:      kernel-p3s-common < 7.3.0-514
+Obsoletes:      kernel-gravity-common <= 7.3.0-514.gravity%{?dist}
+Provides:       kernel-p3s-common
+Provides:       kernel-gravity-common
 Requires:       update-m1n1
 Requires:       tiny-dfr
 # Keep installed sibling subpackages at this release. Installs from the
