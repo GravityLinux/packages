@@ -20,6 +20,19 @@
     "root": "mesa-26.3.0-devel",
     "note": "Mesa 26.3.0-devel with Apple M4 GPU support (GL and Vulkan). CPU maps of shared dma-bufs wait for their implicit fences, which fixes torn frames in screen capture and remote desktop."
   },
+  "mesa-fex-guest": {
+    "kind": "git",
+    "source": "mesa",
+    "note": "x86_64 and i686 builds of the mesa entry's source, built in the fedora-44-x86_64 chroot only."
+  },
+  "gravity-x86-mesa": {
+    "kind": "rpm",
+    "copr_package": "mesa-fex-guest",
+    "copr_chroot": "fedora-44-x86_64",
+    "rpm": "",
+    "ref": "",
+    "note": "Repacks the x86 trees of the mesa-fex-guest RPM that COPR built from the current mesa pin (gravity-x86-mesa and fex-guestos-mesa). After that build succeeds, `make pin` records its URL here and its hash in downloads.lock.json."
+  },
   "uboot-tools": {
     "kind": "spec",
     "note": "Asahi/Fedora source plus nine checked-in Gravity patches through a2f6913694ff26908c16948af3f8372429782263; see UPSTREAM.md."

@@ -1,0 +1,35 @@
+# Fedora x86 packages for the guestos tree: NAME ARCH...
+# mesa-fex-guest installs them as build dependencies (from Fedora's x86_64
+# repositories, which carry the i686 libraries too). assemble.py takes their
+# shared libraries (the ones the tree's Mesa, libglvnd and programs need, plus
+# all of glibc and the C/C++ runtime), glibc's gconv modules, license texts
+# and the x86_64 programs bash, busybox and ldconfig. It fails if a NEEDED
+# library is missing.
+glibc               x86_64 i686
+libgcc              x86_64 i686
+libstdc++           x86_64 i686
+libglvnd            x86_64 i686
+libglvnd-glx        x86_64 i686
+libglvnd-egl        x86_64 i686
+libglvnd-opengl     x86_64 i686
+libglvnd-gles       x86_64 i686
+libdrm              x86_64 i686
+expat               x86_64 i686
+zlib-ng-compat      x86_64 i686
+libzstd             x86_64 i686
+libdisplay-info     x86_64 i686
+spirv-tools-libs    x86_64 i686
+systemd-libs        x86_64 i686
+libwayland-client   x86_64 i686
+libffi              x86_64 i686
+libX11              x86_64 i686
+libX11-xcb          x86_64 i686
+libxcb              x86_64 i686
+libXau              x86_64 i686
+xcb-util-keysyms    x86_64 i686
+libXext             x86_64 i686
+libxshmfence        x86_64 i686
+libXxf86vm          x86_64 i686
+bash                x86_64
+ncurses-libs        x86_64
+busybox             x86_64
