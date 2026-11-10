@@ -10,5 +10,6 @@
   "https://github.com/rafalh/rust-fatfs/archive/4eccb50d011146fbed20e133d33b22f3c27292e7/rust-fatfs-4eccb50d011146fbed20e133d33b22f3c27292e7.tar.gz": "06302558ed3878e70e51109648e2972faf8ec444c352c31f8272a55d93850e95",
   "https://crates.io/api/v1/crates/speakersafetyd/2.0.1/download": "30101e673466072a080e321df3b7d1165dd8b79246ba393b82bb09d8325dd814",
   "https://github.com/AsahiLinux/alsa-ucm-conf-asahi/archive/v10/alsa-ucm-conf-asahi-10.tar.gz": "4cbf77e7113dbe3981c1aa271bc12f30c8af1ac3326db8e261ee8aa25cf37295",
-  "https://github.com/AsahiLinux/asahi-audio/archive/v4.1/asahi-audio-4.1.tar.gz": "e2c3887fe20481675698ac8174f53b66276f75a2b3c0853daf9b1a70dda690c5"
+  "https://github.com/AsahiLinux/asahi-audio/archive/v4.1/asahi-audio-4.1.tar.gz": "e2c3887fe20481675698ac8174f53b66276f75a2b3c0853daf9b1a70dda690c5",
+  "https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-7.3.tar.xz": "87363c24f10e06321eb362765521094e94471f6bff8bce2d6b3e40f39f004953"
 }

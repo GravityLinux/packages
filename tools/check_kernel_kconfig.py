@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check SRPM config overlays against pinned Linux and Fedora's own comparator.
+"""Check SRPM config overlays (every architecture) against pinned Linux and Fedora's own comparator.
 
 Usage: python3 tools/check_kernel_kconfig.py LINUX_TREE BASELINE_SRPM_SOURCES
 Requires make, a host C compiler, flex and bison. Uses Fedora's dummy GCC
@@ -13,6 +13,10 @@ import subprocess
 import tempfile
 
 from package import overlay_kernel_configs
+
+# Fedora config name prefix -> kernel ARCH (as process_configs.sh maps them).
+ARCHES = (("aarch64", "arm64"), ("x86_64", "x86"), ("ppc64le", "powerpc"),
+          ("riscv64", "riscv"), ("s390x", "s390"))
 
 
 def main():
@@ -33,7 +37,8 @@ def main():
         root = Path(tmp)
         configs = root / "configs"
         configs.mkdir()
-        for config in sources.glob("kernel-aarch64*-fedora.config"):
+        # Fedora's %prep processes every architecture's configurations.
+        for config in sources.glob("kernel-*-fedora.config"):
             shutil.copy2(config, configs / config.name)
         if not list(configs.glob("*16k*.config")):
             raise SystemExit("Missing baseline Apple 16K configs")
@@ -43,8 +48,9 @@ def main():
             build.mkdir()
             generated = build / ".config"
             shutil.copy2(config, generated)
+            arch = next(a for p, a in ARCHES if config.name.startswith("kernel-" + p))
             command = ["make", "-s", "-C", str(linux), f"O={build}",
-                       "ARCH=arm64", f"CROSS_COMPILE={linux}/scripts/dummy-tools/"]
+                       f"ARCH={arch}", f"CROSS_COMPILE={linux}/scripts/dummy-tools/"]
             new = subprocess.run(command + ["listnewconfig"], check=True,
                                  capture_output=True, text=True)
             if re.search(r"^CONFIG_", new.stdout, re.M) or "warning:" in new.stderr:

@@ -42,17 +42,18 @@ software dependencies.
 %package core
 Summary:        Metapackage declaring core Asahi platform dependencies
 Requires:       alsa-ucm-asahi
-# The platform scripts tested with kernel-p3s (E2E upgrade 2026-11-08): the
+# The platform scripts tested with the P3S kernel (E2E upgrade 2026-11-08): the
 # dracut and update-m1n1 fixes, and remix-scripts 105, which moves pre-102
-# installs from the disk swapfile kernel-p3s keeps off to zram. Without it a
+# installs from the disk swapfile the P3S kernel keeps off to zram. Without it a
 # bare "dnf install steam" on a 20260920 install left the machine with no swap.
 Requires:       gravity-fwupdate >= 20260915-103
 Requires:       dracut-gravity >= 20260915-103
 Requires:       update-m1n1 >= 20260915-103
 Requires:       gravity-remix-scripts >= 20260915-105
-# kernel-p3s is the one Gravity kernel for every supported board (one config,
-# all device trees). With "(kernel-16k or kernel-p3s)" the solver was free to
-# pick the stock 7.1.13 kernel, which has no M4 support.
+# kernel(p3s) is provided by kernel-16k from 7.3.0-514.gravity on: the one
+# Gravity kernel for every supported board (one config, all device trees).
+# Requiring the kernel-16k name would accept the 7.1.13 kernel, which has no
+# M4 support.
 Requires:       kernel(p3s)
 Requires:       update-m1n1
 Requires:       tiny-dfr

@@ -10,7 +10,7 @@ Gravity-specific RPMs do.
 
 | Source RPM | Main output / role | Packaging baseline |
 | --- | --- | --- |
-| kernel | kernel-16k, core, modules, modules-core, modules-extra, devel | Asahi 7.1.13-403 SRPM |
+| kernel | kernel-16k, core, modules, modules-core, modules-extra, devel (provides kernel(p3s)): the one release kernel for every board (Linux 7.3 + P3S, M4) | Fedora 7.3.3-200.fc44 SRPM on Linux 7.3 |
 | mesa | Fedora Mesa libraries, DRI and Vulkan drivers | Fedora 44 dist-git |
 | uboot-tools | uboot-tools, uboot-images-armv8 | Asahi packaging plus six Gravity patches |
 | gravity-bootloader | gravity-bootloader, gravity-bootloader-stage1, gravity-bootloader-tools | Fedora 44 m1n1 packaging, pinned M4 fork |
@@ -105,13 +105,15 @@ Every run gets an isolated `.work/` directory. SRPMs and their input hashes
 are placed in `dist/`. Existing SRPM filenames are never overwritten: bump
 Release or choose another `--outdir` for a test rebuild.
 
-The kernel builder extracts the pinned Asahi SRPM's configs and auxiliary
-sources, generates a diff from the matching Asahi source commit to Gravity's
-commit, and adds that after the Fedora/Asahi patch stack. This preserves Fedora
-kernel-specific changes. `kernel/gravity.config` enables the M4 GPU and built-in
-J773g speaker support, including its dependencies, in both 16K Fedora
-configurations. Keep the kernel SRPM, base_ref, ref, version and config changes
-in sync on each kernel rebase; check the patch stack again.
+The kernel builder extracts the pinned Fedora SRPM's configs and auxiliary
+sources, generates a diff from upstream Linux (`base_ref`, the release the
+kernel.org tarball holds) to Gravity's commit, and applies it after Fedora's
+patch. This keeps Fedora's kernel-specific changes and configuration.
+`kernel/gravity-aarch64.config` sets the options Gravity's source adds in every
+AArch64 variant; `kernel/gravity.config` adds P3S and the Apple M4 drivers to
+both 16K configurations (see kernel/TRIMMING.md). Keep the kernel SRPM,
+base_ref, ref, version and config changes in sync on each kernel rebase; check
+the patch stack again.
 
 For Mesa, keep Fedora's complete subpackage split and Rust dependency
 packaging. Pinning a new source version may require adapting the Meson options,

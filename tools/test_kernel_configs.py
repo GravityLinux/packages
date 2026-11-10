@@ -33,15 +33,16 @@ class KernelConfigTests(unittest.TestCase):
                         self.assertNotIn("CONFIG_DRM_NOUVEAU=m\n", result)
                         self.assertIn("# CONFIG_ARCH_QCOM is not set\n", result)
                         self.assertNotRegex(result, r"(?m)^CONFIG_\w+=n$")
-                        for key in ("REGMAP_SPMI", "QCOM_SCM"):
-                            self.assertIn(f"CONFIG_{key}=m\n", result)
-                            self.assertNotIn(f"CONFIG_{key}=y\n", result)
+                        self.assertIn("CONFIG_QCOM_SCM=m\n", result)
+                        self.assertNotIn("CONFIG_QCOM_SCM=y\n", result)
+                        # P3S needs 47-bit VA and no AArch32 compat.
+                        self.assertIn("CONFIG_ARM64_PER_PROCESS_PAGE_SIZE=y\n", result)
+                        self.assertIn("# CONFIG_COMPAT is not set\n", result)
                         self.assertIn("CONFIG_SND_COMPRESS_OFFLOAD=y\n", result)
                         self.assertNotIn("CONFIG_SND_COMPRESS_OFFLOAD=m\n", result)
                     else:
                         self.assertIn("CONFIG_DRM_NOUVEAU=m\n", result)
                         self.assertIn("CONFIG_ARCH_QCOM=y\n", result)
-                        self.assertIn("CONFIG_REGMAP_SPMI=y\n", result)
                         self.assertIn("CONFIG_QCOM_SCM=y\n", result)
                         self.assertIn("CONFIG_SND_COMPRESS_OFFLOAD=m\n", result)
                     self.assertIn("CONFIG_USB_STORAGE=m\n", result)
@@ -49,13 +50,19 @@ class KernelConfigTests(unittest.TestCase):
                         self.assertEqual(result.count("CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON="), 1)
                         self.assertIn("CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON=y\n", result)
                         self.assertNotIn("# CONFIG_SERIAL_APPLE_DOCKCHANNEL_EARLYCON is not set", result)
-                        self.assertEqual("CONFIG_DRM_ASAHI_M4=m\n" in result,
+                        self.assertEqual("CONFIG_DRM_ASAHI=y\n" in result,
                                          variant.startswith("aarch64-16k"))
+                        self.assertIn("CONFIG_ARM_APPLE_CPUIDLE=y\n", result)
                         self.assertEqual("CONFIG_SND_SOC_APPLE_T8132_SPEAKER=y\n" in result,
                                          variant.startswith("aarch64-16k"))
                         self.assertIn("CONFIG_OTHER=y\n", result)
                     else:
-                        self.assertEqual(result, initial)
+                        # Other architectures get only the gravity-other.config values.
+                        self.assertEqual(result.replace("# CONFIG_USB_XHCI_PCI_ASMEDIA is not set\n", "")
+                                         .replace("# CONFIG_BT_BRCMEXT is not set\n", "")
+                                         .replace("# CONFIG_BT_HCIMT793B is not set\n", "")
+                                         .replace("# CONFIG_SPI_HID_APPLE_OF is not set\n", ""), initial)
+                        self.assertIn("# CONFIG_USB_XHCI_PCI_ASMEDIA is not set\n", result)
 
 
 if __name__ == "__main__":

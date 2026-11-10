@@ -6,7 +6,7 @@ the source projects, patches, or artwork.
 
 | Directory | Upstream | Pinned packaging revision |
 | --- | --- | --- |
-| kernel | Asahi kernel source build 10979408 | kernel-7.1.13-403.asahi.fc44.src.rpm |
+| kernel | Fedora koji kernel build (f44) | kernel-7.3.3-200.fc44.src.rpm |
 | mesa | https://src.fedoraproject.org/rpms/mesa (f44) | 63150cfc593fcc41d67c5a1b720cc2065a1cf00d |
 | m1n1 | https://src.fedoraproject.org/rpms/m1n1 (f44) | 11a3eafd7658f7adc27859b1f89f7e47db4791a5 |
 | gravity-scripts | https://src.fedoraproject.org/rpms/asahi-scripts (f44) | 50aa8f51e8ad9a7a72f70ced85737f76038e143c |
@@ -49,20 +49,22 @@ Re-export the patches and update this file when that source changes.
 ## Kernel
 
 Baseline source:
-https://download.copr.fedorainfracloud.org/results/@asahi/kernel/srpm-builds/10979408/kernel-7.1.13-403.asahi.fc44.src.rpm
+https://kojipkgs.fedoraproject.org/packages/kernel/7.3.3/200.fc44/src/kernel-7.3.3-200.fc44.src.rpm
 
 SHA256:
-`b21403621e44d6390c089126afb2c8ee41a9926b4bd7a840b544b39ffd15be9a`
+`7eb03986901b0fc95cbfd92ba2239d5f7fdd6fee010f36eab22bf982ad5adeba`
 
-That COPR build's overall state is failed; using its source packaging does not
-establish a successful binary build. Gravity must pass its own aarch64 build.
+Asahi's kernel COPR has no 7.3 source package, so the baseline is Fedora's own
+Fedora 44 kernel: its spec, configurations, auxiliary sources and
+patch-7.3-redhat.patch. The Gravity source is based on Linux 7.3, not 7.3.3, so
+the spec takes the kernel.org linux-7.3.tar.xz (pinned in downloads.lock.json;
+its tree is identical to v7.3) instead of the SRPM's 7.3.3 tarball. Fedora's
+patch applies to it unchanged.
 
-The Gravity patch is generated against the Asahi source revision
-`3988dac1664c05fa7c8310fcad8eee10428b5f43`, with both endpoints recorded in
-sources.json. The baseline source tarball and Fedora/Asahi patch are preserved.
-No source archive is committed to this repo.
-The generated diff uses two context lines to avoid overlapping Fedora's
-adjacent iomfb-surfaces fix in dcp_platform_probe. Both changes are retained.
+The Gravity patch is generated from v7.3
+(`c03c1a14507dfaf8b856c2608f9ac216021fc222`) to the Gravity commit, both
+recorded in sources.json, and applied after Fedora's patch. No source archive
+is committed to this repo.
 
 ## gravity-bootloader (upstream m1n1)
 
