@@ -82,7 +82,7 @@ Name:           mesa
 Vendor:         Gravity Linux
 Summary:        Mesa graphics libraries
 Version:        26.3.0~devel
-Release:        103.gravity%{?dist}
+Release:        108.gravity%{?dist}
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
 
@@ -278,6 +278,11 @@ Obsoletes:      %{name}-va-drivers < 26.0.0-5
 Provides:       %{name}-va-drivers = %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       %{name}-va-drivers%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      %{name}-vaapi-drivers < 22.2.0-5
+# The pinned Mesa revision (first 10 hex digits): gravity-x86-mesa and
+# fex-guestos-mesa carry x86 builds of exactly this revision and require it.
+%if %{defined gravity_git_ref}
+Provides:       gravity-mesa-revision = %{lua:print(string.sub(rpm.expand("%{gravity_git_ref}"), 1, 10))}
+%endif
 
 %description dri-drivers
 %{summary}.
@@ -407,6 +412,10 @@ _EOF
 %build
 # ensure standard Rust compiler flags are set
 export RUSTFLAGS="%build_rustflags"
+# The release tarball has no .git, so Mesa's version string would lack the
+# "(git-xxxxxxxxxx)" suffix that identifies the pinned source in bug reports.
+# tools/package.py defines gravity_git_ref from sources.json.
+%{?gravity_git_ref:export MESA_GIT_SHA1_OVERRIDE=%{gravity_git_ref}}
 
 %if 0%{?with_nvk}
 # So... Meson can't actually find them without tweaks
@@ -759,6 +768,14 @@ ln -s libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
 %endif
 
 %changelog
+* Mon Nov 09 2026 Niklas Sheth <niklassheth@gmail.com> - 26.3.0~devel-108.gravity
+- Pin GravityLinux/mesa 533a2be5
+- CPU maps of shared dma-bufs wait for their implicit fences, so screen
+  recorders such as KRdp no longer capture half-rendered compositor frames
+- The version string names the pinned commit (MESA_GIT_SHA1_OVERRIDE)
+- dri-drivers: Provides gravity-mesa-revision = <pinned revision>, which the
+  x86 Mesa trees (gravity-x86-mesa, fex-guestos-mesa) require
+
 * Sun Sep 27 2026 Gravity Linux maintainers - 26.3.0~devel-103.gravity
 - Update Mesa source pin to include ordinary varying export for legacy clip vertex
 

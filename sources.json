@@ -14,10 +14,10 @@
   "mesa": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/mesa.git",
-    "ref": "87ac51d411f0e58a9433567ec2666f457be89e1d",
+    "ref": "533a2be53faebfd31080c6b2d2a4dc3351ce7b72",
     "archive": "mesa-26.3.0-devel.tar.xz",
     "root": "mesa-26.3.0-devel",
-    "note": "Published M4 compiler and driver updates, including automatic Apple9 rendering selection and ordinary varying export for legacy clip vertex."
+    "note": "Mesa 26.3.0-devel with Apple M4 GPU support (GL and Vulkan). CPU maps of shared dma-bufs wait for their implicit fences, which fixes torn frames in screen capture and remote desktop."
   },
   "uboot-tools": {
     "kind": "spec",
