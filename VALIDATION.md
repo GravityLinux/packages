@@ -1,4 +1,16 @@
-# Validation — 2026-09-15
+# Packaging validation
+
+## Combined release candidate (2026-11-11)
+
+The release uses kernel 7.3.0-514 as the normal kernel packages, metapackage
+0-112 with both modules-extra and the J713 audio add-on, one board-aware sleep
+policy with the interim USB4 inhibitor, and Mesa 109 at `97b7d43544b7`.
+Zram remains the default; the kernel disk-swap guard is removed after successful
+4K-process disk-swap validation. The x86 Mesa source build follows Mesa 109;
+its repack still needs an RPM pin after that build exists in COPR.
+
+The historical results below describe their original revisions. They do not
+constitute a COPR build or device test of this combined package set.
 
 ## 2026-11-10 x86 Mesa built from source (mesa-fex-guest, gravity-x86-mesa)
 

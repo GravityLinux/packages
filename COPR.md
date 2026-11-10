@@ -43,6 +43,20 @@ README.md. New builds must use a new RPM Release when package contents change.
 The SRPM preparation worker can fetch sources and install preparation tools;
 binary-build network access can remain disabled.
 
+## Release build order
+
+1. Build kernel (kernel-16k and its module packages), mesa, mesa-fex-guest,
+   uboot-tools, gravity-installer, gravity-logos, gravity-release,
+   gravity-appstream-metadata, gravity-remix-scripts, gravity-x86 and
+   gravity-audio-j713 independently.
+2. Build gravity-bootloader after gravity-logos; build gravity-x86-mesa after
+   both Mesa builds and the reviewed RPM pin described below.
+3. Build gravity-scripts after gravity-bootloader, uboot-images-armv8 and
+   python3-gravity_firmware are available for installation tests.
+4. Build gravity-repos after project/key configuration, and
+   gravity-platform-metapackage last; validate the complete upgrade and image
+   dependency transactions before publishing the set.
+
 ## x86 Mesa (mesa-fex-guest and gravity-x86-mesa)
 
 The project needs a second chroot for one package. In Settings / Project

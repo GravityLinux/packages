@@ -1,7 +1,7 @@
 Name:           gravity-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        104.gravity%{?dist}
+Release:        105.gravity%{?dist}
 Summary:        Miscellaneous admin scripts for Gravity Linux
 
 License:        MIT
@@ -145,6 +145,9 @@ grep -q 'gravity_firmware' && %{_sbindir}/gravity-fwupdate || :
 %ghost %config(noreplace) %{_sysconfdir}/udev/macsmc-battery.conf
 
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-105.gravity
+- Update diagnostics for the normal kernel packages and the audio add-on.
+
 * Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 20260915-104.gravity
 - gravity-diagnose: check the page size and P3S support instead of a "+16k"
   kernel name, accept T8132 with 26.6.2 firmware and the DEFAULTKERNEL values

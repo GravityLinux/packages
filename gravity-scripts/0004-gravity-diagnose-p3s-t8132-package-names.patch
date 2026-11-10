@@ -1,17 +1,16 @@
 From: Niklas Sheth <niklassheth@gmail.com>
 Subject: [PATCH] gravity-diagnose: check page size and P3S, T8132 firmware, current package names
 
-- 16k check by getconf PAGESIZE instead of a "+16k" uname suffix (kernel-p3s
-  is "+p3s_16k"); note when the running kernel lacks P3S (4K processes).
+- Check 16K pages with getconf PAGESIZE and check 4K-process support.
 - T8132 (M4) with macOS 26.6.2 firmware is a supported combination.
-- DEFAULTKERNEL kernel-16k-core, kernel-16k, kernel-p3s and kernel-core all work.
+- DEFAULTKERNEL uses the normal kernel-16k packages.
 - Check gravity-platform-metapackage-core, not the base package that image
   installs do not carry.
-- Package list: kernel-p3s, gravity-bootloader, gravity-x86, Steam, FEX, Mesa.
+- Package list: kernel-16k, the audio add-on, bootloader, x86 Mesa, Steam and FEX.
 ---
 --- a/gravity-diagnose	2026-09-15 20:49:29.000000000 -0400
 +++ b/gravity-diagnose	2026-11-08 23:18:31.792408042 -0500
-@@ -154,10 +154,14 @@
+@@ -154,10 +154,15 @@
              mesa xorg-server pipewire kwin mutter"
      elif [ -e /etc/fedora-release ]; then
        cmd="rpm -q"
@@ -22,15 +21,16 @@ Subject: [PATCH] gravity-diagnose: check page size and P3S, T8132 firmware, curr
 +      pkgs="gravity-bootloader alsa-ucm-asahi gravity-platform-metapackage
 +            gravity-platform-metapackage-core gravity-platform-metapackage-mesa
 +            gravity-platform-metapackage-desktop gravity-repos gravity-remix-scripts tiny-dfr
-+            uboot-images-armv8 kernel-p3s kernel-p3s-common kernel-16k kernel-16k-modules-extra
-+            gravity-fwupdate python3-gravity_firmware dracut-gravity update-m1n1
++            uboot-images-armv8 kernel-16k kernel-16k-core kernel-16k-modules kernel-16k-modules-core
++            kernel-16k-modules-extra kernel-modules-extra-matched gravity-audio-j713 gravity-fwupdate
++            python3-gravity_firmware dracut-gravity update-m1n1
 +            asahi-audio speakersafetyd wireplumber pipewire mesa-dri-drivers mesa-vulkan-drivers
 +            fex-emu fex-emu-rootfs-fedora gravity-x86 gravity-x86-mesa fex-guestos-mesa
 +            steam proton-gravity-arm64"
      else
        echo "Distribution not supported"
        return
-@@ -274,6 +278,8 @@
+@@ -274,6 +279,8 @@
          t600[012]:13.5*) ;;
          t8112:13.5*) ;;
          t602[012]:13.5*) ;;
@@ -39,13 +39,12 @@ Subject: [PATCH] gravity-diagnose: check page size and P3S, T8132 firmware, curr
          *)
              echo
              echo "** WARNING! **"
-@@ -286,30 +292,51 @@
+@@ -286,30 +293,50 @@
      esac
  
      if [ -e /etc/fedora-release ]; then
 -        if uname -r | grep -qv '+16k$'; then
-+        # Page size of the running kernel, not its name: kernel-16k ends in
-+        # "+16k", kernel-p3s in "+p3s_16k".
++        # Check the running kernel page size directly.
 +        kcfg="/usr/lib/modules/$(uname -r)/config"
 +        if [ "$(getconf PAGESIZE)" != 16384 ]; then
              echo
@@ -57,7 +56,7 @@ Subject: [PATCH] gravity-diagnose: check page size and P3S, T8132 firmware, curr
 +            echo
 +            echo "** NOTE **"
 +            echo "The running kernel ($(uname -r)) has no 4K process support (P3S): Steam and"
-+            echo "x86 programs need the Gravity kernel (kernel-p3s). If it is installed, restart"
++            echo "x86 programs need the Gravity kernel (kernel-16k). If it is installed, restart"
 +            echo "into it; otherwise run \`sudo dnf upgrade\` and restart."
 +        fi
 +        if [ ! -e /etc/sysconfig/kernel ]; then
@@ -73,17 +72,17 @@ Subject: [PATCH] gravity-diagnose: check page size and P3S, T8132 firmware, curr
 -            echo "for how to fix."
 +        else
 +            # grub makes a new kernel the default if its release contains the
-+            # DEFAULTKERNEL type (16k, p3s) or, for kernel-core, matches no
-+            # 64k/rt/auto/uki; kernel-p3s's +p3s_16k works with all three, and
-+            # the platform metapackage keeps 4K kernels from being installed.
++            # DEFAULTKERNEL type (16k) or, for kernel-core, matches no
++            # 64k/rt/auto/uki; the platform metapackage keeps 4K kernels
++            # from being installed.
 +            dk="$(sed -n 's/^DEFAULTKERNEL=//p' /etc/sysconfig/kernel | tail -1)"
 +            case "$dk" in
-+                kernel-16k-core|kernel-16k|kernel-p3s|kernel-core) ;;
++                kernel-16k-core|kernel-16k|kernel-core) ;;
 +                *)
 +                    echo
 +                    echo "** WARNING! **"
 +                    echo "/etc/sysconfig/kernel sets DEFAULTKERNEL=$dk; new Gravity kernels may not"
-+                    echo "become the boot default. Expected kernel-16k-core, kernel-p3s or kernel-core."
++                    echo "become the boot default. Expected kernel-16k-core, kernel-16k or kernel-core."
 +                    ;;
 +            esac
          fi
