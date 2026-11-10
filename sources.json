@@ -15,10 +15,10 @@
   "mesa": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/mesa.git",
-    "ref": "533a2be53faebfd31080c6b2d2a4dc3351ce7b72",
+    "ref": "97b7d43544b7ac33a274955635f20ce866cd0c73",
     "archive": "mesa-26.3.0-devel.tar.xz",
     "root": "mesa-26.3.0-devel",
-    "note": "Mesa 26.3.0-devel with Apple M4 GPU support (GL and Vulkan). CPU maps of shared dma-bufs wait for their implicit fences, which fixes torn frames in screen capture and remote desktop."
+    "note": "Mesa 26.3.0-devel with Apple M4 GPU support (GL and Vulkan), vertex-stage store ordering fixed in the Vulkan driver, the conformance warning removed, and research files removed from the source tree."
   },
   "mesa-fex-guest": {
     "kind": "git",
@@ -46,7 +46,9 @@
     "url": "https://github.com/GravityLinux/bootloader.git",
     "ref": "f6c017a7090c3256f9b5587417168a9d40ff5af0",
     "archive": "gravity-bootloader-1.6.1.tar.gz",
-    "omit_submodules": ["artwork"],
+    "omit_submodules": [
+      "artwork"
+    ],
     "root": "gravity-bootloader-1.6.1",
     "note": "M4 bring-up on top of GravityLinux/bootloader main 79ff30c70f06: T8132 GPU calibration and core mask, MTP and AOP DAPF setup, system-level cache, CPU frequency init, ISP heap, NO_DISPLAY build, and m1n1.conf.example restored. Preserve DCP firmware-version and firmware-compat as 26.6.2; pair with the kernel's exact actual-version check."
   },
@@ -63,7 +65,10 @@
     "url": "https://github.com/GravityLinux/installer.git",
     "ref": "34c9ded9e2e4efd9add6bb984d5c50656ea324da",
     "archive": "gravity-installer-0.9.1.tar.gz",
-    "omit_submodules": ["artwork", "bootloader"],
+    "omit_submodules": [
+      "artwork",
+      "bootloader"
+    ],
     "root": "gravity-installer-0.9.1",
     "note": "Qualified recovery extraction plus per-radio J773g Wi-Fi and Bluetooth factory calibration."
   },
