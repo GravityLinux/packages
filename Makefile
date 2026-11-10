@@ -1,4 +1,4 @@
-.PHONY: check status prepare srpm
+.PHONY: check status prepare srpm pin
 PYTHON ?= python3
 check:
 	$(PYTHON) tools/package.py check
@@ -10,3 +10,5 @@ prepare:
 srpm:
 	@test -n "$(PACKAGE)" || (echo "Set PACKAGE"; exit 1)
 	$(PYTHON) tools/package.py srpm "$(PACKAGE)" $(ARGS)
+pin:
+	$(PYTHON) tools/package.py pin $(PACKAGE)

@@ -11,6 +11,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -38,6 +39,58 @@ def write_json(path, value):
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
 
 
+COPR_API = "https://copr.fedorainfracloud.org/api_3"
+
+
+def resolve(name, recipes):
+    """A recipe with "source" builds from another git recipe's pinned source."""
+    recipe = recipes[name]
+    if "source" not in recipe:
+        return recipe
+    base = recipes.get(recipe["source"])
+    if not base or base["kind"] != "git" or "source" in base:
+        raise ValueError(f"{name}: source must name a git recipe")
+    return {**base, **recipe}
+
+
+def spec_version(name):
+    """(Version, Release without %{?dist}) of a package spec in this repository."""
+    text = (ROOT / name / (name + ".spec")).read_text()
+    version = re.search(r"^Version:\s*(\S+)\s*$", text, re.M)
+    release = re.search(r"^Release:\s*(\S+?)(?:%\{\?dist\})?\s*$", text, re.M)
+    if not version or not release or "%" in version[1] + release[1]:
+        raise ValueError(f"{name}: expected literal Version and Release")
+    return version[1], release[1]
+
+
+def rpm_nvr(filename, release):
+    """(name, version, release without the dist tag) from an RPM file name."""
+    stem = re.fullmatch(r"(.+)\.[A-Za-z0-9_]+\.rpm", filename)
+    parts = stem[1].rsplit("-", 2) if stem else []
+    if len(parts) != 3:
+        raise ValueError(f"Not an RPM file name: {filename}")
+    return parts[0], parts[1], parts[2].removesuffix(f".fc{release['fedora']}")
+
+
+def rpm_git_ref(path, package):
+    """The source commit an RPM declares with Provides: PACKAGE(git-ref) = COMMIT."""
+    if not shutil.which("rpm"):
+        raise ValueError("Missing rpm; use the Fedora environment documented in README.md")
+    provides = run("rpm", "-qp", "--qf", "[%{PROVIDES} %{PROVIDEVERSION}\n]", path, capture=True)
+    for line in provides.splitlines():
+        key, _, value = line.partition(" ")
+        if key == f"{package}(git-ref)" and re.fullmatch(r"[0-9a-f]{40}", value):
+            return value
+    raise ValueError(f"{path.name} does not provide {package}(git-ref)")
+
+
+def copr_get(path, **query):
+    url = f"{COPR_API}/{path}?" + urllib.parse.urlencode(query)
+    request = urllib.request.Request(url, headers={"User-Agent": "GravityLinux-packages/1"})
+    with urllib.request.urlopen(request, timeout=120) as response:
+        return json.load(response)
+
+
 def download(url, target, expected, accept, updates):
     if not expected and not accept:
         raise ValueError(f"Unpinned download: {url}\nRun prepare --update-lock, review downloads.lock.json, then commit it.")
@@ -63,8 +116,24 @@ def download(url, target, expected, accept, updates):
     shutil.copyfile(item, target)
 
 
-def blockers(name, recipe, release):
+def rpm_blockers(name, recipe, recipes):
+    package = recipe["copr_package"]
+    want = resolve(package, recipes)["ref"]
+    how = f"build {package} in COPR ({recipe['copr_chroot']}), then run `make pin`"
+    if not recipe.get("rpm"):
+        return [f"No {package} RPM pinned: {how}"]
+    if recipe.get("ref") != want:
+        return [f"The pinned {package} RPM is from {recipe.get('ref', '')[:10] or 'an unknown commit'}, "
+                f"sources.json {resolve(package, recipes).get('source', package)} is at {want[:10]}: {how}"]
+    if recipe["rpm"] not in read_json("downloads.lock.json"):
+        return [f"{recipe['rpm']} has no downloads.lock.json hash: run `make pin`"]
+    return []
+
+
+def blockers(name, recipe, release, recipes=None):
     result = []
+    if recipe["kind"] == "rpm" and recipes is not None:
+        result += rpm_blockers(name, recipe, recipes)
     if recipe["kind"] == "git" and not recipe.get("ref"):
         result.append(recipe.get("note", "Pin source commit in sources.json"))
     if name in ("gravity-logos", "gravity-bootloader") and not release["artwork_license"]:
@@ -82,8 +151,22 @@ def check(recipes, release):
         spec = ROOT / name / (name + ".spec")
         if not spec.is_file():
             raise ValueError(f"Missing {spec}")
-        if recipe["kind"] not in ("git", "local", "spec"):
+        if recipe["kind"] not in ("git", "local", "spec", "rpm"):
             raise ValueError(f"Unknown source kind for {name}")
+        if "source" in recipe:
+            resolve(name, recipes)
+            spec_version(recipe["source"])
+        if recipe["kind"] == "rpm":
+            package = recipe.get("copr_package")
+            if package not in recipes or "source" not in recipes[package]:
+                raise ValueError(f"{name}: copr_package must name a recipe that builds from a git source")
+            if not re.fullmatch(r"fedora-\d+-(x86_64|i386|aarch64)", recipe.get("copr_chroot", "")):
+                raise ValueError(f"{name}: invalid copr_chroot")
+            url = recipe.get("rpm", "")
+            if url and not (url.startswith("https://") and Path(urllib.parse.urlsplit(url).path).name.startswith(package + "-")):
+                raise ValueError(f"{name}: rpm must be an HTTPS URL of a {package} RPM")
+            if recipe.get("ref") and not re.fullmatch(r"[0-9a-f]{40}", recipe["ref"]):
+                raise ValueError(f"{name}: pin a full Git commit hash for ref")
         if recipe["kind"] == "git":
             for field in ("ref", "base_ref"):
                 ref = recipe.get(field)
@@ -258,7 +341,10 @@ def macros(work, release):
 
 
 def prepare(name, recipe, release, args):
-    problems = blockers(name, recipe, release)
+    if args.rpm and recipe["kind"] != "rpm":
+        raise ValueError("--rpm applies to packages that repack a COPR-built RPM")
+    # A local --rpm stands in for the pin (test builds).
+    problems = blockers(name, recipe, release, None if args.rpm else read_json("sources.json"))
     # A bootloader SRPM can be prepared before its logo build dependency exists.
     if name == "gravity-bootloader":
         problems = []
@@ -296,9 +382,43 @@ def prepare(name, recipe, release, args):
         if "\n" in license_value or "%" in license_value:
             raise ValueError("Expected a single-line SPDX license expression")
         spec.write_text("%global gravity_artwork_license " + license_value + "\n" + spec.read_text())
+    defines = {}
     if recipe["kind"] == "git" and recipe.get("ref"):
         # Lets a spec name its pinned source commit (e.g. Mesa's version string).
-        spec.write_text("%global gravity_git_ref " + recipe["ref"] + "\n" + spec.read_text())
+        defines["gravity_git_ref"] = recipe["ref"]
+    if recipe.get("source"):
+        # Builds of another package's source follow its Version and Release.
+        defines["gravity_source_version"], defines["gravity_source_release"] = spec_version(recipe["source"])
+    if recipe["kind"] == "rpm":
+        # A repack of one RPM built by COPR: its URL (hash in downloads.lock.json),
+        # version, release and source commit.
+        url = recipe.get("rpm", "")
+        if args.rpm:
+            local = Path(args.rpm).resolve()
+            if not url or Path(urllib.parse.urlsplit(url).path).name != local.name:
+                url = (f"https://download.copr.fedorainfracloud.org/results/{release['copr_owner']}/"
+                       f"{release['copr_project']}/{recipe['copr_chroot']}/local/{local.name}")
+            expected = locks.get(url)
+            if expected and checksum(local) != expected:
+                raise ValueError(f"{local} does not match the downloads.lock.json hash of {url}")
+            shutil.copyfile(local, sources / local.name)
+            ref = rpm_git_ref(local, recipe["copr_package"])
+            want = resolve(recipe["copr_package"], read_json("sources.json"))["ref"]
+            if ref != want:
+                raise ValueError(f"{local.name} is from {ref[:10]}, sources.json pins {want[:10]}")
+            print(f"Using local {local.name}" + ("" if expected else " (not pinned; test build only)"), flush=True)
+        else:
+            ref = recipe["ref"]
+        package, version, rpm_release = rpm_nvr(Path(urllib.parse.urlsplit(url).path).name, release)
+        if package != recipe["copr_package"]:
+            raise ValueError(f"{url} is not a {recipe['copr_package']} RPM")
+        defines.update(gravity_rpm_url=url, gravity_rpm_version=version,
+                       gravity_rpm_release=rpm_release, gravity_git_ref=ref)
+    for key, value in defines.items():
+        if not re.fullmatch(r"[A-Za-z0-9_.~:/+-]+", value):
+            raise ValueError(f"Unexpected characters in {key}: {value}")
+    if defines:
+        spec.write_text("".join(f"%global {k} {v}\n" for k, v in defines.items()) + spec.read_text())
     if name == "gravity-repos":
         owner, project = release["copr_owner"], release["copr_project"]
         if not re.fullmatch(r"@?[A-Za-z0-9_.-]+", owner) or not re.fullmatch(r"[A-Za-z0-9_.-]+", project):
@@ -340,12 +460,92 @@ def prepare(name, recipe, release, args):
     return work, spec, opts
 
 
+def set_recipe_fields(name, fields):
+    """Rewrite string fields of one sources.json recipe in place, keeping the
+    file's formatting."""
+    path = ROOT / "sources.json"
+    text = path.read_text()
+    start = text.index(f'\n  "{name}": {{')
+    end = text.index("\n  }", start)
+    block = text[start:end]
+    for key, value in fields.items():
+        block, count = re.subn(rf'("{key}": )"[^"]*"', lambda m: m[1] + json.dumps(value), block)
+        if count != 1:
+            raise ValueError(f"sources.json {name} has no {key} field")
+    expected = json.loads(text)
+    expected[name].update(fields)
+    if json.loads(text[:start] + block + text[end:]) != expected:
+        raise ValueError("sources.json update failed")
+    path.write_text(text[:start] + block + text[end:])
+
+
+def pin(name, recipes, release):
+    """Pin the newest successful COPR build of the RPM a repack package uses
+    that was built from the current source pin."""
+    recipe = recipes[name]
+    package, chroot = recipe["copr_package"], recipe["copr_chroot"]
+    want = resolve(package, recipes)["ref"]
+    owner, project = release["copr_owner"], release["copr_project"]
+    version, source_release = spec_version(recipes[package]["source"])
+    prefix = f"{version}-{source_release}."
+    arch = chroot.rsplit("-", 1)[1].replace("i386", "i686")
+    builds = copr_get("build/list", ownername=owner, projectname=project, packagename=package,
+                      limit=30, order="id", order_type="DESC")["items"]
+    for build in builds:
+        if not (build.get("source_package") or {}).get("version", "").startswith(prefix):
+            continue
+        if chroot not in build.get("chroots", []):
+            continue
+        result = copr_get("build-chroot", build_id=build["id"], chrootname=chroot)
+        if result.get("state") != "succeeded":
+            continue
+        built = copr_get("build-chroot/built-packages", build_id=build["id"], chrootname=chroot)["packages"]
+        names = [f"{p['name']}-{p['version']}-{p['release']}.{p['arch']}.rpm" for p in built
+                 if p["name"] == package and p["arch"] == arch and not p.get("epoch")]
+        if len(names) != 1:
+            raise ValueError(f"COPR build {build['id']}: expected one {package}.{arch} RPM, found {names}")
+        # The build's result directory. In a project that publishes its
+        # repositories by hand, a build is only served from the chroot's
+        # devel repository until then; that URL keeps working afterwards.
+        file = urllib.parse.quote(names[0], safe="~+")
+        candidates = [result["result_url"].rstrip("/") + "/" + file,
+                      f"{build['repo_url'].rstrip('/')}/{chroot}/devel/Packages/{file[0].lower()}/{file}"]
+        updates = {}
+        (ROOT / ".work").mkdir(exist_ok=True)
+        target = Path(tempfile.mkdtemp(prefix="pin-", dir=ROOT / ".work")) / names[0]
+        for url in candidates:
+            try:
+                download(url, target, None, True, updates)
+                break
+            except urllib.error.HTTPError as error:
+                print(f"{url}: {error}")
+        else:
+            raise ValueError(f"Cannot download {names[0]} from COPR build {build['id']}")
+        ref = rpm_git_ref(target, package)
+        shutil.rmtree(target.parent)
+        if ref != want:
+            print(f"COPR build {build['id']} ({names[0]}) is from {ref[:10]}, not {want[:10]}; skipped")
+            continue
+        locks = read_json("downloads.lock.json")
+        old = recipe.get("rpm")
+        if old and old != url:
+            locks.pop(old, None)
+        locks[url] = updates[url]
+        write_json(ROOT / "downloads.lock.json", locks)
+        set_recipe_fields(name, {"rpm": url, "ref": ref})
+        print(f"{name}: pinned COPR build {build['id']}, {names[0]} (sha256 {updates[url]})")
+        return
+    raise ValueError(f"No successful {chroot} COPR build of {package} {prefix}* from {want[:10]}; "
+                     "build it first (COPR.md)")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("check", "status", "prepare", "srpm"))
+    parser.add_argument("command", choices=("check", "status", "prepare", "srpm", "pin"))
     parser.add_argument("package", nargs="?")
     parser.add_argument("--source-dir", help="Use a clean local checkout of the pinned source commit")
     parser.add_argument("--update-lock", action="store_true", help="Record SHA256 for previously unpinned HTTPS inputs; review before committing")
+    parser.add_argument("--rpm", help="Use a local copy of the RPM a repack package pins (test builds)")
     parser.add_argument("--outdir", default=str(ROOT / "dist"))
     args = parser.parse_args()
     recipes, release = read_json("sources.json"), read_json("release.json")
@@ -354,12 +554,19 @@ def main():
         return
     if args.command == "status":
         for name, recipe in recipes.items():
-            pending = blockers(name, recipe, release)
+            pending = blockers(name, resolve(name, recipes), release, recipes)
             print(name + ": " + ("; ".join(pending) if pending else "inputs configured; build validation pending"))
+        return
+    if args.command == "pin":
+        names = [args.package] if args.package else [n for n, r in recipes.items() if r["kind"] == "rpm"]
+        for name in names:
+            if recipes.get(name, {}).get("kind") != "rpm":
+                parser.error(f"{name} does not repack a COPR-built RPM")
+            pin(name, recipes, release)
         return
     if args.package not in recipes:
         parser.error("Select a package from: " + ", ".join(recipes))
-    work, spec, opts = prepare(args.package, recipes[args.package], release, args)
+    work, spec, opts = prepare(args.package, resolve(args.package, recipes), release, args)
     if args.command == "srpm":
         # -bs builds source RPMs only; binary BuildRequires belong to mock/COPR.
         run("rpmbuild", *opts, "-bs", spec)
