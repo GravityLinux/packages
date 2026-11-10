@@ -2,7 +2,7 @@
   "kernel": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/linux.git",
-    "ref": "44381bbc105900756fb7f062c5a3c65fc2a591cb",
+    "ref": "50c933ad090c56ebc3ce5d9421a9c3b57b7ebaa2",
     "archive": "gravity-m4.patch",
     "base_ref": "c03c1a14507dfaf8b856c2608f9ac216021fc222",
     "root": "linux-7.3",
@@ -10,7 +10,7 @@
       "url": "https://kojipkgs.fedoraproject.org/packages/kernel/7.3.3/200.fc44/src/kernel-7.3.3-200.fc44.src.rpm",
       "sha256": "7eb03986901b0fc95cbfd92ba2239d5f7fdd6fee010f36eab22bf982ad5adeba"
     },
-    "note": "Release 7.3.0-514.gravity: Fedora's kernel-7.3.3-200.fc44 packaging and configuration on the Linux 7.3 tarball, plus gravity-m4.patch (v7.3..ref): P3S and the Apple M4 platform support from the GravityLinux/linux integration branch (the bits/* topic branches merged in order). The J713 camera is disabled in its device tree."
+    "note": "Release 7.3.0-515.gravity: Fedora's kernel-7.3.3-200.fc44 packaging and configuration on the Linux 7.3 tarball, plus gravity-m4.patch (v7.3..ref): P3S and the Apple M4 platform support from the GravityLinux/linux integration branch (the bits/* topic branches merged in order). The J713 camera is disabled in its device tree."
   },
   "mesa": {
     "kind": "git",
