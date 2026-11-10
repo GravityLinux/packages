@@ -1,7 +1,7 @@
 Name:           gravity-remix-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        105.gravity%{?dist}
+Release:        106.gravity%{?dist}
 Summary:        Fedora-specific Gravity first-boot utilities
 License:        MIT
 URL:            https://github.com/GravityLinux/packages
@@ -13,15 +13,18 @@ Requires:       systemd
 Requires:       systemd-udev
 Requires:       btrfs-progs
 Requires:       e2fsprogs
+Requires:       grep
 Requires:       util-linux-core
 Requires:       policycoreutils-python-utils
 Conflicts:      fedora-asahi-remix-scripts
+# Its J713 overrides undid the no-sleep policy that this package no longer ships.
+Obsoletes:      gravity-air-power < 20261104-3
 
 %description
 Install optional RPMs from the Gravity ESP directory on first boot. Swap is
 Fedora's default zram; setup-swap.sh remains as a manual swapfile tool.
 Derived from Fedora Asahi Remix first-boot integration.
-Temporarily disable system sleep while M4 suspend/resume is unsupported.
+Allow suspend-to-idle only on machines whose kernel and board support it.
 
 %prep
 %autosetup
@@ -34,11 +37,7 @@ install -Dpm0644 -t %{buildroot}%{_udevhwdbdir} 65-autosuspend-override-asahi.hw
 install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name} install-extras.sh setup-swap.sh
 install -Dpm0644 -t %{buildroot}%{_datadir}/%{name} gravity-enable-zswap.conf
 install -Dpm0644 -t %{buildroot}%{_tmpfilesdir} 60-gravity-mglru-min-ttl.conf
-install -Dpm0644 90-gravity-no-sleep.conf %{buildroot}%{_prefix}/lib/systemd/sleep.conf.d/90-gravity-no-sleep.conf
-install -Dpm0644 90-gravity-no-sleep-logind.conf %{buildroot}%{_prefix}/lib/systemd/logind.conf.d/90-gravity-no-sleep.conf
-for unit in suspend hibernate hybrid-sleep suspend-then-hibernate; do
-    install -Dpm0644 90-gravity-block-sleep-service.conf %{buildroot}%{_unitdir}/systemd-$unit.service.d/90-gravity-no-sleep.conf
-done
+install -Dpm0755 -t %{buildroot}%{_systemdgeneratordir} gravity-sleep-generator
 
 %post
 %systemd_post gravity-extras-firstboot.service
@@ -82,18 +81,16 @@ fi
 %{_libexecdir}/%{name}/
 %{_datadir}/%{name}/
 %{_tmpfilesdir}/60-gravity-mglru-min-ttl.conf
-%{_prefix}/lib/systemd/sleep.conf.d/90-gravity-no-sleep.conf
-%{_prefix}/lib/systemd/logind.conf.d/90-gravity-no-sleep.conf
-%dir %{_unitdir}/systemd-suspend.service.d
-%dir %{_unitdir}/systemd-hibernate.service.d
-%dir %{_unitdir}/systemd-hybrid-sleep.service.d
-%dir %{_unitdir}/systemd-suspend-then-hibernate.service.d
-%{_unitdir}/systemd-suspend.service.d/90-gravity-no-sleep.conf
-%{_unitdir}/systemd-hibernate.service.d/90-gravity-no-sleep.conf
-%{_unitdir}/systemd-hybrid-sleep.service.d/90-gravity-no-sleep.conf
-%{_unitdir}/systemd-suspend-then-hibernate.service.d/90-gravity-no-sleep.conf
+%{_systemdgeneratordir}/gravity-sleep-generator
 
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <niklassheth@gmail.com> - 20260915-106.gravity
+- Replace the sleep block on every machine with gravity-sleep-generator,
+  which masks the sleep targets at boot unless the board and running kernel
+  support suspend-to-idle (J713 with CPU power-down in s2idle). Supported
+  machines use systemd's and the desktop's default sleep and lid policy.
+- Obsolete gravity-air-power, whose runtime overrides undid the old block.
+
 * Sun Nov 08 2026 Niklas Sheth <niklassheth@gmail.com> - 20260915-105.gravity
 - Move installs from before 102 to zram swap: remove the zram-disabling
   /etc/systemd/zram-generator.conf, the zswap tmpfiles link and the

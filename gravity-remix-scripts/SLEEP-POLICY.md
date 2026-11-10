@@ -1,23 +1,57 @@
-# Temporary M4 sleep policy
+# Sleep policy
 
-Release 101.gravity disables suspend, hibernation, hybrid sleep and
-suspend-then-hibernate using RPM-owned vendor configuration under /usr/lib.
-Logind ignores automatic idle sleep, sleep keys and lid events. Four service
-drop-ins use ExecCondition=/usr/bin/false to block direct service activation.
-Screen locking and display blanking are not system suspend and are unchanged.
+Gravity machines use systemd's and the desktop's default sleep policy where
+suspend-to-idle (s2idle) works, and cannot sleep anywhere else. Real
+macOS-style deep sleep is not attempted; the kernel offers s2idle only.
 
-No /etc files or masks are created by the package. Normal RPM upgrades remove
-obsolete vendor files, preserving administrator configuration in /etc.
+## Where it is decided
 
-When sleep is supported, bump Release and remove the six installed policy files
-and their spec install/file entries. The systemd scriptlet reloads unit state;
-reboot after upgrading to refresh logind policy as well. Check for administrator
-overrides if sleep remains disabled. Do not automatically remove user masks.
+`/usr/lib/systemd/system-generators/gravity-sleep-generator` runs at boot and
+on every `systemctl daemon-reload`. Suspend-to-idle is supported when both
+hold:
 
-This is a userspace safety policy, not a security boundary against root writing
-directly to kernel power-management interfaces. It applies to every machine
-with this Gravity package installed until the policy is revised.
+- the board's drivers keep storage, USB and Bluetooth working across s2idle:
+  the device tree is `apple,j713` (MacBook Air M4);
+- the running kernel's CPU idle driver powers CPUs down in s2idle: a
+  `/sys/devices/system/cpu/cpu0/cpuidle/state*/s2idle` directory exists.
+  Without it s2idle would idle the CPUs in a state that loses their
+  registers. Kernels without the driver, or booted with
+  `cpuidle_apple_m4.enable=0`, are unsupported.
 
-Validation: build the real spec and tools/sleep-policy-future.spec, then run
-tools/test_sleep_policy.py against the resulting RPMs in a disposable Fedora
-VM. The successor is only a test fixture and must never be published.
+On a supported machine the generator does nothing. Nothing else in Gravity
+changes the sleep configuration: lid close, the suspend key and idle sleep
+follow systemd-logind and KDE PowerDevil defaults.
+
+Everywhere else it masks `suspend.target`, `hibernate.target`,
+`hybrid-sleep.target` and `suspend-then-hibernate.target` in
+`/run/systemd/generator`, which is what the `systemd.mask=` kernel argument
+does. logind then answers `CanSuspend` with `no`, desktops do not offer
+sleep, and requests (`systemctl suspend`, the suspend key) are refused with
+"Unit suspend.target is masked" before anything is frozen. Hibernation is
+also unavailable because the kernel reports it disabled.
+
+The Mac mini M4 (J773g) is unsupported for now. The kernel keeps its USB
+controllers, NVMe and Bluetooth on the cold-restart resume paths (the
+retention used on J713 is board-gated), and after a full device and
+platform suspend cycle the internal USB hub's xHCI controller stops
+responding, so USB hot-plug hangs and every later suspend fails to freeze
+tasks. A connected USB4 device also makes the kernel refuse to suspend.
+
+## Overrides
+
+- Allow sleep on every machine: `ln -s /dev/null
+  /etc/systemd/system-generators/gravity-sleep-generator`, then reboot.
+- Block sleep on a supported machine: `systemctl mask suspend.target`.
+
+Both are ordinary administrator configuration in /etc; the package never
+writes to /etc or /run itself.
+
+## History
+
+Releases 101 to 105 blocked sleep on every machine with vendor files under
+/usr/lib (`90-gravity-no-sleep.conf` in sleep.conf.d and logind.conf.d and
+`ExecCondition=/usr/bin/false` drop-ins on the four sleep services). RPM
+removes them on upgrade. The unreleased gravity-air-power package, which
+re-enabled sleep on the Air with runtime overrides, is obsoleted.
+logind reads its configuration at start, so the lid and key defaults apply
+after the next reboot.

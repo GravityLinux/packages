@@ -18,7 +18,7 @@ Gravity-specific RPMs do.
 | gravity-installer | python3-gravity_firmware and gravity-fwextract | Linux half of installer packaging |
 | gravity-platform-metapackage | core, audio, plasma, desktop, fex, mesa integration | Asahi platform dependencies plus Gravity packages |
 | gravity-repos | Gravity repository configuration and signing key | Gravity |
-| gravity-remix-scripts | ESP extra-RPM installation (swap: Fedora default zram, SWAP-POLICY.md) | Asahi first-boot scripts |
+| gravity-remix-scripts | ESP extra-RPM installation (swap: Fedora default zram, SWAP-POLICY.md); sleep allowed only where suspend-to-idle works (SLEEP-POLICY.md) | Asahi first-boot scripts |
 | gravity-release | common, basic and KDE release identity/defaults | Asahi release packaging |
 | gravity-appstream-metadata | OS identity for software centers | Gravity |
 | gravity-logos | Bootloader and desktop logos | Gravity artwork |
