@@ -173,7 +173,7 @@ Summary: The Linux kernel
 %define specversion 7.3.0
 %define patchversion 7.3
 # Gravity release number: the one place to bump it (changelog aside).
-%global gravity_release 515
+%global gravity_release 516
 %define pkgrelease %{gravity_release}.gravity
 %define kversion 7
 %define tarfile_release 7.3
@@ -4880,6 +4880,9 @@ fi\
 #
 #
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-516.gravity
+- Fix the interrupt used by the iMac USB-C port controller.
+
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-515.gravity
 - Raise Air CPU thermal trips to 105/110 C and add a 120 C critical trip.
 - Keep the Air USB4 link across suspend.
