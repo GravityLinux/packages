@@ -1,6 +1,6 @@
 Name:           steam
 Version:        1.0.0.85
-Release:        14.gravity%{?dist}
+Release:        15.gravity%{?dist}
 Summary:        Launcher for Valve's native ARM64 Steam client
 # Only the launcher is packaged. Each user's first start downloads Valve's
 # proprietary client from Valve, and the ARM64 Proton build described in
@@ -28,6 +28,7 @@ Source26:       proton-wine-ntdll-header-only-sve-context.patch
 Source27:       proton-FEX-upstream-681636cd.patch
 Source30:       test_fetch_client.py
 Source31:       test_first_run.py
+Source32:       test_launcher.py
 ExclusiveArch:  aarch64
 
 BuildRequires:  desktop-file-utils
@@ -35,6 +36,7 @@ BuildRequires:  gcc
 BuildRequires:  python3
 BuildRequires:  tar
 BuildRequires:  zstd
+BuildRequires:  util-linux
 
 Requires:       bash, coreutils, tar, zstd, procps-ng, util-linux
 Requires:       hicolor-icon-theme
@@ -107,6 +109,7 @@ desktop-file-install --dir=%{buildroot}%{_datadir}/applications steam.desktop
 %check
 python3 test_fetch_client.py
 python3 test_first_run.py
+python3 test_launcher.py
 
 %files
 %license LICENSE LICENSE.icon
@@ -129,6 +132,9 @@ python3 test_first_run.py
 %{_libexecdir}/steam-gravity/seed-compat
 
 %changelog
+* Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 1.0.0.85-15.gravity
+- Stop setup with a useful error when its directory or bootstrap lock fails.
+
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 1.0.0.85-14.gravity
 - The Steam client is no longer part of the package. The first start
   downloads it from Valve (about 700 MB), shows the progress, checks the

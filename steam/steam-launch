@@ -42,13 +42,30 @@ if [ -x "$data/SteamArm64/steamrtarm64/steam" ] ||
 	root="$data/SteamArm64"
 fi
 
-mkdir -p "$HOME/.steam" "$data"
+setup_error() {
+	local msg="$1"
+	echo "steam: $msg" >&2
+	if [ -n "${WAYLAND_DISPLAY:-}${DISPLAY:-}" ]; then
+		if command -v zenity >/dev/null; then
+			zenity --error --title=Steam --text="$msg" >/dev/null 2>&1 || :
+		elif command -v kdialog >/dev/null; then
+			kdialog --title Steam --error "$msg" >/dev/null 2>&1 || :
+		fi
+	fi
+	exit 1
+}
+
+bootstrap_lock() {
+	exec 9>"$HOME/.steam/.bootstrap.lock" || setup_error "Cannot open the Steam setup lock in $HOME/.steam. Check the directory's permissions and free space."
+	flock 9 || setup_error "Cannot acquire the Steam setup lock in $HOME/.steam. Setup stopped without changing the client."
+}
+
+mkdir -p "$HOME/.steam" "$data" || setup_error "Cannot create the Steam directories in $HOME and $data. Check their permissions and free space."
 if [ ! -x "$root/steamrtarm64/steam" ]; then
 	# First run: download Valve's client and unpack it. It goes in one rename,
 	# so an interrupted run leaves only a staging directory, removed next
 	# time, and the partial download, which fetch-client continues.
-	exec 9>"$HOME/.steam/.bootstrap.lock"
-	flock 9
+	bootstrap_lock
 	rm -rf "$data"/.steam-bootstrap-*
 	if [ ! -x "$root/steamrtarm64/steam" ]; then
 		echo "steam: setting up Steam in $root" >&2
@@ -82,9 +99,8 @@ if [ ! -f "$tools/$proton/compatibilitytool.vdf" ]; then
 	tools="$data/steam-gravity/compatibilitytools.d"
 	# Not while Steam is running: this start only hands its arguments over.
 	if [ ! -f "$tools/$proton/compatibilitytool.vdf" ] && ! pgrep -u "$(id -u)" -x steam >/dev/null; then
-		exec 9>"$HOME/.steam/.bootstrap.lock"
-		flock 9
-		mkdir -p "$tools"
+		bootstrap_lock
+		mkdir -p "$tools" || setup_error "Cannot create the Proton directory $tools. Check its permissions and free space."
 		rm -rf "$tools"/.proton-*
 		if [ ! -f "$tools/$proton/compatibilitytool.vdf" ]; then
 			stage="$(mktemp -d "$tools/.proton-XXXXXX")" || exit 1
