@@ -132,6 +132,11 @@ def open_url(url, start=0):
     return urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30)
 
 
+def storage_error(what, path, error):
+    return Stop(f"{capital(what)} could not be saved to {error.filename or path}: "
+                f"{error.strerror or error}.")
+
+
 def download(what, url, size, part, window, text):
     """Fetch url into part, continuing a partial file. Raises Gone on HTTP 404."""
     failures = 0
@@ -151,15 +156,23 @@ def download(what, url, size, part, window, text):
                 if have + length != size:
                     raise Stop(f"The download server offers {what} with {megabytes(have + length)} where "
                                f"{megabytes(size)} was expected, so it was not downloaded. " + UPDATE)
-                with part.open("ab" if have else "wb") as out:
+                try:
+                    out = part.open("ab" if have else "wb")
+                except OSError as error:
+                    raise storage_error(what, part, error) from None
+                try:
                     while chunk := response.read(1 << 18):
                         try:
                             out.write(chunk)
                         except OSError as error:
-                            raise Stop(f"{capital(what)} could not be saved to {part.parent}: "
-                                       f"{error.strerror}.") from None
+                            raise storage_error(what, part, error) from None
                         have += len(chunk)
                         window.update(f"{text}: {megabytes(have)} of {megabytes(size)}", 0.9 * have / size)
+                finally:
+                    try:
+                        out.close()
+                    except OSError as error:
+                        raise storage_error(what, part, error) from None
         except urllib.error.HTTPError as error:
             error.close()
             if error.code == 404:
@@ -316,6 +329,9 @@ def main(arguments):
         fetch(item, Path(arguments[1]), Path(arguments[2]), window)
     except Stop as stop:
         window.error(str(stop) + note)
+        return 1
+    except OSError as error:
+        window.error(str(storage_error(item["what"], arguments[1], error)) + note)
         return 1
     except Cancelled:
         print(f"steam: setting up {item['what']} was cancelled; the download continues from here next time."

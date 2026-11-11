@@ -136,6 +136,7 @@ python3 test_launcher.py
 - Stop setup with a useful error when its directory or bootstrap lock fails.
 - Serialize settings seeding through the handoff to a running client.
 - Retain interrupted downloads selected by the client-index fallback.
+- Show filesystem failures, including open and close errors, in the error window.
 
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 1.0.0.85-14.gravity
 - The Steam client is no longer part of the package. The first start

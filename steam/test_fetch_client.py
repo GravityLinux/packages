@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT
 """Tests of fetch-client against a local HTTP server (run in %check)."""
 import functools
+import errno
 import hashlib
 import http.server
 import importlib.machinery
@@ -14,6 +15,7 @@ import tarfile
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 
 loader = importlib.machinery.SourceFileLoader("fetch_client", str(Path(__file__).with_name("fetch-client")))
 fetch_client = importlib.util.module_from_spec(importlib.util.spec_from_loader("fetch_client", loader))
@@ -84,6 +86,9 @@ class Quiet:
 
     def close(self):
         pass
+
+    def error(self, text):
+        self.errors.append(text)
 
 
 def package(work, marker):
@@ -303,6 +308,59 @@ class FetchClient(unittest.TestCase):
         with self.assertRaisesRegex(fetch_client.Stop, "Proton is not on its download server"):
             self.fetch()
         self.assertEqual(self.site.requests, [("/repo/proton-1.tar.zst", None)])
+
+    def main(self, window):
+        with patch.object(fetch_client, "CLIENT", self.client), patch.object(fetch_client, "Window", return_value=window), patch.object(fetch_client.signal, "signal"):
+            return fetch_client.main(["client", str(self.downloads), str(self.target)])
+
+    def test_directory_read_only_error_uses_error_window(self):
+        window = Quiet()
+        with patch.object(Path, "mkdir", side_effect=OSError(errno.EROFS, "Read-only file system", str(self.downloads))):
+            self.assertEqual(self.main(window), 1)
+        self.assertIn(str(self.downloads), window.errors[0])
+        self.assertIn("Read-only file system", window.errors[0])
+        self.assertIsNone(self.installed())
+
+    def test_full_download_directory_reports_storage_error_without_network_retry(self):
+        window = Quiet()
+        original = Path.open
+        def full(path, *args, **kwargs):
+            if path == self.part() and args and args[0] in ("wb", "ab"):
+                raise OSError(errno.ENOSPC, "No space left on device", str(path))
+            return original(path, *args, **kwargs)
+        with patch.object(Path, "open", full):
+            self.assertEqual(self.main(window), 1)
+        self.assertIn("No space left on device", window.errors[0])
+        self.assertIn(str(self.part()), window.errors[0])
+        self.assertEqual(self.sleeps, [])
+        self.assertIsNone(self.installed())
+
+    @unittest.skipIf(os.geteuid() == 0, "root bypasses ordinary filesystem permissions")
+    def test_actual_unwritable_download_directory_uses_error_window(self):
+        self.downloads.mkdir()
+        self.downloads.chmod(0o500)
+        window = Quiet()
+        try:
+            self.assertEqual(self.main(window), 1)
+        finally:
+            self.downloads.chmod(0o700)
+        self.assertIn("Permission denied", window.errors[0])
+        self.assertEqual(self.sleeps, [])
+        self.assertIsNone(self.installed())
+
+    @unittest.skipIf(os.geteuid() == 0, "root bypasses ordinary filesystem permissions")
+    def test_unreadable_verified_download_uses_error_window(self):
+        self.downloads.mkdir()
+        self.part().write_bytes(self.body)
+        self.part().chmod(0)
+        window = Quiet()
+        try:
+            self.assertEqual(self.main(window), 1)
+        finally:
+            self.part().chmod(0o600)
+        self.assertIn("Permission denied", window.errors[0])
+        self.assertIn(str(self.part()), window.errors[0])
+        self.assertIsNone(self.installed())
 
     def test_pinned_downloads(self):
         for item in (fetch_client.CLIENT, fetch_client.PROTON):
