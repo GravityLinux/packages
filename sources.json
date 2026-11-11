@@ -29,8 +29,8 @@
     "kind": "rpm",
     "copr_package": "mesa-fex-guest",
     "copr_chroot": "fedora-44-x86_64",
-    "rpm": "https://download.copr.fedorainfracloud.org/results/adevwithanidea/gravity/fedora-44-x86_64/devel/Packages/m/mesa-fex-guest-26.3.0~devel-109.gravity.1.fc44.x86_64.rpm",
-    "ref": "97b7d43544b7ac33a274955635f20ce866cd0c73",
+    "rpm": "https://download.copr.fedorainfracloud.org/results/adevwithanidea/gravity/fedora-44-x86_64/devel/Packages/m/mesa-fex-guest-26.3.0~devel-110.gravity.1.fc44.x86_64.rpm",
+    "ref": "f66f380c648551249df5ba8538983279ca800985",
     "note": "Repacks the x86 trees of the mesa-fex-guest RPM that COPR built from the current mesa pin (gravity-x86-mesa and fex-guestos-mesa). After that build succeeds, `make pin` records its URL here and its hash in downloads.lock.json."
   },
   "uboot-tools": {
