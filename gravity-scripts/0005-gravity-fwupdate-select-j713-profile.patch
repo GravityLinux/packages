@@ -1,0 +1,18 @@
+--- a/gravity-fwupdate
++++ b/gravity-fwupdate
+@@ -46,9 +46,12 @@
+ fi
+ 
+ if [ -z "$GRAVITY_MACHINE" ] && [ -r /proc/device-tree/compatible ]; then
+-    if tr '\0' '\n' < /proc/device-tree/compatible | grep -qx 'apple,j773g'; then
+-        GRAVITY_MACHINE=j773g
+-    fi
++    for machine in j773g j713; do
++        if tr '\0' '\n' < /proc/device-tree/compatible | grep -qx "apple,$machine"; then
++            GRAVITY_MACHINE=$machine
++            break
++        fi
++    done
+ fi
+ 
+ if [ -z "$GRAVITY_MACHINE" ]; then

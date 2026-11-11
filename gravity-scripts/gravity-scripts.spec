@@ -1,7 +1,7 @@
 Name:           gravity-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        105.gravity%{?dist}
+Release:        106.gravity%{?dist}
 Summary:        Miscellaneous admin scripts for Gravity Linux
 
 License:        MIT
@@ -13,6 +13,7 @@ Source2:        15-update-m1n1.install
 Patch02:        0002-fedora-update-m1n1-handle-dangling-boot-dtb-symlinks.patch
 Patch03:        0003-dracut-gravity-firmware-include-when-building-images.patch
 Patch04:        0004-gravity-diagnose-p3s-t8132-package-names.patch
+Patch05:        0005-gravity-fwupdate-select-j713-profile.patch
 
 BuildArch:      noarch
 Conflicts:      asahi-scripts
@@ -36,7 +37,7 @@ Summary:        Gravity Linux firmware extractor
 
 Requires:       %{name} = %{version}-%{release}
 # Not using python3dist(gravity-firmware) because its version is fixed
-Requires:       python3-gravity_firmware >= 0.9.1
+Requires:       python3-gravity_firmware >= 0.9.1-105.gravity
 
 %description -n gravity-fwupdate
 Gravity Linux firmware updater.
@@ -145,6 +146,9 @@ grep -q 'gravity_firmware' && %{_sbindir}/gravity-fwupdate || :
 %ghost %config(noreplace) %{_sysconfdir}/udev/macsmc-battery.conf
 
 %changelog
+* Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-106.gravity
+- Select the J713 firmware profile and require the extractor that supports it.
+
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-105.gravity
 - Update diagnostics for the normal kernel packages and the audio add-on.
 

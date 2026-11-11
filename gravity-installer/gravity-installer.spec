@@ -8,7 +8,7 @@
 Name:           gravity-installer
 Vendor:         Gravity Linux
 Version:        0.9.1
-Release:        104.gravity%{?dist}
+Release:        105.gravity%{?dist}
 Summary:        Gravity Linux firmware extraction tools
 License:        MIT
 URL:            https://github.com/GravityLinux/installer
@@ -58,6 +58,10 @@ rm %{pypi_name}/asn1.py
 %{_bindir}/gravity-fwextract
 
 %changelog
+* Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 0.9.1-105.gravity
+- Package J713 Wi-Fi and Bluetooth firmware profiles from the installer.
+- Follow the installer revision that also preserves boot variables behind its logo.
+
 * Fri Sep 18 2026 Gravity Linux maintainers - 0.9.1-104.gravity
 - Preserve J773g Wi-Fi and Bluetooth factory calibration for boot DT injection
 
