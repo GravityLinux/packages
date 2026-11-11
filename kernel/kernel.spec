@@ -173,7 +173,7 @@ Summary: The Linux kernel
 %define specversion 7.3.0
 %define patchversion 7.3
 # Gravity release number: the one place to bump it (changelog aside).
-%global gravity_release 518
+%global gravity_release 519
 %define pkgrelease %{gravity_release}.gravity
 %define kversion 7
 %define tarfile_release 7.3
@@ -4880,6 +4880,10 @@ fi\
 #
 #
 %changelog
+* Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-519.gravity
+- MacBook Air 13-inch (J713): reset the trackpad controller at start-up, so the
+  trackpad works after a restart or power-off through the SMC
+
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-518.gravity
 - Shut down and restart through the SMC, so Shut Down powers the machine off
 
