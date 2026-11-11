@@ -57,7 +57,11 @@ class RestartGuard(unittest.TestCase):
                 driver.mkdir()
                 (driver / 'macsmc-reboot').touch()
                 (driver / 'unbind').touch()
-                code = source.replace('dt=/proc/device-tree', 'dt=' + str(root))
+                # The real /proc/device-tree is a symbolic link to the tree.
+                link = root.parent / (root.name + '-link')
+                link.symlink_to(root)
+                self.addCleanup(link.unlink)
+                code = source.replace('dt=/proc/device-tree', 'dt=' + str(link))
                 code = code.replace('/sys/bus/platform/drivers/macsmc-reboot', str(driver))
                 code = code.replace('/dev/kmsg', str(root / 'kmsg'))
                 subprocess.run(['sh', '-c', code], check=True, capture_output=True)

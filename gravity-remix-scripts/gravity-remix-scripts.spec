@@ -1,7 +1,7 @@
 Name:           gravity-remix-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        109.gravity%{?dist}
+Release:        110.gravity%{?dist}
 Summary:        Fedora-specific Gravity first-boot utilities
 License:        MIT
 URL:            https://github.com/GravityLinux/packages
@@ -97,6 +97,10 @@ fi
 %{_systemdgeneratordir}/gravity-sleep-generator
 
 %changelog
+* Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-110.gravity
+- Fix the trackpad reset line check: it did not enter the device tree
+  directory, so 109 still detached the SMC reboot driver on kernel 7.3.0-519.
+
 * Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-109.gravity
 - MacBook Air (M4): keep SMC restart and power-off when the kernel's device
   tree connects the trackpad controller's reset line (kernel 7.3.0-519 on the

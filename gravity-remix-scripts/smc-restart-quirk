@@ -7,7 +7,8 @@ dt=/proc/device-tree
 tr '\0' '\n' < "$dt/compatible" 2>/dev/null | grep -qxE 'apple,j71[35]' || exit 0
 # With the reset line the kernel resets the controller at every start, so a
 # restart or power-off through the SMC is safe.
-for node in $(find "$dt" -type d -name multi-touch 2>/dev/null); do
+# /proc/device-tree is a symbolic link: the trailing slash makes find enter it.
+for node in $(find "$dt/" -type d -name multi-touch 2>/dev/null); do
 	[ -e "$node/reset-gpios" ] && exit 0
 done
 drv=/sys/bus/platform/drivers/macsmc-reboot
