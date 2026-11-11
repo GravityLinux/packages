@@ -1,7 +1,7 @@
 Name:           gravity-remix-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        107.gravity%{?dist}
+Release:        108.gravity%{?dist}
 Summary:        Fedora-specific Gravity first-boot utilities
 License:        MIT
 URL:            https://github.com/GravityLinux/packages
@@ -33,9 +33,9 @@ Allow suspend-to-idle only on machines whose kernel and board support it.
 
 %install
 install -Dpm0644 -t %{buildroot}%{_unitdir} gravity-*.service
-install -Dpm0644 -t %{buildroot}%{_udevrulesdir} 90-gravity-usb4-sleep-inhibit.rules
+install -Dpm0644 -t %{buildroot}%{_udevrulesdir} 90-gravity-usb4-sleep-inhibit.rules 91-gravity-smc-restart.rules
 install -Dpm0644 -t %{buildroot}%{_udevhwdbdir} 65-autosuspend-override-asahi.hwdb
-install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name} install-extras.sh setup-swap.sh
+install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name} install-extras.sh setup-swap.sh smc-restart-quirk
 install -Dpm0644 -t %{buildroot}%{_datadir}/%{name} gravity-enable-zswap.conf
 install -Dpm0644 -t %{buildroot}%{_tmpfilesdir} 60-gravity-mglru-min-ttl.conf
 install -Dpm0755 -t %{buildroot}%{_systemdgeneratordir} gravity-sleep-generator
@@ -78,6 +78,7 @@ fi
 %doc SLEEP-POLICY.md SWAP-POLICY.md
 %{_unitdir}/gravity-*.service
 %{_udevrulesdir}/90-gravity-usb4-sleep-inhibit.rules
+%{_udevrulesdir}/91-gravity-smc-restart.rules
 %{_udevhwdbdir}/65-autosuspend-override-asahi.hwdb
 %{_libexecdir}/%{name}/
 %{_datadir}/%{name}/
@@ -85,6 +86,12 @@ fi
 %{_systemdgeneratordir}/gravity-sleep-generator
 
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-108.gravity
+- Detach the SMC reboot driver on the MacBook Air (M4): after a restart or
+  power-off through the SMC the trackpad did not work on the next boot.
+  Restart uses the watchdog there and Shut Down halts without cutting power;
+  other machines keep SMC restart and power-off.
+
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-107.gravity
 - Document validated disk swap with 4K-page processes; keep zram as default.
 - Make the manual swapfile tool add disk swap alongside zram, without

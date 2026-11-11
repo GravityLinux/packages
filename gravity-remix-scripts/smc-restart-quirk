@@ -1,0 +1,8 @@
+#!/bin/sh
+# Run by 91-gravity-smc-restart.rules when the SMC reboot device appears or
+# its driver binds. Detaches the driver on the 13- and 15-inch MacBook Air (M4).
+tr '\0' '\n' < /proc/device-tree/compatible 2>/dev/null | grep -qxE 'apple,j71[35]' || exit 0
+drv=/sys/bus/platform/drivers/macsmc-reboot
+[ -e "$drv/macsmc-reboot" ] || exit 0
+echo macsmc-reboot > "$drv/unbind" || exit 1
+echo "gravity: SMC restart and power-off are off on this model; restart uses the watchdog" > /dev/kmsg

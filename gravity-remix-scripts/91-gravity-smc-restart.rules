@@ -1,0 +1,7 @@
+# On the MacBook Air (M4), a restart or power-off through the SMC leaves the
+# trackpad's touch controller unable to start on the next boot. Detach the
+# SMC reboot driver there, so restart goes through the watchdog as on earlier
+# kernels (Shut Down then halts without cutting power). Remove this rule and
+# its helper once the kernel shuts the touch controller down before an SMC
+# restart.
+ACTION=="add|bind", SUBSYSTEM=="platform", KERNEL=="macsmc-reboot", RUN+="/usr/libexec/gravity-remix-scripts/smc-restart-quirk"
