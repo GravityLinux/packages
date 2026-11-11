@@ -1,6 +1,6 @@
 # Gravity Linux RPM packaging
 
-Sixteen source packages for the first Fedora 44 / aarch64 / KDE release.
+Seventeen source packages for the first Fedora 44 / aarch64 / KDE release.
 Each directory contains one RPM spec and its packaging files. Application and
 driver code remains in separate Git repositories; sources are pinned in
 [sources.json](sources.json). Repository names do not have a Gravity prefix;
@@ -26,6 +26,7 @@ Gravity-specific RPMs do.
 | gravity-logos | Bootloader and desktop logos | Gravity artwork |
 | gravity-audio-j713 | J713 UCM profiles, DSP rules and speakersafetyd profile for Fedora's audio packages | Gravity |
 | gravity-x86 | gravity-x86: FEX x86 programs with 4K pages on P3S kernels (rootfs service, binfmt rules) | Gravity |
+| steam | steam and steam-gravity-proton-default: launcher for Valve's native ARM64 Steam client, which each user's first start downloads from Valve; nothing of Valve's is packaged | Gravity |
 
 U-Boot's AArch64 image build is limited to `apple_m1`; host utilities are retained.
 
@@ -168,7 +169,7 @@ spec is `ExclusiveArch: x86_64`) and every other package in
 
 1. Independent: kernel, Mesa, mesa-fex-guest, uboot-tools, gravity-installer,
    gravity-logos, gravity-release, gravity-appstream-metadata,
-   gravity-remix-scripts, gravity-x86, gravity-audio-j713.
+   gravity-remix-scripts, gravity-x86, gravity-audio-j713, steam.
 2. gravity-bootloader after gravity-logos. gravity-x86-mesa after Mesa and
    mesa-fex-guest succeeded and `make pin` was committed.
 3. gravity-scripts after gravity-bootloader, uboot-images-armv8 and python3-gravity_firmware

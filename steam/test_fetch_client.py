@@ -1,0 +1,251 @@
+# SPDX-License-Identifier: MIT
+"""Tests of fetch-client against a local HTTP server (run in %check)."""
+import functools
+import hashlib
+import http.server
+import importlib.machinery
+import importlib.util
+import io
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tarfile
+import tempfile
+import threading
+import unittest
+
+loader = importlib.machinery.SourceFileLoader("fetch_client", str(Path(__file__).with_name("fetch-client")))
+fetch_client = importlib.util.module_from_spec(importlib.util.spec_from_loader("fetch_client", loader))
+loader.exec_module(fetch_client)
+
+
+class Handler(http.server.BaseHTTPRequestHandler):
+    protocol_version = "HTTP/1.1"
+
+    def log_message(self, *_):
+        pass
+
+    def do_GET(self):
+        site = self.server.site
+        site.requests.append((self.path, self.headers.get("Range")))
+        body = site.files.get(self.path)
+        if body is None:
+            self.send_error(404)
+            return
+        start = 0
+        requested = self.headers.get("Range")
+        if requested and site.ranges:
+            start = int(requested.removeprefix("bytes=").rstrip("-"))
+            if start >= len(body):
+                self.send_error(416)
+                return
+            self.send_response(206)
+            self.send_header("Content-Range", f"bytes {start}-{len(body) - 1}/{len(body)}")
+        else:
+            self.send_response(200)
+        self.send_header("Content-Length", str(len(body) - start))
+        self.end_headers()
+        end = len(body)
+        if site.cut:  # drop the connection after this many bytes, once
+            end, site.cut = min(end, start + site.cut), 0
+        try:
+            self.wfile.write(body[start:end])
+        except OSError:  # the client stopped reading
+            self.close_connection = True
+            return
+        if end != len(body):
+            self.close_connection = True
+            self.connection.close()
+
+
+class Site:
+    def __init__(self):
+        self.files, self.requests, self.ranges, self.cut = {}, [], True, 0
+        self.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+        self.server.site = self
+        threading.Thread(target=self.server.serve_forever, daemon=True).start()
+        self.base = f"http://127.0.0.1:{self.server.server_port}/repo/"
+
+    def close(self):
+        self.server.shutdown()
+        self.server.server_close()
+
+
+class Quiet:
+    def __init__(self, cancel_at=None):
+        self.texts, self.errors, self.cancel_at = [], [], cancel_at
+
+    def update(self, text, fraction, force=False):
+        self.texts.append(text)
+        if self.cancel_at is not None and fraction >= self.cancel_at:
+            raise fetch_client.Cancelled
+
+    def close(self):
+        pass
+
+
+def package(work, marker):
+    """A package like Valve's: usr/lib/steam/steam.tar.zst holding the client tree."""
+    tree = work / "tree"
+    (tree / "steamrtarm64").mkdir(parents=True)
+    (tree / "steamrtarm64/steam").write_bytes(marker + os.urandom(1000000))
+    (tree / "steamrtarm64/steam").chmod(0o755)
+    outer = work / "outer/usr/lib/steam"
+    outer.mkdir(parents=True)
+    subprocess.run(["tar", "--zstd", "-cf", outer / "steam.tar.zst", "-C", tree, "."], check=True)
+    subprocess.run(["tar", "--zstd", "-cf", work / "pkg", "-C", work / "outer", "usr"], check=True)
+    return (work / "pkg").read_bytes()
+
+
+def index(entries):
+    raw = io.BytesIO()
+    with tarfile.open(fileobj=raw, mode="w:xz") as archive:
+        for directory, fields in entries.items():
+            text = "".join(f"%{key}%\n{value}\n\n" for key, value in fields.items()).encode()
+            info = tarfile.TarInfo(directory + "/desc")
+            info.size = len(text)
+            archive.addfile(info, io.BytesIO(text))
+    return raw.getvalue()
+
+
+class FetchClient(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.work = Path(self.temporary.name)
+        self.site = Site()
+        self.body = package(self.work, b"pinned")
+        self.site.files["/repo/client-1.pkg.tar.zst"] = self.body
+        self.client = {
+            "name": "client", "url": self.site.base + "client-1.pkg.tar.zst",
+            "sha256": hashlib.sha256(self.body).hexdigest(), "size": len(self.body),
+            "index": "index.db", "member": "usr/lib/steam/steam.tar.zst", "unpacked": 1000,
+        }
+        self.downloads, self.target = self.work / "downloads", self.work / "target"
+        self.target.mkdir()
+        self.sleeps = []
+        fetch_client.time.sleep = self.sleeps.append
+
+    def tearDown(self):
+        self.site.close()
+        self.temporary.cleanup()
+
+    def fetch(self, window=None, **options):
+        fetch_client.fetch(self.client, self.downloads, self.target, window or Quiet(), **options)
+
+    def installed(self):
+        path = self.target / "steamrtarm64/steam"
+        return path.read_bytes()[:6] if path.exists() and os.access(path, os.X_OK) else None
+
+    def part(self, digest=None):
+        return self.downloads / ((digest or self.client["sha256"]) + ".part")
+
+    def test_download_verify_unpack(self):
+        self.fetch()
+        self.assertEqual(self.installed(), b"pinned")
+        self.assertEqual(self.site.requests, [("/repo/client-1.pkg.tar.zst", None)])
+
+    def test_interrupted_download_resumes(self):
+        self.site.cut = 5000
+        self.fetch()
+        self.assertEqual(self.installed(), b"pinned")
+        self.assertEqual(self.site.requests[1], ("/repo/client-1.pkg.tar.zst", "bytes=5000-"))
+
+    def test_cancel_keeps_the_partial_file_and_the_next_run_continues(self):
+        with self.assertRaises(fetch_client.Cancelled):
+            self.fetch(Quiet(cancel_at=0.0001))
+        have = self.part().stat().st_size
+        self.assertTrue(0 < have < len(self.body))
+        self.assertIsNone(self.installed())
+        self.site.requests.clear()
+        self.fetch()
+        self.assertEqual(self.site.requests, [("/repo/client-1.pkg.tar.zst", f"bytes={have}-")])
+        self.assertEqual(self.installed(), b"pinned")
+
+    def test_server_without_ranges_starts_again(self):
+        self.downloads.mkdir()
+        self.part().write_bytes(b"x" * 100)
+        self.site.ranges = False
+        self.fetch()
+        self.assertEqual(self.installed(), b"pinned")
+
+    def test_checksum_mismatch_is_refused_and_deleted(self):
+        self.downloads.mkdir()
+        self.part().write_bytes(b"x" * 100)  # a damaged start that the rest is appended to
+        with self.assertRaisesRegex(fetch_client.Stop, "checksum"):
+            self.fetch()
+        self.assertFalse(self.part().exists())
+        self.assertIsNone(self.installed())
+
+    def test_other_size_is_refused(self):
+        self.client["size"] += 1
+        with self.assertRaisesRegex(fetch_client.Stop, "expected"):
+            self.fetch()
+        self.assertIsNone(self.installed())
+
+    def test_free_space(self):
+        with self.assertRaisesRegex(fetch_client.Stop, "free space"):
+            self.fetch(free=lambda path: self.client["size"] + 500)
+        self.assertEqual(self.site.requests, [])
+
+    def test_offline(self):
+        self.site.close()
+        with self.assertRaisesRegex(fetch_client.Stop, "internet connection"):
+            self.fetch()
+        self.assertEqual(len(self.sleeps), 3)
+        self.site = Site()
+
+    def gone(self, entries):
+        del self.site.files["/repo/client-1.pkg.tar.zst"]
+        if entries is not None:
+            self.site.files["/repo/index.db"] = index(entries)
+
+    def test_gone_uses_the_index_build_with_its_checksum(self):
+        newer = package(self.work / "newer", b"newer!")
+        self.site.files["/repo/client-2%2Bb.pkg.tar.zst"] = newer
+        self.gone({"other-1": {"NAME": "other", "FILENAME": "other-1.pkg.tar.zst"},
+                   "client-2+b": {"NAME": "client", "FILENAME": "client-2+b.pkg.tar.zst",
+                                  "CSIZE": len(newer), "SHA256SUM": hashlib.sha256(newer).hexdigest()}})
+        window = Quiet()
+        self.fetch(window)
+        self.assertEqual(self.installed(), b"newer!")
+        self.assertTrue(any("newer than" in text for text in window.texts))
+
+    def test_gone_and_index_checksum_does_not_match(self):
+        newer = package(self.work / "newer", b"newer!")
+        self.site.files["/repo/client-2.pkg.tar.zst"] = newer
+        self.gone({"client-2": {"NAME": "client", "FILENAME": "client-2.pkg.tar.zst",
+                                "CSIZE": len(newer), "SHA256SUM": "0" * 64}})
+        with self.assertRaisesRegex(fetch_client.Stop, "checksum"):
+            self.fetch()
+        self.assertIsNone(self.installed())
+
+    def test_gone_without_a_usable_index_stops(self):
+        cases = {
+            "no index": None,
+            "no checksum": {"client-2": {"NAME": "client", "FILENAME": "client-2.pkg.tar.zst", "CSIZE": 5}},
+            "same file": {"client-1": {"NAME": "client", "FILENAME": "client-1.pkg.tar.zst", "CSIZE": 5,
+                                       "SHA256SUM": "0" * 64}},
+            "not listed": {"other-1": {"NAME": "other", "FILENAME": "other-1.pkg.tar.zst", "CSIZE": 5,
+                                       "SHA256SUM": "0" * 64}},
+            "odd name": {"client-2": {"NAME": "client", "FILENAME": "../client-2.pkg.tar.zst", "CSIZE": 5,
+                                      "SHA256SUM": "0" * 64}},
+        }
+        self.gone(None)
+        for name, entries in cases.items():
+            with self.subTest(name):
+                if entries is not None:
+                    self.site.files["/repo/index.db"] = index(entries)
+                with self.assertRaisesRegex(fetch_client.Stop, "sudo dnf upgrade"):
+                    self.fetch()
+                self.assertIsNone(self.installed())
+
+    def test_pinned_client(self):
+        client = fetch_client.CLIENT
+        self.assertTrue(client["url"].startswith("https://"))
+        self.assertRegex(client["sha256"], "^[0-9a-f]{64}$")
+        self.assertGreater(client["unpacked"], client["size"])
+
+
+if __name__ == "__main__":
+    unittest.main()

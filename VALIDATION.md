@@ -12,6 +12,34 @@ its repack still needs an RPM pin after that build exists in COPR.
 The historical results below describe their original revisions. They do not
 constitute a COPR build or device test of this combined package set.
 
+## 2026-11-10 steam 1.0.0.85-13 (client downloaded at the first start)
+
+- `make srpm PACKAGE=steam` (32 KB, launcher files only), rebuilt natively on
+  a MacBook Air 13" (M4) with `rpmbuild --rebuild`; `%check` ran the
+  fetch-client tests against a local HTTP server.
+- On that Air, a fresh install without Steam (kernel 7.3.0-515, Mesa 109):
+  `dnf install steam` with COPR's devel repository and a local repository of
+  the new packages and the existing proton-gravity-arm64 build resolved and
+  installed steam, fex-guestos-mesa (`/usr/share/guestos/fex-mesa` with
+  `graphics_provider.json`), gtk2, proton-gravity-arm64 and
+  steam-gravity-proton-default; `dnf check` was clean.
+- First start as the desktop user: progress window, download from Valve at
+  about 15 MB/s. Closing the window at 451 of 703 MB stopped the setup and
+  kept the partial file; the next start continued from there, checked the
+  SHA-256, unpacked 3.1 GB to `~/.local/share/Steam` and removed the
+  download. The client updated itself and reached its sign-in window, running
+  with 4K pages and with `/opt/steam-gravity/compatibilitytools.d` in
+  `STEAM_EXTRA_COMPAT_TOOLS_PATHS`; the Proton default was set.
+- A partial file padded to the full size with wrong content was refused with
+  the checksum message and deleted; nothing was installed.
+- A second start, and a start after `dnf upgrade steam` from the earlier
+  1.0.0.85-12 build (which carried the client archive), did not download
+  anything and left the installed client's files as they were.
+- Not tested: signing in, Valve's FEX tool and games (they are only
+  downloaded after sign-in), the package-index path against Valve's server
+  (the pinned build is still the listed one; covered by the unit tests), and
+  a COPR build.
+
 ## 2026-11-10 x86 Mesa built from source (mesa-fex-guest, gravity-x86-mesa)
 
 - Local stand-in for COPR: `make srpm` of mesa-fex-guest from Mesa 533a2be53fae,

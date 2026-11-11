@@ -97,5 +97,9 @@
     "verbatim": true,
     "archive": "gravity-x86-0.3.0.tar.gz",
     "root": "gravity-x86-0.3.0"
+  },
+  "steam": {
+    "kind": "spec",
+    "note": "Launcher only. Valve's ARM64 client is not a source: fetch-client downloads it at each user's first start from the URL and SHA-256 it pins (steam/README.md)."
   }
 }

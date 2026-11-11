@@ -1,0 +1,90 @@
+#!/bin/bash
+# SPDX-License-Identifier: MIT
+# Native AArch64 Steam for desktop Linux. /usr/bin/steam runs this as a 4K
+# process, so Steam and everything it starts (runtime, Proton, FEX) inherit
+# the page size. It sets up what the client expects from its launcher: the
+# ~/.steam links, its library path, and a restart when it exits with 42
+# after updating itself.
+set -u
+
+if [ "$(id -u)" = 0 ]; then
+	echo "steam: run Steam as your desktop user, not root" >&2
+	exit 1
+fi
+
+# Valve's ARM64 client needs 4K pages. On a kernel without P3S the 4K
+# personality is ignored and the client segfaults at once, so say why instead.
+# A kernel(p3s) provider is a dependency; this catches the boot before the
+# first restart into it, and a manually chosen older kernel.
+if [ "$(getconf PAGESIZE)" != 4096 ]; then
+	if rpm -q --whatprovides 'kernel(p3s)' >/dev/null 2>&1; then
+		msg="Steam needs the Gravity kernel with 4K process support, which is installed but not running. Restart your computer to start it, then open Steam again."
+	else
+		msg="Steam needs the Gravity kernel with 4K process support. Update the system (sudo dnf upgrade), restart, then open Steam again."
+	fi
+	echo "steam: $msg (running $(uname -r))" >&2
+	if [ -n "${WAYLAND_DISPLAY:-}${DISPLAY:-}" ]; then
+		if command -v kdialog >/dev/null; then
+			kdialog --title Steam --error "$msg" >/dev/null 2>&1
+		elif command -v zenity >/dev/null; then
+			zenity --error --title=Steam --text="$msg" >/dev/null 2>&1
+		fi
+	fi
+	exit 1
+fi
+
+data="${XDG_DATA_HOME:-$HOME/.local/share}"
+# Steam's default directory, unless it holds an x86 installation. That one
+# stays untouched and the native client lives beside it.
+root="$data/Steam"
+if [ -x "$data/SteamArm64/steamrtarm64/steam" ] ||
+	{ [ ! -x "$root/steamrtarm64/steam" ] && [ -n "$(ls -A "$root" 2>/dev/null)" ]; }; then
+	root="$data/SteamArm64"
+fi
+
+mkdir -p "$HOME/.steam" "$data"
+if [ ! -x "$root/steamrtarm64/steam" ]; then
+	# First run: download Valve's client and unpack it. It goes in one rename,
+	# so an interrupted run leaves only a staging directory, removed next
+	# time, and the partial download, which fetch-client continues.
+	exec 9>"$HOME/.steam/.bootstrap.lock"
+	flock 9
+	rm -rf "$data"/.steam-bootstrap-*
+	if [ ! -x "$root/steamrtarm64/steam" ]; then
+		echo "steam: setting up Steam in $root" >&2
+		stage="$(mktemp -d "$data/.steam-bootstrap-XXXXXX")" || exit 1
+		if ! /usr/libexec/steam-gravity/fetch-client "$data/.steam-client-download" "$stage" ||
+			! { rmdir "$root" 2>/dev/null; mv -T "$stage" "$root"; }; then
+			rm -rf "$stage"
+			echo "steam: could not set up $root" >&2
+			exit 1
+		fi
+		rm -rf "$data/.steam-client-download"
+	fi
+	exec 9>&-
+fi
+
+ln -sTfn "$root" "$HOME/.steam/steam"
+ln -sTfn "$root" "$HOME/.steam/root"
+for link in sdk32:linux32 sdk64:linux64 sdkarm64:linuxarm64 binarm64:steamrtarm64 \
+	bin32:ubuntu12_32 bin64:ubuntu12_64; do
+	ln -sTfn "$root/${link#*:}" "$HOME/.steam/${link%%:*}"
+done
+
+# The compat-tool default is seeded only while Steam is stopped.
+if [ -x /usr/libexec/steam-gravity/seed-compat ] && ! pgrep -u "$(id -u)" -x steam >/dev/null; then
+	/usr/libexec/steam-gravity/seed-compat "$root/config/config.vdf"
+fi
+
+# Packaged compat tools live outside /usr, which pressure-vessel keeps for the
+# runtime and does not share with the container.
+if [ -d /opt/steam-gravity/compatibilitytools.d ]; then
+	export STEAM_EXTRA_COMPAT_TOOLS_PATHS="/opt/steam-gravity/compatibilitytools.d${STEAM_EXTRA_COMPAT_TOOLS_PATHS:+:$STEAM_EXTRA_COMPAT_TOOLS_PATHS}"
+fi
+export LD_LIBRARY_PATH="$root/steamrtarm64"
+cd "$root" || exit 1
+while :; do
+	"$root/steamrtarm64/steam" "$@"
+	status=$?
+	[ "$status" = 42 ] || exit "$status"
+done

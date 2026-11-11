@@ -1,0 +1,3 @@
+#!/bin/sh
+# SPDX-License-Identifier: MIT
+exec /usr/libexec/steam-gravity/exec-pages --4k /usr/libexec/steam-gravity/steam-launch "$@"

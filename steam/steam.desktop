@@ -1,0 +1,29 @@
+[Desktop Entry]
+Type=Application
+Name=Steam
+GenericName=Game Store and Library
+Comment=Install and play games from Steam
+Icon=steam
+TryExec=steam
+Exec=steam %U
+Terminal=false
+Categories=Network;FileTransfer;Game;
+MimeType=x-scheme-handler/steam;x-scheme-handler/steamlink;
+StartupWMClass=steam
+Actions=Store;Library;Settings;BigPicture;
+
+[Desktop Action Store]
+Name=Store
+Exec=steam steam://store
+
+[Desktop Action Library]
+Name=Library
+Exec=steam steam://open/games
+
+[Desktop Action Settings]
+Name=Settings
+Exec=steam steam://open/settings
+
+[Desktop Action BigPicture]
+Name=Big Picture
+Exec=steam steam://open/bigpicture

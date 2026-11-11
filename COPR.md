@@ -47,8 +47,8 @@ binary-build network access can remain disabled.
 
 1. Build kernel (kernel-16k and its module packages), mesa, mesa-fex-guest,
    uboot-tools, gravity-installer, gravity-logos, gravity-release,
-   gravity-appstream-metadata, gravity-remix-scripts, gravity-x86 and
-   gravity-audio-j713 independently.
+   gravity-appstream-metadata, gravity-remix-scripts, gravity-x86,
+   gravity-audio-j713 and steam independently.
 2. Build gravity-bootloader after gravity-logos; build gravity-x86-mesa after
    both Mesa builds and the reviewed RPM pin described below.
 3. Build gravity-scripts after gravity-bootloader, uboot-images-armv8 and
