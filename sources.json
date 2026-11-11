@@ -15,10 +15,10 @@
   "mesa": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/mesa.git",
-    "ref": "97b7d43544b7ac33a274955635f20ce866cd0c73",
+    "ref": "f66f380c648551249df5ba8538983279ca800985",
     "archive": "mesa-26.3.0-devel.tar.xz",
     "root": "mesa-26.3.0-devel",
-    "note": "Mesa 26.3.0-devel with Apple M4 GPU support (GL and Vulkan), vertex-stage store ordering fixed in the Vulkan driver, and the conformance warning removed."
+    "note": "Mesa 26.3.0-devel with Apple M4 GPU support (GL and Vulkan). The shader compiler waits for a scalar export before its inputs are reused, which fixes intermittently misplaced vertices."
   },
   "mesa-fex-guest": {
     "kind": "git",

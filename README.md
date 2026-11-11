@@ -53,9 +53,9 @@ bundle and bootloader release assets are built separately.
 Run `make status` for unresolved inputs:
 
 - Publish the pinned scripts and installer source commits to their Gravity URLs.
-- Mesa 26.3.0~devel-109.gravity pins `97b7d43544b7`; publish that source
+- Mesa 26.3.0~devel-110.gravity pins `f66f380c6485`; publish that source
   before remote builds, and use `--source-dir` for local validation.
-- The x86 Mesa repack needs a pin after mesa-fex-guest 109 is built; publish
+- The x86 Mesa repack needs a pin after mesa-fex-guest 110 is built; publish
   native Mesa and both repacked x86 packages together.
 - Validate the J713 speakersafetyd profile on hardware (gravity-audio-j713/README.md).
 - COPR is configured as `adevwithanidea/gravity`; its public signing key is

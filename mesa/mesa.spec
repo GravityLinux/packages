@@ -82,7 +82,7 @@ Name:           mesa
 Vendor:         Gravity Linux
 Summary:        Mesa graphics libraries
 Version:        26.3.0~devel
-Release:        109.gravity%{?dist}
+Release:        110.gravity%{?dist}
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
 
@@ -768,6 +768,11 @@ ln -s libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
 %endif
 
 %changelog
+* Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 26.3.0~devel-110.gravity
+- Fix intermittently misplaced vertices: the shader compiler now waits for a
+  scalar export before reusing its inputs (seen as flickering spikes on user
+  interface elements in Direct3D games).
+
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 26.3.0~devel-109.gravity
 - Fix vertex-stage store ordering in the Vulkan driver, stop printing the
   conformance warning.
