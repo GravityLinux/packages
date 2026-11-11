@@ -173,7 +173,7 @@ Summary: The Linux kernel
 %define specversion 7.3.0
 %define patchversion 7.3
 # Gravity release number: the one place to bump it (changelog aside).
-%global gravity_release 517
+%global gravity_release 518
 %define pkgrelease %{gravity_release}.gravity
 %define kversion 7
 %define tarfile_release 7.3
@@ -4880,6 +4880,9 @@ fi\
 #
 #
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-518.gravity
+- Shut down and restart through the SMC, so Shut Down powers the machine off
+
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-517.gravity
 - Start Air CPU throttling at 100 and 105 °C, with a 120 °C critical trip.
 
