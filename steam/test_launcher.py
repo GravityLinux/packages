@@ -76,7 +76,7 @@ class Launcher(unittest.TestCase):
         self.assert_error(self.launch(), 'Cannot create the Steam directories')
 
     def test_two_starts_seed_once_through_delayed_client_handoff(self):
-        self.command(self.bindir / 'pgrep', """#!/usr/bin/python3
+        self.command(self.bindir / 'pgrep', r"""#!/usr/bin/python3
 import os, pathlib, sys
 p = pathlib.Path(os.environ['TEST_WORK']) / 'running'
 try:
@@ -84,7 +84,7 @@ try:
 except (OSError, ValueError):
     sys.exit(1)
 """)
-        self.command(self.libexec / 'seed-compat', """#!/usr/bin/python3
+        self.command(self.libexec / 'seed-compat', r"""#!/usr/bin/python3
 import os, pathlib, sys, time
 w = pathlib.Path(os.environ['TEST_WORK'])
 with (w / 'seed-count').open('a') as f: f.write('seed\n')
@@ -93,7 +93,7 @@ p = pathlib.Path(sys.argv[1]); old = p.read_text()
 time.sleep(0.3)
 p.write_text(old + 'seeded\n')
 """)
-        self.command(self.root / 'steamrtarm64/steam', """#!/usr/bin/python3
+        self.command(self.root / 'steamrtarm64/steam', r"""#!/usr/bin/python3
 import os, pathlib, time
 w = pathlib.Path(os.environ['TEST_WORK'])
 # Stay alive but invisible to the launcher's process check during startup.
@@ -118,7 +118,7 @@ with (w / 'launch-count').open('a') as f: f.write('start\n')
         try:
             deadline = time.monotonic() + 5
             while not (self.work / 'seed-reading').exists():
-                self.assertIsNone(first.poll())
+                self.assertIsNone(first.poll(), first.stderr.read() if first.poll() is not None else "")
                 self.assertLess(time.monotonic(), deadline)
                 time.sleep(0.01)
             second = subprocess.Popen(['bash', str(self.launcher)], env=self.env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -130,8 +130,9 @@ with (w / 'launch-count').open('a') as f: f.write('start\n')
             self.assertEqual(config.read_text(), 'original\nseeded\nnewer-client-setting\n')
         finally:
             for process in [first, second]:
-                if process is not None and process.poll() is None:
-                    process.kill()
+                if process is not None:
+                    if process.poll() is None:
+                        process.kill()
                     process.communicate()
 
 
