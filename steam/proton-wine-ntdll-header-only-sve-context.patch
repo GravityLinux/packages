@@ -1,0 +1,44 @@
+From 80a1aeb95fa7f530a8aa0e53cc8a37d7ac987762 Mon Sep 17 00:00:00 2001
+From: Niklas Sheth <hi@niklassheth.com>
+Date: Sat, 31 Oct 2026 18:50:48 -0400
+Subject: [PATCH] ntdll: Do not write predicates into a header-only SVE signal
+ context.
+
+On an SME-only AArch64 machine Linux emits a 16-byte SVE header with
+vl=0, followed by the TPIDR2 context. The SIGUSR2 context restore path
+writes P2 and P6 beyond that empty record, corrupting TPIDR2. The kernel
+rejects rt_sigreturn, so even native wineboot fails before thread entry.
+
+Require a nonzero vector length and enough recorded storage for the full
+SVE register payload before initializing the FEX predicates. Leave the
+header-only context intact. This does not change the FEX source.
+
+Reproduced the rejected signal return in a standalone signal-context test
+on T8132 (4K and 16K execution); the guarded version returns normally.
+Native Wine/default-prefix validation follows in the experiment report.
+
+Generated-by: LLM
+---
+ dlls/ntdll/unix/signal_arm64.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/unix/signal_arm64.c b/dlls/ntdll/unix/signal_arm64.c
+index c18e650..dc11689 100644
+--- a/dlls/ntdll/unix/signal_arm64.c
++++ b/dlls/ntdll/unix/signal_arm64.c
+@@ -1399,7 +1399,11 @@ static void usr2_handler( int signal, siginfo_t *siginfo, void *sigcontext )
+             memcpy( fp->vregs, frame->v, sizeof(fp->vregs) );
+         }
+ 
+-        if (sve)
++        /* SME-only systems can supply a header-only SVE context with vl=0.
++         * There is no predicate storage in that record; writing past it would
++         * corrupt the following extension and make rt_sigreturn fail. */
++        if (sve && sve->vl &&
++            sve->head.size >= SVE_SIG_CONTEXT_SIZE( sve_vq_from_vl(sve->vl) ))
+         {
+             /* setup FEX SVE state */
+             ULONG64 vq = sve_vq_from_vl(sve->vl);
+-- 
+2.55.0
+

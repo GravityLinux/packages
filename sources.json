@@ -100,6 +100,6 @@
   },
   "steam": {
     "kind": "spec",
-    "note": "Launcher only. Valve's ARM64 client is not a source: fetch-client downloads it at each user's first start from the URL and SHA-256 it pins (steam/README.md)."
+    "note": "Launcher only. Valve's ARM64 client and the ARM64 Proton build are not sources: fetch-client downloads them at each user's first start from the URLs and SHA-256 values it pins (steam/README.md, steam/PROTON-SOURCE.md)."
   }
 }

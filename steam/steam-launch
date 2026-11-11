@@ -53,7 +53,7 @@ if [ ! -x "$root/steamrtarm64/steam" ]; then
 	if [ ! -x "$root/steamrtarm64/steam" ]; then
 		echo "steam: setting up Steam in $root" >&2
 		stage="$(mktemp -d "$data/.steam-bootstrap-XXXXXX")" || exit 1
-		if ! /usr/libexec/steam-gravity/fetch-client "$data/.steam-client-download" "$stage" ||
+		if ! /usr/libexec/steam-gravity/fetch-client client "$data/.steam-client-download" "$stage" ||
 			! { rmdir "$root" 2>/dev/null; mv -T "$stage" "$root"; }; then
 			rm -rf "$stage"
 			echo "steam: could not set up $root" >&2
@@ -71,15 +71,43 @@ for link in sdk32:linux32 sdk64:linux64 sdkarm64:linuxarm64 binarm64:steamrtarm6
 	ln -sTfn "$root/${link#*:}" "$HOME/.steam/${link%%:*}"
 done
 
-# The compat-tool default is seeded only while Steam is stopped.
-if [ -x /usr/libexec/steam-gravity/seed-compat ] && ! pgrep -u "$(id -u)" -x steam >/dev/null; then
-	/usr/libexec/steam-gravity/seed-compat "$root/config/config.vdf"
+# Proton (ARM64, Gravity) for Windows games: the tree of the earlier
+# proton-gravity-arm64 package when it is installed, otherwise a per-user copy
+# that the first start downloads. Both are outside /usr, which pressure-vessel
+# keeps for the runtime and does not share with the container. Without it
+# Steam still starts, and the next start tries again.
+proton=proton-gravity-arm64
+tools=/opt/steam-gravity/compatibilitytools.d
+if [ ! -f "$tools/$proton/compatibilitytool.vdf" ]; then
+	tools="$data/steam-gravity/compatibilitytools.d"
+	# Not while Steam is running: this start only hands its arguments over.
+	if [ ! -f "$tools/$proton/compatibilitytool.vdf" ] && ! pgrep -u "$(id -u)" -x steam >/dev/null; then
+		exec 9>"$HOME/.steam/.bootstrap.lock"
+		flock 9
+		mkdir -p "$tools"
+		rm -rf "$tools"/.proton-*
+		if [ ! -f "$tools/$proton/compatibilitytool.vdf" ]; then
+			stage="$(mktemp -d "$tools/.proton-XXXXXX")" || exit 1
+			if /usr/libexec/steam-gravity/fetch-client proton "$data/.steam-proton-download" "$stage" &&
+				cp /usr/share/steam-gravity/proton/NOTICE.txt /usr/share/steam-gravity/proton/compatibilitytool.vdf "$stage/" &&
+				{ rm -rf "${tools:?}/$proton"; mv -T "$stage" "$tools/$proton"; }; then
+				rm -rf "$data/.steam-proton-download"
+			else
+				rm -rf "$stage"
+				echo "steam: starting without Proton (ARM64, Gravity)" >&2
+			fi
+		fi
+		exec 9>&-
+	fi
 fi
 
-# Packaged compat tools live outside /usr, which pressure-vessel keeps for the
-# runtime and does not share with the container.
-if [ -d /opt/steam-gravity/compatibilitytools.d ]; then
-	export STEAM_EXTRA_COMPAT_TOOLS_PATHS="/opt/steam-gravity/compatibilitytools.d${STEAM_EXTRA_COMPAT_TOOLS_PATHS:+:$STEAM_EXTRA_COMPAT_TOOLS_PATHS}"
+# The compat-tool default is seeded only while Steam is stopped.
+if [ -x /usr/libexec/steam-gravity/seed-compat ] && ! pgrep -u "$(id -u)" -x steam >/dev/null; then
+	/usr/libexec/steam-gravity/seed-compat "$root/config/config.vdf" "$tools"
+fi
+
+if [ -d "$tools" ]; then
+	export STEAM_EXTRA_COMPAT_TOOLS_PATHS="$tools${STEAM_EXTRA_COMPAT_TOOLS_PATHS:+:$STEAM_EXTRA_COMPAT_TOOLS_PATHS}"
 fi
 export LD_LIBRARY_PATH="$root/steamrtarm64"
 cd "$root" || exit 1

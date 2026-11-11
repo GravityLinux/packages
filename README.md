@@ -26,7 +26,7 @@ Gravity-specific RPMs do.
 | gravity-logos | Bootloader and desktop logos | Gravity artwork |
 | gravity-audio-j713 | J713 UCM profiles, DSP rules and speakersafetyd profile for Fedora's audio packages | Gravity |
 | gravity-x86 | gravity-x86: FEX x86 programs with 4K pages on P3S kernels (rootfs service, binfmt rules) | Gravity |
-| steam | steam and steam-gravity-proton-default: launcher for Valve's native ARM64 Steam client, which each user's first start downloads from Valve; nothing of Valve's is packaged | Gravity |
+| steam | steam and steam-gravity-proton-default: launcher for Valve's native ARM64 Steam client. Each user's first start downloads the client from Valve and the ARM64 Proton build from Gravity Linux; neither is packaged | Gravity |
 
 U-Boot's AArch64 image build is limited to `apple_m1`; host utilities are retained.
 

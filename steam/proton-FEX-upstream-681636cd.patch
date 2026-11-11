@@ -1,0 +1,56 @@
+From 681636cd68ea7d7083635479a9211651dcec6d07 Mon Sep 17 00:00:00 2001
+From: Ryan Houdek <Sonicadvance1@gmail.com>
+Date: Thu, 30 Jul 2026 20:51:29 -0700
+Subject: [PATCH] Win32: Actually set app config path and name
+
+Apparently we never set this and it happened to not be a problem. I
+needed it to gather some data so fix it.
+---
+ Source/Windows/ARM64EC/Module.cpp | 5 ++++-
+ Source/Windows/WOW64/Module.cpp   | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/Source/Windows/ARM64EC/Module.cpp b/Source/Windows/ARM64EC/Module.cpp
+index ab3e7a35e..2be579233 100644
+--- a/Source/Windows/ARM64EC/Module.cpp
++++ b/Source/Windows/ARM64EC/Module.cpp
+@@ -581,10 +581,13 @@ NTSTATUS ProcessInit() {
+   InitSyscalls();
+ 
+   FEX::Windows::InitCRTProcess();
+-  const auto ExecutableName = FEX::Windows::BaseName(FEX::Windows::GetExecutableFilePath());
++  const auto ExecutablePath = FEX::Windows::GetExecutableFilePath();
++  const auto ExecutableName = FEX::Windows::BaseName(ExecutablePath);
+   FEX::Config::LoadConfig(fextl::string {ExecutableName}, _environ, FEX::ReadPortabilityInformation());
+   FEXCore::Config::ReloadMetaLayer();
+   FEX::Windows::Logging::Init();
++  FEXCore::Config::Set(FEXCore::Config::CONFIG_APP_FILENAME, ExecutablePath);
++  FEXCore::Config::Set(FEXCore::Config::CONFIG_APP_CONFIG_NAME, ExecutableName);
+ 
+   FEXCore::Config::Set(FEXCore::Config::CONFIG_IS64BIT_MODE, "1");
+ 
+diff --git a/Source/Windows/WOW64/Module.cpp b/Source/Windows/WOW64/Module.cpp
+index 515a553b7..75503c82d 100644
+--- a/Source/Windows/WOW64/Module.cpp
++++ b/Source/Windows/WOW64/Module.cpp
+@@ -515,13 +515,16 @@ public:
+ 
+ void BTCpuProcessInit() {
+   FEX::Windows::InitCRTProcess();
+-  const auto ExecutableName = FEX::Windows::BaseName(FEX::Windows::GetExecutableFilePath());
++  const auto ExecutablePath = FEX::Windows::GetExecutableFilePath();
++  const auto ExecutableName = FEX::Windows::BaseName(ExecutablePath);
+   FEX::Config::LoadConfig(fextl::string {ExecutableName}, _environ, FEX::ReadPortabilityInformation());
+   FEXCore::Config::ReloadMetaLayer();
+   FEX::Windows::Logging::Init();
+ 
+   FEXCore::Config::Set(FEXCore::Config::CONFIG_INTERPRETER_INSTALLED, "0");
+   FEXCore::Config::Set(FEXCore::Config::CONFIG_IS64BIT_MODE, "0");
++  FEXCore::Config::Set(FEXCore::Config::CONFIG_APP_FILENAME, ExecutablePath);
++  FEXCore::Config::Set(FEXCore::Config::CONFIG_APP_CONFIG_NAME, ExecutableName);
+ 
+   FEXCore::Profiler::Init("", "");
+ 
+-- 
+2.55.0
+

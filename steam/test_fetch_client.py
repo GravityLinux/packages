@@ -117,7 +117,7 @@ class FetchClient(unittest.TestCase):
         self.body = package(self.work, b"pinned")
         self.site.files["/repo/client-1.pkg.tar.zst"] = self.body
         self.client = {
-            "name": "client", "url": self.site.base + "client-1.pkg.tar.zst",
+            "what": "the Steam client", "source": "Valve", "name": "client", "url": self.site.base + "client-1.pkg.tar.zst",
             "sha256": hashlib.sha256(self.body).hexdigest(), "size": len(self.body),
             "index": "index.db", "member": "usr/lib/steam/steam.tar.zst", "unpacked": 1000,
         }
@@ -240,11 +240,47 @@ class FetchClient(unittest.TestCase):
                     self.fetch()
                 self.assertIsNone(self.installed())
 
-    def test_pinned_client(self):
-        client = fetch_client.CLIENT
-        self.assertTrue(client["url"].startswith("https://"))
-        self.assertRegex(client["sha256"], "^[0-9a-f]{64}$")
-        self.assertGreater(client["unpacked"], client["size"])
+    def proton(self):
+        """A bundle like Proton's: one top-level directory holding the tool."""
+        tool = self.work / "bundle/Proton-build/files"
+        tool.mkdir(parents=True)
+        (tool / "wine").write_bytes(b"proton" + os.urandom(1000000))
+        (tool.parent / "proton").write_text("#!/usr/bin/python3\n")
+        subprocess.run(["tar", "--zstd", "-cf", self.work / "bundle.tar.zst", "-C", self.work / "bundle",
+                        "Proton-build"], check=True)
+        body = (self.work / "bundle.tar.zst").read_bytes()
+        self.site.files["/repo/proton-1.tar.zst"] = body
+        self.client = {"what": "Proton", "source": "Gravity Linux", "url": self.site.base + "proton-1.tar.zst",
+                       "sha256": hashlib.sha256(body).hexdigest(), "size": len(body), "unpacked": 1000}
+
+    def test_proton_bundle_becomes_the_tool_directory(self):
+        self.proton()
+        self.site.cut = 5000
+        self.fetch()
+        self.assertEqual(sorted(path.name for path in self.target.iterdir()), ["files", "proton"])
+        self.assertEqual((self.target / "files/wine").read_bytes()[:6], b"proton")
+        self.assertEqual(self.site.requests[1], ("/repo/proton-1.tar.zst", "bytes=5000-"))
+
+    def test_proton_checksum_mismatch_is_refused(self):
+        self.proton()
+        self.client["sha256"] = "0" * 64
+        with self.assertRaisesRegex(fetch_client.Stop, "Proton.*checksum"):
+            self.fetch()
+        self.assertEqual(list(self.target.iterdir()), [])
+
+    def test_proton_gone_has_no_other_source(self):
+        self.proton()
+        del self.site.files["/repo/proton-1.tar.zst"]
+        with self.assertRaisesRegex(fetch_client.Stop, "Proton is not on its download server"):
+            self.fetch()
+        self.assertEqual(self.site.requests, [("/repo/proton-1.tar.zst", None)])
+
+    def test_pinned_downloads(self):
+        for item in (fetch_client.CLIENT, fetch_client.PROTON):
+            self.assertTrue(item["url"].startswith("https://"))
+            self.assertRegex(item["sha256"], "^[0-9a-f]{64}$")
+            self.assertGreater(item["unpacked"], item["size"])
+        self.assertNotIn("index", fetch_client.PROTON)
 
 
 if __name__ == "__main__":

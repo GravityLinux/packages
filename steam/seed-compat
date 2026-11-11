@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 # SPDX-License-Identifier: MIT
-"""Seed the default compatibility tool named by the installed policy."""
+"""Seed the default compatibility tool named by the installed policy.
+
+usage: seed-compat CONFIG_VDF TOOLS_DIR
+"""
 import json
 from pathlib import Path
 import sys
@@ -9,7 +12,7 @@ from first_run import seed_file
 
 try:
     setting = json.loads(Path('/usr/share/steam-gravity/first-run-policy.json').read_text())
-    manifest = Path('/opt/steam-gravity/compatibilitytools.d')/setting['tool']/'compatibilitytool.vdf'
+    manifest = Path(sys.argv[2])/setting['tool']/'compatibilitytool.vdf'
     if manifest.is_file() and seed_file(Path(sys.argv[1]), setting['tool'], setting['priority'], tuple(setting.get('replaces', ()))):
         print('steam: updated the compatibility tool settings; existing choices were kept', file=sys.stderr)
 except (OSError, ValueError, KeyError, IndexError) as error:

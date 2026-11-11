@@ -12,7 +12,7 @@ its repack still needs an RPM pin after that build exists in COPR.
 The historical results below describe their original revisions. They do not
 constitute a COPR build or device test of this combined package set.
 
-## 2026-11-10 steam 1.0.0.85-13 (client downloaded at the first start)
+## 2026-11-10 steam 1.0.0.85-13 and -14 (client and Proton downloaded at the first start)
 
 - `make srpm PACKAGE=steam` (32 KB, launcher files only), rebuilt natively on
   a MacBook Air 13" (M4) with `rpmbuild --rebuild`; `%check` ran the
@@ -35,10 +35,21 @@ constitute a COPR build or device test of this combined package set.
 - A second start, and a start after `dnf upgrade steam` from the earlier
   1.0.0.85-12 build (which carried the client archive), did not download
   anything and left the installed client's files as they were.
-- Not tested: signing in, Valve's FEX tool and games (they are only
-  downloaded after sign-in), the package-index path against Valve's server
-  (the pinned build is still the listed one; covered by the unit tests), and
-  a COPR build.
+- 1.0.0.85-14 (Proton downloaded at the first start), same Air with the
+  proton-gravity-arm64 package removed: with the archive not yet on the
+  server (HTTP 403) Steam said so and started without Proton. Against a
+  local test server: closing the window at 178 of 536 MB kept the partial
+  file and Steam reached its sign-in window; a partial file padded with
+  wrong content was refused and deleted and Steam started; the next start
+  continued from 178 MB (HTTP 206). Then with the shipped address, after the
+  archive was uploaded: downloaded, verified and unpacked 1.9 GB to
+  `~/.local/share/steam-gravity/compatibilitytools.d/proton-gravity-arm64`,
+  which is in the client's `STEAM_EXTRA_COMPAT_TOOLS_PATHS` and which the
+  default seed accepts; a second start downloaded nothing.
+- Not tested: signing in, Valve's FEX tool, games and Proton itself from the
+  per-user directory (all need a sign-in), the package-index path against
+  Valve's server (the pinned build is still the listed one; covered by the
+  unit tests), and a COPR build.
 
 ## 2026-11-10 x86 Mesa built from source (mesa-fex-guest, gravity-x86-mesa)
 

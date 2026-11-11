@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 # SPDX-License-Identifier: MIT
-"""Download Valve's ARM64 Steam client, verify it and unpack it.
+"""Download Valve's ARM64 Steam client or the ARM64 Proton, verify and unpack it.
 
-usage: fetch-client DOWNLOAD_DIR TARGET_DIR
+usage: fetch-client client|proton DOWNLOAD_DIR TARGET_DIR
 
-steam-launch runs this once per user, when the client is not installed yet.
-The package is downloaded to DOWNLOAD_DIR (an interrupted download continues
-there on the next start), checked against the SHA-256 below and unpacked
-into TARGET_DIR. steam-launch removes DOWNLOAD_DIR when the client is in
-place.
+steam-launch runs this once per user for each of the two, when it is not
+installed yet. The file is downloaded to DOWNLOAD_DIR (an interrupted
+download continues there on the next start), checked against the size and
+SHA-256 below and unpacked into TARGET_DIR. steam-launch removes
+DOWNLOAD_DIR when the result is in place.
 """
 import hashlib
 import http.client
@@ -29,6 +29,8 @@ import urllib.request
 # The client build this package was tested with: Valve's public package, as
 # listed in the package index of the same directory.
 CLIENT = {
+    "what": "the Steam client",
+    "source": "Valve",
     "name": "deckard-steam-rel",
     "url": "https://steamdeck-packages.steamos.cloud/archlinux-deckard-hotfixes/release/0.4.x/"
            "deckard-steam-rel-r1792099137%2Bbffc849f-1-aarch64.pkg.tar.zst",
@@ -40,10 +42,21 @@ CLIENT = {
     "member": "usr/lib/steam/steam.tar.zst",
     "unpacked": 2600000000,
 }
+# Proton (ARM64, Gravity): Valve's Proton 11.0 built for AArch64 with the two
+# changes described in PROTON-SOURCE.md. One top-level directory, which
+# becomes the tool directory.
+PROTON = {
+    "what": "Proton",
+    "source": "Gravity Linux",
+    "url": "https://cdn.gravitylinux.org/proton/proton-gravity-arm64-11.0-2e-1.tar.zst",
+    "sha256": "6f66af5b722e361476d795a3d03c115590e7a097202c97235addf75b885c42cf",
+    "size": 536330291,
+    "unpacked": 2100000000,
+}
 AGENT = "steam-gravity-launcher"
 MARGIN = 200 * 1000 * 1000
 UPDATE = "Update the system (sudo dnf upgrade), then start Steam again."
-OFFLINE = ("Steam could not be downloaded: Valve's download server cannot be reached. "
+OFFLINE = ("{} could not be downloaded: the download server cannot be reached. "
            "Check the internet connection, then start Steam again. "
            "A download that was interrupted continues where it stopped.")
 
@@ -58,6 +71,10 @@ class Cancelled(Exception):
 
 class Gone(Exception):
     """The server no longer has the file (HTTP 404)."""
+
+
+def capital(text):
+    return text[0].upper() + text[1:]
 
 
 def megabytes(count):
@@ -115,7 +132,7 @@ def open_url(url, start=0):
     return urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30)
 
 
-def download(url, size, part, window, text):
+def download(what, url, size, part, window, text):
     """Fetch url into part, continuing a partial file. Raises Gone on HTTP 404."""
     failures = 0
     while True:
@@ -132,14 +149,15 @@ def download(url, size, part, window, text):
                     have = 0  # the server sent the whole file again
                 length = int(response.headers.get("Content-Length") or -1)
                 if have + length != size:
-                    raise Stop(f"Valve's server offers a Steam client of {megabytes(have + length)} where "
+                    raise Stop(f"The download server offers {what} with {megabytes(have + length)} where "
                                f"{megabytes(size)} was expected, so it was not downloaded. " + UPDATE)
                 with part.open("ab" if have else "wb") as out:
                     while chunk := response.read(1 << 18):
                         try:
                             out.write(chunk)
                         except OSError as error:
-                            raise Stop(f"Steam could not be saved to {part.parent}: {error.strerror}.") from None
+                            raise Stop(f"{capital(what)} could not be saved to {part.parent}: "
+                                       f"{error.strerror}.") from None
                         have += len(chunk)
                         window.update(f"{text}: {megabytes(have)} of {megabytes(size)}", 0.9 * have / size)
         except urllib.error.HTTPError as error:
@@ -148,6 +166,9 @@ def download(url, size, part, window, text):
                 raise Gone from None
             if error.code == 416:  # the partial file does not fit the server's file
                 part.unlink(missing_ok=True)
+            elif 400 <= error.code < 500:
+                raise Stop(f"The download server refused to send {what} (HTTP {error.code}). "
+                           "Start Steam again later.") from None
         except (OSError, http.client.HTTPException):
             pass
         have = part.stat().st_size if part.exists() else 0
@@ -156,7 +177,7 @@ def download(url, size, part, window, text):
         # Keep trying while the download advances; give up after repeated failures.
         failures = 0 if have > before else failures + 1
         if failures > 3:
-            raise Stop(OFFLINE)
+            raise Stop(OFFLINE.format(capital(what)))
         window.update(f"{text}: waiting for the connection", 0.9 * have / size, force=True)
         time.sleep(3)
 
@@ -185,12 +206,14 @@ def current_build(client):
                         and re.fullmatch(r"[0-9a-f]{64}", digest) and re.fullmatch(r"[1-9][0-9]*", size)):
                     return base + urllib.parse.quote(name), digest, int(size)
                 break
-    except (OSError, http.client.HTTPException, tarfile.TarError):
+    except (OSError, http.client.HTTPException, tarfile.TarError) as error:
+        if isinstance(error, urllib.error.HTTPError):
+            error.close()
         raise Stop(gone.format(", and its package index could not be read")) from None
     raise Stop(gone.format(", and its package index names no newer one with a checksum"))
 
 
-def verify(part, digest, window):
+def verify(what, part, digest, window):
     size = part.stat().st_size
     done = 0
     actual = hashlib.sha256()
@@ -201,16 +224,24 @@ def verify(part, digest, window):
             window.update("Checking the download", 0.9 + 0.02 * done / size)
     if actual.hexdigest() != digest:
         part.unlink()
-        raise Stop("The downloaded Steam client is damaged or is not the expected file (its checksum does "
+        raise Stop(f"The download of {what} is damaged or is not the expected file (its checksum does "
                    "not match), so it was deleted and nothing was installed. Start Steam again to download "
                    "it again.")
 
 
-def unpack(part, member, target, window):
+def unpack(item, part, target, window):
+    """Unpack the tree into target: the archive named by "member" inside the
+    download, or the download's single top-level directory."""
     size = part.stat().st_size
-    outer = subprocess.Popen(["tar", "--zstd", "-xOf", "-", member], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    inner = subprocess.Popen(["tar", "--zstd", "-xf", "-", "--no-same-owner", "-C", str(target)], stdin=outer.stdout)
-    outer.stdout.close()
+    text = f"Unpacking {item['what']}"
+    tree = ["tar", "--zstd", "-xf", "-", "--no-same-owner", "-C", str(target)]
+    if "member" in item:
+        outer = subprocess.Popen(["tar", "--zstd", "-xOf", "-", item["member"]],
+                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        inner = subprocess.Popen(tree, stdin=outer.stdout)
+        outer.stdout.close()
+    else:
+        outer = inner = subprocess.Popen(tree + ["--strip-components=1"], stdin=subprocess.PIPE)
     try:
         done = 0
         with part.open("rb") as stream:
@@ -220,13 +251,13 @@ def unpack(part, member, target, window):
                 except OSError:
                     break
                 done += len(chunk)
-                window.update("Unpacking Steam", 0.92 + 0.08 * done / size)
+                window.update(text, 0.92 + 0.08 * done / size)
         try:
             outer.stdin.close()
         except OSError:
             pass
         if outer.wait() or inner.wait():
-            raise Stop(f"The Steam client could not be unpacked in {target.parent}.")
+            raise Stop(f"{capital(item['what'])} could not be unpacked in {target.parent}.")
     finally:
         for process in (outer, inner):
             if process.poll() is None:
@@ -234,38 +265,45 @@ def unpack(part, member, target, window):
                 process.wait()
 
 
-def fetch(client, directory, target, window, free=lambda path: shutil.disk_usage(path).free):
+def fetch(item, directory, target, window, free=lambda path: shutil.disk_usage(path).free):
+    what = item["what"]
     directory.mkdir(parents=True, exist_ok=True)
-    url, digest, size = client["url"], client["sha256"], client["size"]
-    text = "Downloading the Steam client from Valve"
+    url, digest, size = item["url"], item["sha256"], item["size"]
+    text = f"Downloading {what} from {item['source']}"
     for attempt in ("pinned", "index"):
         part = directory / (digest + ".part")
         for other in directory.iterdir():
             if other != part:
                 other.unlink()
         have = min(part.stat().st_size, size) if part.exists() else 0
-        need = size - have + client["unpacked"] + MARGIN
+        need = size - have + item["unpacked"] + MARGIN
         if free(directory) < need:
-            raise Stop(f"Steam needs about {need / 1e9:.1f} GB of free space in {directory.parent} to set "
-                       f"itself up, and only {free(directory) / 1e9:.1f} GB is free.")
+            raise Stop(f"Setting up {what} needs about {need / 1e9:.1f} GB of free space in "
+                       f"{directory.parent}, and only {free(directory) / 1e9:.1f} GB is free.")
         window.update(text, 0.9 * have / size, force=True)
         try:
-            download(url, size, part, window, text)
+            download(what, url, size, part, window, text)
             break
         except Gone:
+            if "index" not in item:
+                raise Stop(f"{capital(what)} is not on its download server any more. " + UPDATE) from None
             if attempt == "index":
                 raise Stop("Valve's server does not have the Steam client that its package index lists. "
                            "Start Steam again later.") from None
-            url, digest, size = current_build(client)
+            url, digest, size = current_build(item)
             text = "Downloading Valve's current Steam client (newer than the one this package was made for)"
-    verify(part, digest, window)
-    window.update("Unpacking Steam", 0.92, force=True)
-    unpack(part, client["member"], target, window)
+    verify(what, part, digest, window)
+    window.update(f"Unpacking {what}", 0.92, force=True)
+    unpack(item, part, target, window)
 
 
 def main(arguments):
-    if len(arguments) != 2:
+    if len(arguments) != 3 or arguments[0] not in ("client", "proton"):
         sys.exit(__doc__.strip())
+    item = CLIENT if arguments[0] == "client" else PROTON
+    # Steam starts without Proton; say what that means.
+    note = "" if item is CLIENT else (" Steam starts without Proton, which Windows games need; "
+                                      "the next start tries again.")
 
     def interrupt(*_):
         raise Cancelled
@@ -273,12 +311,13 @@ def main(arguments):
         signal.signal(number, interrupt)
     window = Window()
     try:
-        fetch(CLIENT, Path(arguments[0]), Path(arguments[1]), window)
+        fetch(item, Path(arguments[1]), Path(arguments[2]), window)
     except Stop as stop:
-        window.error(str(stop))
+        window.error(str(stop) + note)
         return 1
     except Cancelled:
-        print("steam: setup cancelled; the download continues from here next time", file=sys.stderr)
+        print(f"steam: setting up {item['what']} was cancelled; the download continues from here next time."
+              + note, file=sys.stderr)
         return 1
     finally:
         window.close()

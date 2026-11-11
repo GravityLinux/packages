@@ -1,9 +1,10 @@
 Name:           steam
 Version:        1.0.0.85
-Release:        13.gravity%{?dist}
+Release:        14.gravity%{?dist}
 Summary:        Launcher for Valve's native ARM64 Steam client
-# Only the launcher is packaged. Valve's client is proprietary; each user's
-# first start downloads it from Valve (README.md).
+# Only the launcher is packaged. Each user's first start downloads Valve's
+# proprietary client from Valve, and the ARM64 Proton build described in
+# PROTON-SOURCE.md from Gravity Linux (README.md).
 License:        MIT
 URL:            https://github.com/GravityLinux/packages
 Source0:        LICENSE
@@ -18,6 +19,13 @@ Source15:       steam.svg
 Source20:       first_run.py
 Source21:       seed-compat
 Source22:       first-run-policy.json
+# Proton (ARM64, Gravity): the tool manifest and notice that the launcher adds
+# to the downloaded tool, and what it was built from.
+Source23:       compatibilitytool.vdf
+Source24:       NOTICE.txt
+Source25:       PROTON-SOURCE.md
+Source26:       proton-wine-ntdll-header-only-sve-context.patch
+Source27:       proton-FEX-upstream-681636cd.patch
 Source30:       test_fetch_client.py
 Source31:       test_first_run.py
 ExclusiveArch:  aarch64
@@ -57,28 +65,28 @@ Requires:       mesa-vulkan-drivers >= 26.3.0~devel-105
 # x86 Linux games use Valve's FEX tool, whose graphics driver is this x86
 # build of the system Mesa.
 Requires:       fex-guestos-mesa
-# Windows games: the ARM64 Proton, as the default tool (weak, so either can
-# be left out).
-Recommends:     proton-gravity-arm64
+# Windows games: make the ARM64 Proton that the first start downloads the
+# default tool (weak, so it can be left out).
 Recommends:     steam-gravity-proton-default
 
 %description
 The steam command, desktop entry and steam:// handler for Valve's native
 ARM64 Steam client. The client itself is not part of this package: the first
-start downloads it from Valve (about 700 MB) into the user's data directory,
-shows the progress, and checks the download before installing it. After that
-the client keeps itself up to date.
+start downloads it from Valve (about 700 MB) and Proton for Windows games
+from Gravity Linux (about 540 MB) into the user's data directory, shows the
+progress, and checks each download before installing it. After that the
+client keeps itself up to date.
 
 %package -n steam-gravity-proton-default
 Summary:        Make the ARM64 Proton the default Steam compatibility tool
 Requires:       steam = %{version}-%{release}
-Requires:       proton-gravity-arm64
 Requires:       python3
 
 %description -n steam-gravity-proton-default
-Makes Proton (ARM64, Gravity) the default compatibility tool. The steam
-launcher sets it while Steam is stopped; it only adds the default when none
-is set, and keeps existing global and per-game choices.
+Makes Proton (ARM64, Gravity), which the steam launcher downloads at the
+first start, the default compatibility tool. The launcher sets it while
+Steam is stopped; it only adds the default when none is set, and keeps
+existing global and per-game choices.
 
 %prep
 %setup -c -T
@@ -92,6 +100,7 @@ install -Dm755 steam %{buildroot}%{_bindir}/steam
 install -Dm755 -t %{buildroot}%{_libexecdir}/steam-gravity exec-pages steam-launch fetch-client seed-compat
 install -m644 first_run.py %{buildroot}%{_libexecdir}/steam-gravity/first_run.py
 install -Dm644 first-run-policy.json %{buildroot}%{_datadir}/steam-gravity/first-run-policy.json
+install -Dm644 -t %{buildroot}%{_datadir}/steam-gravity/proton compatibilitytool.vdf NOTICE.txt
 install -Dm644 steam.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/steam.svg
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications steam.desktop
 
@@ -101,27 +110,33 @@ python3 test_first_run.py
 
 %files
 %license LICENSE LICENSE.icon
-%doc README.md
+%doc README.md PROTON-SOURCE.md proton-wine-ntdll-header-only-sve-context.patch
+%doc proton-FEX-upstream-681636cd.patch
 %{_bindir}/steam
 %dir %{_libexecdir}/steam-gravity
 %{_libexecdir}/steam-gravity/exec-pages
 %{_libexecdir}/steam-gravity/steam-launch
 %{_libexecdir}/steam-gravity/fetch-client
+%dir %{_datadir}/steam-gravity
+%{_datadir}/steam-gravity/proton/
 %{_datadir}/applications/steam.desktop
 %{_datadir}/icons/hicolor/scalable/apps/steam.svg
 
 %files -n steam-gravity-proton-default
 %license LICENSE
-%dir %{_datadir}/steam-gravity
 %{_datadir}/steam-gravity/first-run-policy.json
 %{_libexecdir}/steam-gravity/first_run.py
 %{_libexecdir}/steam-gravity/seed-compat
 
 %changelog
-* Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 1.0.0.85-13.gravity
+* Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 1.0.0.85-14.gravity
 - The Steam client is no longer part of the package. The first start
   downloads it from Valve (about 700 MB), shows the progress, checks the
   download and continues an interrupted one. A client that is already
   installed stays as it is.
+- Proton for Windows games is downloaded at the first start too (about
+  540 MB, from Gravity Linux) instead of being a separate package. If that
+  download fails or is cancelled, Steam starts without it and tries again at
+  the next start. An installed proton-gravity-arm64 package keeps being used.
 - Install the graphics driver for x86 Linux games (fex-guestos-mesa) with
   Steam.

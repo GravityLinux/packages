@@ -3,7 +3,8 @@
 The `steam` command, desktop entry and `steam://` handler for Valve's native
 ARM64 Steam client on Gravity Linux. The package contains only this launcher
 (MIT). Nothing of Valve's is in the RPM or its source package: the client is
-proprietary and is downloaded from Valve for each user at the first start.
+proprietary and is downloaded from Valve for each user at the first start,
+followed by Proton from Gravity Linux.
 
 ## First start
 
@@ -33,6 +34,24 @@ the fix is a package update that pins the new build.
 An existing client is never downloaded again or changed by a package update;
 Steam updates itself.
 
+## Proton
+
+Windows games use Proton (ARM64, Gravity), a build of Valve's Proton 11.0
+with a Wine fix for the Apple M4 (`PROTON-SOURCE.md`). It is not an RPM:
+after the client, `steam-launch` has `fetch-client` download the archive
+pinned in it (about 540 MB) from Gravity Linux's server in the same way
+(progress window, resume, size and SHA-256 check; no package-index lookup)
+and unpacks it to
+`~/.local/share/steam-gravity/compatibilitytools.d/proton-gravity-arm64`,
+adding `compatibilitytool.vdf` and `NOTICE.txt` from this package. If the
+download fails or is cancelled, Steam starts without Proton and the next
+start tries again. When the earlier `proton-gravity-arm64` package is
+installed, its tree under `/opt/steam-gravity/compatibilitytools.d` is used
+and nothing is downloaded.
+
+To publish a new build, upload the archive and change `PROTON` in
+`fetch-client` (URL, size, SHA-256).
+
 ## Updating the pinned client
 
 Take the `deckard-steam-rel` entry of Valve's package index
@@ -42,7 +61,7 @@ go into `CLIENT` in `fetch-client`. Test a first start before publishing.
 
 ## Compatibility tools
 
-`steam-launch` adds `/opt/steam-gravity/compatibilitytools.d` to
+`steam-launch` adds the directory that holds Proton to
 `STEAM_EXTRA_COMPAT_TOOLS_PATHS`. `steam-gravity-proton-default` makes
 `proton-gravity-arm64` the default tool for games without another choice.
 x86 Linux games run through Valve's FEX tool with the x86 Mesa of
