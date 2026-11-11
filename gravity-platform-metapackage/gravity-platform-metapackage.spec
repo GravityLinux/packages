@@ -4,7 +4,7 @@
 Name:           gravity-platform-metapackage
 Vendor:         Gravity Linux
 Version:        0
-Release:        112.gravity%{?dist}
+Release:        113.gravity%{?dist}
 Summary:        Metapackage declaring Asahi platform dependencies
 Group:          Metapackages
 License:        MIT
@@ -48,7 +48,7 @@ Requires:       alsa-ucm-asahi
 Requires:       gravity-fwupdate >= 20260915-103
 Requires:       dracut-gravity >= 20260915-103
 Requires:       update-m1n1 >= 20260915-103
-Requires:       gravity-remix-scripts >= 20260915-105
+Requires:       gravity-remix-scripts >= 20260915-108
 # kernel(p3s) is provided by kernel-16k from 7.3.0-514.gravity on: the one
 # Gravity kernel for every supported board (one config, all device trees).
 # Requiring the kernel-16k name would accept the 7.1.13 kernel, which has no
@@ -270,6 +270,10 @@ install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name}-desktop %SOURCE1
 install -Dpm0644 -t %{buildroot}%{_datadir}/drirc.d %SOURCE2
 
 %changelog
+* Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 0-113.gravity
+- core: require gravity-remix-scripts 108, which keeps the MacBook Air (M4)
+  trackpad working after a restart
+
 * Tue Nov 10 2026 Niklas Sheth <niklassheth@gmail.com> - 0-112.gravity
 - audio: require gravity-audio-j713 (J713 files as an add-on to Fedora's
   asahi-audio, alsa-ucm-asahi and speakersafetyd) instead of Gravity forks of
