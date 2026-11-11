@@ -1,7 +1,7 @@
 Name:           gravity-remix-scripts
 Vendor:         Gravity Linux
 Version:        20260915
-Release:        108.gravity%{?dist}
+Release:        109.gravity%{?dist}
 Summary:        Fedora-specific Gravity first-boot utilities
 License:        MIT
 URL:            https://github.com/GravityLinux/packages
@@ -67,6 +67,17 @@ if grep -qx '/var/swap/swapfile swap swap sw 0 0' %{_sysconfdir}/fstab 2>/dev/nu
     sed -i '\|^/var/swap/swapfile swap swap sw 0 0$|d' %{_sysconfdir}/fstab
 fi
 
+%posttrans
+# Apply the restart guard to an SMC reboot driver that was bound before this
+# package was installed. Image builds have no running udev daemon.
+if [ -S /run/udev/control ]; then
+    if udevadm control --reload-rules; then
+        udevadm trigger --action=bind --subsystem-match=platform --sysname-match=macsmc-reboot || :
+        udevadm settle --timeout=10 || :
+    fi
+fi
+# End of the restart guard refresh.
+
 %preun
 %systemd_preun gravity-extras-firstboot.service
 
@@ -86,6 +97,12 @@ fi
 %{_systemdgeneratordir}/gravity-sleep-generator
 
 %changelog
+* Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-109.gravity
+- MacBook Air (M4): keep SMC restart and power-off when the kernel's device
+  tree connects the trackpad controller's reset line (kernel 7.3.0-519 on the
+  13-inch model); the guard stays for kernels without it.
+- Apply the guard at once when the package is installed on a running system.
+
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 20260915-108.gravity
 - Detach the SMC reboot driver on the MacBook Air (M4): after a restart or
   power-off through the SMC the trackpad did not work on the next boot.
