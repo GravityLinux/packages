@@ -117,6 +117,11 @@ if [ ! -f "$tools/$proton/compatibilitytool.vdf" ]; then
 	fi
 fi
 
+# Serialize the stopped-client check, settings seed and handoff to Steam.
+# Keep this lock until the new client is visible, so another start cannot seed
+# an old snapshot after this client begins writing its settings.
+bootstrap_lock
+
 # The compat-tool default is seeded only while Steam is stopped.
 if [ -x /usr/libexec/steam-gravity/seed-compat ] && ! pgrep -u "$(id -u)" -x steam >/dev/null; then
 	/usr/libexec/steam-gravity/seed-compat "$root/config/config.vdf" "$tools"
@@ -128,7 +133,18 @@ fi
 export LD_LIBRARY_PATH="$root/steamrtarm64"
 cd "$root" || exit 1
 while :; do
-	"$root/steamrtarm64/steam" "$@"
+	# The client must not inherit the setup lock. Concurrent launches may
+	# forward their arguments as soon as Steam is visible to the stopped check.
+	"$root/steamrtarm64/steam" "$@" 9>&- &
+	client_pid=$!
+	trap 'kill -TERM "$client_pid" 2>/dev/null || :' HUP INT TERM
+	while kill -0 "$client_pid" 2>/dev/null && ! pgrep -u "$(id -u)" -x steam >/dev/null; do
+		sleep 0.05
+	done
+	exec 9>&-
+	wait "$client_pid"
 	status=$?
+	trap - HUP INT TERM
 	[ "$status" = 42 ] || exit "$status"
+	bootstrap_lock
 done
