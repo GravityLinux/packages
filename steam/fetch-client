@@ -272,9 +272,6 @@ def fetch(item, directory, target, window, free=lambda path: shutil.disk_usage(p
     text = f"Downloading {what} from {item['source']}"
     for attempt in ("pinned", "index"):
         part = directory / (digest + ".part")
-        for other in directory.iterdir():
-            if other != part:
-                other.unlink()
         have = min(part.stat().st_size, size) if part.exists() else 0
         need = size - have + item["unpacked"] + MARGIN
         if free(directory) < need:
@@ -293,6 +290,11 @@ def fetch(item, directory, target, window, free=lambda path: shutil.disk_usage(p
             url, digest, size = current_build(item)
             text = "Downloading Valve's current Steam client (newer than the one this package was made for)"
     verify(what, part, digest, window)
+    # Resolve and verify the active build before pruning. A failed pinned URL
+    # must not discard the partial download selected by the previous fallback.
+    for other in directory.iterdir():
+        if other != part:
+            other.unlink()
     window.update(f"Unpacking {what}", 0.92, force=True)
     unpack(item, part, target, window)
 

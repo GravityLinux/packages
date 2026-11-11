@@ -47,7 +47,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body) - start))
         self.end_headers()
         end = len(body)
-        if site.cut:  # drop the connection after this many bytes, once
+        if site.cut and (site.cut_path is None or self.path == site.cut_path):  # drop once
             end, site.cut = min(end, start + site.cut), 0
         try:
             self.wfile.write(body[start:end])
@@ -62,6 +62,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
 class Site:
     def __init__(self):
         self.files, self.requests, self.ranges, self.cut = {}, [], True, 0
+        self.cut_path = None
         self.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
         self.server.site = self
         threading.Thread(target=self.server.serve_forever, daemon=True).start()
@@ -210,6 +211,34 @@ class FetchClient(unittest.TestCase):
         self.fetch(window)
         self.assertEqual(self.installed(), b"newer!")
         self.assertTrue(any("newer than" in text for text in window.texts))
+
+    def test_fallback_cancel_keeps_partial_for_next_launch(self):
+        newer = package(self.work / "newer", b"newer!")
+        digest = hashlib.sha256(newer).hexdigest()
+        self.site.files["/repo/client-2.pkg.tar.zst"] = newer
+        self.gone({"client-2": {"NAME": "client", "FILENAME": "client-2.pkg.tar.zst",
+                                "CSIZE": len(newer), "SHA256SUM": digest}})
+        with self.assertRaises(fetch_client.Cancelled):
+            self.fetch(Quiet(cancel_at=0.0001))
+        have = self.part(digest).stat().st_size
+        self.assertTrue(0 < have < len(newer))
+        self.assertIsNone(self.installed())
+        self.site.requests.clear()
+        self.fetch()
+        self.assertEqual(self.site.requests, [("/repo/client-1.pkg.tar.zst", None),
+                                             ("/repo/index.db", None),
+                                             ("/repo/client-2.pkg.tar.zst", f"bytes={have}-")])
+        self.assertEqual(self.installed(), b"newer!")
+
+    def test_fallback_disconnect_resumes_with_range(self):
+        newer = package(self.work / "newer", b"newer!")
+        self.site.files["/repo/client-2.pkg.tar.zst"] = newer
+        self.gone({"client-2": {"NAME": "client", "FILENAME": "client-2.pkg.tar.zst",
+                                "CSIZE": len(newer), "SHA256SUM": hashlib.sha256(newer).hexdigest()}})
+        self.site.cut, self.site.cut_path = 5000, "/repo/client-2.pkg.tar.zst"
+        self.fetch()
+        self.assertEqual(self.site.requests[-1], ("/repo/client-2.pkg.tar.zst", "bytes=5000-"))
+        self.assertEqual(self.installed(), b"newer!")
 
     def test_gone_and_index_checksum_does_not_match(self):
         newer = package(self.work / "newer", b"newer!")
