@@ -173,7 +173,7 @@ Summary: The Linux kernel
 %define specversion 7.3.0
 %define patchversion 7.3
 # Gravity release number: the one place to bump it (changelog aside).
-%global gravity_release 519
+%global gravity_release 520
 %define pkgrelease %{gravity_release}.gravity
 %define kversion 7
 %define tarfile_release 7.3
@@ -4880,6 +4880,10 @@ fi\
 #
 #
 %changelog
+* Fri Nov 13 2026 Gravity Linux <packaging@gravitylinux.org> - 7.3.0-520.gravity
+- Limit J713 speaker digital volume to -14 dB for woofers and -22 dB for tweeters
+- Keep speaker feedback protection and fail-closed volume locking enabled
+
 * Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-519.gravity
 - MacBook Air 13-inch (J713): reset the trackpad controller at start-up, so the
   trackpad works after a restart or power-off through the SMC

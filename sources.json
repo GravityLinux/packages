@@ -2,7 +2,7 @@
   "kernel": {
     "kind": "git",
     "url": "https://github.com/GravityLinux/linux.git",
-    "ref": "ccb78b0a487ed4e828054bd14afe6119e9e2cd16",
+    "ref": "6d046bc26a98cbff90c8bc93f2170cd23c786ddd",
     "archive": "gravity-m4.patch",
     "base_ref": "c03c1a14507dfaf8b856c2608f9ac216021fc222",
     "root": "linux-7.3",
@@ -10,7 +10,7 @@
       "url": "https://kojipkgs.fedoraproject.org/packages/kernel/7.3.3/200.fc44/src/kernel-7.3.3-200.fc44.src.rpm",
       "sha256": "7eb03986901b0fc95cbfd92ba2239d5f7fdd6fee010f36eab22bf982ad5adeba"
     },
-    "note": "Release 7.3.0-519.gravity: Fedora's kernel-7.3.3-200.fc44 packaging and configuration on the Linux 7.3 tarball, plus gravity-m4.patch (v7.3..ref): P3S and the Apple M4 platform support from the GravityLinux/linux integration branch (the bits/* topic branches merged in order). The J713 camera is disabled in its device tree."
+    "note": "Release 7.3.0-520.gravity: Fedora's kernel-7.3.3-200.fc44 packaging and configuration on the Linux 7.3 tarball, plus gravity-m4.patch (v7.3..ref): P3S and the Apple M4 platform support from the GravityLinux/linux integration branch (the bits/* topic branches merged in order). The J713 camera is disabled in its device tree. J713 speaker digital-volume ceilings are -14 dB for woofers and -22 dB for tweeters while speaker protection is investigated."
   },
   "mesa": {
     "kind": "git",
@@ -46,7 +46,9 @@
     "url": "https://github.com/GravityLinux/bootloader.git",
     "ref": "f5f5d4520587b6b8e2d8eb4d866baae129f47765",
     "archive": "gravity-bootloader-1.6.1.tar.gz",
-    "omit_submodules": ["artwork"],
+    "omit_submodules": [
+      "artwork"
+    ],
     "root": "gravity-bootloader-1.6.1",
     "note": "M4 bring-up on top of GravityLinux/bootloader main 79ff30c70f06: T8132 GPU calibration and core mask, MTP and AOP DAPF setup, system-level cache, CPU frequency init, ISP heap, NO_DISPLAY build, and m1n1.conf.example restored. Preserve DCP firmware-version and firmware-compat as 26.6.2; pair with the kernel's exact actual-version check."
   },
@@ -63,7 +65,10 @@
     "url": "https://github.com/GravityLinux/installer.git",
     "ref": "f54140ea4957363c6fcdd8f1699b2e38730603ab",
     "archive": "gravity-installer-0.9.1.tar.gz",
-    "omit_submodules": ["artwork", "bootloader"],
+    "omit_submodules": [
+      "artwork",
+      "bootloader"
+    ],
     "root": "gravity-installer-0.9.1",
     "note": "Qualified recovery extraction plus J713/J773g firmware profiles and boot-logo variable parsing."
   },
