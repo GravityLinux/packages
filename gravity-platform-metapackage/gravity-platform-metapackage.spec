@@ -4,7 +4,7 @@
 Name:           gravity-platform-metapackage
 Vendor:         Gravity Linux
 Version:        0
-Release:        113.gravity%{?dist}
+Release:        115.gravity%{?dist}
 Summary:        Metapackage declaring Asahi platform dependencies
 Group:          Metapackages
 License:        MIT
@@ -226,6 +226,7 @@ exit 0
 %package mesa
 Summary:        Metapackage shipping Mesa configuration for Asahi systems
 Requires:       mesa-filesystem
+Requires:       gravity-flatpak-graphics >= 26.3.0~devel-112.gravity
 
 %description mesa
 This package contains Asahi-specific Mesa driconf files.
@@ -270,6 +271,12 @@ install -Dpm0755 -t %{buildroot}%{_libexecdir}/%{name}-desktop %SOURCE1
 install -Dpm0644 -t %{buildroot}%{_datadir}/drirc.d %SOURCE2
 
 %changelog
+* Fri Nov 13 2026 Niklas Sheth <hi@niklassheth.com> - 0-115.gravity
+- Require the Flatpak driver update that also supports software GL requests.
+
+* Thu Nov 12 2026 Niklas Sheth <hi@niklassheth.com> - 0-114.gravity
+- Pull in Gravity's hardware graphics extensions for Flatpak applications.
+
 * Tue Nov 10 2026 Niklas Sheth <hi@niklassheth.com> - 0-113.gravity
 - core: require gravity-remix-scripts 108, which keeps the MacBook Air (M4)
   trackpad working after a restart
