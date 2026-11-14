@@ -9,5 +9,10 @@
   "https://download.copr.fedorainfracloud.org/results/adevwithanidea/gravity/fedora-44-x86_64/devel/Packages/m/mesa-fex-guest-26.3.0~devel-110.gravity.1.fc44.x86_64.rpm": "ae5597df04a1e25d96e445d629d2405438f1b6e14d2c64a4852397c3cf1bdda6",
   "https://ftp.denx.de/pub/u-boot/u-boot-2026.07.tar.bz2": "78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e",
   "https://github.com/rafalh/rust-fatfs/archive/4eccb50d011146fbed20e133d33b22f3c27292e7/rust-fatfs-4eccb50d011146fbed20e133d33b22f3c27292e7.tar.gz": "06302558ed3878e70e51109648e2972faf8ec444c352c31f8272a55d93850e95",
-  "https://gitlab.freedesktop.org/virgl/venus-protocol/-/archive/e94b12f301b9eb27ebead757128a18420b4f7994/venus-protocol-e94b12f301b9eb27ebead757128a18420b4f7994.tar.gz": "7c00e631fc59d849c80e0f44f80d0dfa5a4dbc45061ba11c0f675a5e5ad09caf"
+  "https://gitlab.freedesktop.org/virgl/venus-protocol/-/archive/e94b12f301b9eb27ebead757128a18420b4f7994/venus-protocol-e94b12f301b9eb27ebead757128a18420b4f7994.tar.gz": "7c00e631fc59d849c80e0f44f80d0dfa5a4dbc45061ba11c0f675a5e5ad09caf",
+  "https://codeload.github.com/KhronosGroup/SPIRV-Tools/tar.gz/refs/tags/v2026.4": "92df4c377603f086c3d2a1eb2bd9b8f883a73ca890fb939d78a0cecdcc01686c",
+  "https://codeload.github.com/KhronosGroup/SPIRV-Headers/tar.gz/496543121ce6419f23d6fa5d7194ba66c36212d2": "a9bb9c48713245eacf97cc539b6f1d45405a92d8813f8b82e635f0a085ee9898",
+  "https://codeload.github.com/KhronosGroup/SPIRV-LLVM-Translator/tar.gz/ae707ecba4b0c64d85f4f7bdcabeb1fa152c0ab2": "05458d44097d472b6b4ddb7c426072fa581dd73bbc13b37eca758e763ff047a4",
+  "https://codeload.github.com/KhronosGroup/SPIRV-Headers/tar.gz/cb42dec3830d3ac67fa449ecdc0c0f73d5e74498": "117010e525fe36b1ce006e0e58a6e0a3b415aabc9179d912b92737f41f3f994f",
+  "https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd7729d542c61a4d537767a59645b82a0b521206e1e25c2/pyyaml-6.0.3.tar.gz": "d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f"
 }

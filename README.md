@@ -11,7 +11,7 @@ Gravity-specific RPMs do.
 | Source RPM | Main output / role | Packaging baseline |
 | --- | --- | --- |
 | kernel | kernel-16k, core, modules, modules-core, modules-extra, devel (provides kernel(p3s)): the one release kernel for every board (Linux 7.3 + P3S, M4) | Fedora 7.3.3-200.fc44 SRPM on Linux 7.3 |
-| mesa | Fedora Mesa libraries, DRI and Vulkan drivers | Fedora 44 dist-git |
+| mesa | Fedora Mesa libraries, DRI and Vulkan drivers; gravity-flatpak-graphics hardware extensions for freedesktop 25.08/26.08 and Fedora f45 | Fedora 44 dist-git and Gravity SDK build |
 | mesa-fex-guest | x86_64 and i686 builds of the same Mesa source, assembled into the two x86 trees below (built in the fedora-44-x86_64 chroot only) | Gravity |
 | gravity-x86-mesa | gravity-x86-mesa and fex-guestos-mesa: the x86 trees of the pinned mesa-fex-guest build, repacked as noarch packages for gravity-x86's FEX root filesystem and Steam's FEX tool | Gravity |
 | uboot-tools | uboot-tools, uboot-images-armv8 | Asahi packaging plus six Gravity patches |
@@ -120,6 +120,13 @@ For Mesa, keep Fedora's complete subpackage split and Rust dependency
 packaging. Pinning a new source version may require adapting the Meson options,
 vendored dependency versions and file lists. A source pin alone is not a build
 test.
+
+The aarch64 Mesa build also produces `gravity-flatpak-graphics`, automatically
+selected by Flatpak and required by the platform Mesa metapackage. It compiles
+the same Mesa source in the pinned freedesktop SDK; binary-build networking must
+be enabled for SDK acquisition (`copr-cli build --enable-net on`). See
+[gravity-flatpak-graphics](gravity-flatpak-graphics/README.md) for its runtime
+layouts, compiler pins and native validation command.
 
 ## x86 Mesa for FEX
 

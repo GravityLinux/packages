@@ -78,11 +78,23 @@
 # Disable LTO for now
 %global _lto_cflags %nil
 
+# Native extension-only validation need not rebuild the host's many unrelated
+# drivers. The default COPR build always builds both host Mesa and the extension.
+%bcond_with flatpak_only
+%if %{with flatpak_only}
+%global with_nvk 0
+%global debug_package %{nil}
+# assemble.py already strips Mesa. Preserve the prebuilt SDK LLVM unchanged
+# in this local extension-only path, which has no debuginfo processing.
+%global __brp_strip %{nil}
+%global __brp_strip_comment_note %{nil}
+%endif
+
 Name:           mesa
 Vendor:         Gravity Linux
 Summary:        Mesa graphics libraries
 Version:        26.3.0~devel
-Release:        110.gravity%{?dist}
+Release:        112.gravity%{?dist}
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
 
@@ -119,6 +131,39 @@ Source13:       https://crates.io/api/v1/crates/syn/%{rust_syn_ver}/download#/sy
 Source14:       https://crates.io/api/v1/crates/unicode-ident/%{rust_unicode_ident_ver}/download#/unicode-ident-%{rust_unicode_ident_ver}.tar.gz
 Source15:       https://crates.io/api/v1/crates/rustc-hash/%{rustc_hash_ver}/download#/rustc-hash-%{rustc_hash_ver}.tar.gz
 
+# Pinned Flatpak compiler acquisition; only aarch64 produces the extension.
+# These are build tools, not prebuilt Gravity Mesa. Mesa is always Source0.
+Source90:       gravity-flatpak-build.sh
+Source91:       gravity-flatpak-sandbox.sh
+Source92:       gravity-flatpak-assemble.py
+Source93:       https://codeload.github.com/KhronosGroup/SPIRV-Tools/tar.gz/refs/tags/v2026.4#/flatpak-spirv-tools.tar.gz
+Source94:       https://codeload.github.com/KhronosGroup/SPIRV-Headers/tar.gz/496543121ce6419f23d6fa5d7194ba66c36212d2#/flatpak-spirv-headers.tar.gz
+Source95:       https://codeload.github.com/KhronosGroup/SPIRV-LLVM-Translator/tar.gz/ae707ecba4b0c64d85f4f7bdcabeb1fa152c0ab2#/flatpak-translator.tar.gz
+Source96:       https://codeload.github.com/KhronosGroup/SPIRV-Headers/tar.gz/cb42dec3830d3ac67fa449ecdc0c0f73d5e74498#/flatpak-translator-headers.tar.gz
+Source97:       https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd7729d542c61a4d537767a59645b82a0b521206e1e25c2/pyyaml-6.0.3.tar.gz
+Source98:       gravity-flatpak-sdk.sha256
+Source99:       gravity-flatpak-export-sdk.py
+Source100:      gravity-flatpak-sdk.lock.json
+Source101:      gravity-flatpak-llvm-origin.json
+
+%ifarch aarch64
+# The one prebuilt SDK libLLVM.so.22.1 has no GNU build ID. It is shipped
+# byte-for-byte, mode 0644, so find-debuginfo leaves it untouched.
+%global _missing_build_ids_terminate_build 0
+%endif
+
+# Never derive system RPM dependencies/provides from the private SDK ABI.
+%global __provides_exclude_from ^/var/lib/flatpak/extension/.*$
+%global __requires_exclude_from ^/var/lib/flatpak/extension/.*$
+%ifarch aarch64
+BuildRequires:  bubblewrap
+BuildRequires:  patchelf
+BuildRequires:  flatpak
+BuildRequires:  python3
+BuildRequires:  binutils
+%endif
+
+%if %{without flatpak_only}
 BuildRequires:  meson >= 1.4.0
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -214,9 +259,12 @@ BuildRequires:  pkgconfig(vulkan)
 BuildRequires:  pkgconfig(DirectX-Headers) >= 1.619.1
 %endif
 
+%endif
+
 %description
 %{summary}.
 
+%if %{without flatpak_only}
 %package filesystem
 Summary:        Mesa driver filesystem
 Provides:       mesa-dri-filesystem = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -357,10 +405,43 @@ Obsoletes:      VK_hdr_layer < 1
 
 %description vulkan-drivers
 The drivers with support for the Vulkan API.
+%endif
+
+%ifarch aarch64
+%package -n gravity-flatpak-graphics
+Summary:        Gravity hardware graphics drivers for Flatpak applications
+License:        MIT AND BSD-3-Clause AND SGI-B-2.0 AND Apache-2.0 AND (Apache-2.0 WITH LLVM-exception)
+Requires:       flatpak
+Requires:       gravity-mesa-revision = %{lua:print(string.sub(rpm.expand("%{gravity_git_ref}"), 1, 10))}
+Provides:       gravity-flatpak-graphics(git-ref) = %{gravity_git_ref}
+
+%description -n gravity-flatpak-graphics
+Gravity's native Apple GPU GL, GLES and Vulkan drivers, built from this
+Mesa source in the freedesktop SDK. Automatically selected GL.host extensions
+for freedesktop 25.08 and 26.08 (including derived KDE runtimes) and Fedora f45.
+No environment override or software rendering default is installed.
+Explicit software GL requests use llvmpipe with the pinned SDK's shared LLVM.
+%endif
 
 %prep
 %autosetup -n %{name}-%{ver} -p1
 cp %{SOURCE1} docs/
+
+%ifarch aarch64
+mkdir flatpak
+mkdir flatpak/mesa flatpak/spirv-tools flatpak/translator flatpak/translator-headers flatpak/pyyaml
+tar -xf %{SOURCE0} --strip-components=1 -C flatpak/mesa
+tar -xf %{SOURCE93} --strip-components=1 -C flatpak/spirv-tools
+mkdir -p flatpak/spirv-tools/external/spirv-headers
+tar -xf %{SOURCE94} --strip-components=1 -C flatpak/spirv-tools/external/spirv-headers
+tar -xf %{SOURCE95} --strip-components=1 -C flatpak/translator
+tar -xf %{SOURCE96} --strip-components=1 -C flatpak/translator-headers
+tar -xf %{SOURCE97} --strip-components=1 -C flatpak/pyyaml
+cp %{SOURCE90} flatpak/build.sh
+cp %{SOURCE99} flatpak/export-sdk.py
+cp %{SOURCE100} flatpak/sdk.lock.json
+cp %{SOURCE101} flatpak/llvm-origin.json
+%endif
 
 # Fail rather than silently using stale vendored protocol after a Mesa repin.
 grep -Fx 'revision = %{venus_protocol_commit}' subprojects/venus-protocol.wrap
@@ -410,6 +491,27 @@ _EOF
 
 
 %build
+%ifarch aarch64
+# COPR needs --enable-net on for SDK acquisition. The compiler sandbox below
+# still has no network. Nothing from the build worker's system ABI is shipped.
+python3 flatpak/export-sdk.py --output "$PWD/flatpak/gravity-flatpak-sdk-25.08-aarch64.tar.gz"
+(
+  cd flatpak
+  # Hash the normalized contents, not gzip's compressor-dependent encoding.
+  read -r sdk_want sdk_name < %{SOURCE98}
+  sdk_have=$(gzip -dc gravity-flatpak-sdk-25.08-aarch64.tar.gz | sha256sum | cut -d ' ' -f1)
+  echo "Flatpak SDK contents SHA256: $sdk_have"
+  test "$sdk_have" = "$sdk_want" || { echo 'Flatpak SDK content checksum mismatch' >&2; exit 1; }
+  # The SDK tree is archived read-only and the LLVM extension lands inside it:
+  # an unprivileged builder can only create it if directory modes are applied
+  # last. Then make the tree writable by its owner so the build directory can
+  # be removed; the compiler sandbox still mounts it read-only.
+  tar --delay-directory-restore -xf gravity-flatpak-sdk-25.08-aarch64.tar.gz
+  chmod -R u+w sdk
+  rm gravity-flatpak-sdk-25.08-aarch64.tar.gz
+)
+%endif
+%if %{without flatpak_only}
 # ensure standard Rust compiler flags are set
 export RUSTFLAGS="%build_rustflags"
 # The release tarball has no .git, so Mesa's version string would lack the
@@ -494,6 +596,11 @@ rewrite_wrap_file rustc-hash
   -Dspirv-tools=%{?with_spirv_tools:enabled}%{!?with_spirv_tools:disabled} \
   %{nil}
 %meson_build
+%endif
+
+%ifarch aarch64
+(cd flatpak; sh %{SOURCE91} %{gravity_git_ref})
+%endif
 
 %if 0%{?with_nvk}
 %cargo_license_summary
@@ -504,8 +611,15 @@ rewrite_wrap_file rustc-hash
 %endif
 
 %install
+%if %{without flatpak_only}
 %meson_install
+%endif
 
+%ifarch aarch64
+python3 -I %{SOURCE92} flatpak %{buildroot}/var/lib/flatpak/extension %{gravity_git_ref}
+%endif
+
+%if %{without flatpak_only}
 # likewise glvnd
 rm -vf %{buildroot}%{_libdir}/libGLX_mesa.so
 rm -vf %{buildroot}%{_libdir}/libEGL_mesa.so
@@ -521,7 +635,17 @@ rm -vf %{buildroot}%{_libdir}/dri/apple_dri.so
 # glvnd needs a default provider for indirect rendering where it cannot
 # determine the vendor
 ln -s libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
+%endif
 
+%ifarch aarch64
+%files -n gravity-flatpak-graphics
+%license docs/license.rst
+%license flatpak/LLVM-LICENSE.txt flatpak/spirv-tools/LICENSE
+/var/lib/flatpak/extension/org.freedesktop.Platform.GL.host/
+/var/lib/flatpak/extension/org.fedoraproject.Platform.GL.host/
+%endif
+
+%if %{without flatpak_only}
 %files filesystem
 %doc docs/Mesa-MLAA-License-Clarification-Email.txt
 %dir %{_libdir}/dri
@@ -767,7 +891,18 @@ ln -s libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
 %endif
 %endif
 
+%endif
+
 %changelog
+* Fri Nov 13 2026 Niklas Sheth <hi@niklassheth.com> - 26.3.0~devel-112.gravity
+- Restore software GL in Flatpak with llvmpipe and the pinned SDK's shared LLVM.
+- Declare the linked SPIRV-Tools and LLVM licenses for the graphics extension.
+- Preserve SDK LLVM byte-for-byte and tolerate its missing GNU build ID.
+
+* Thu Nov 12 2026 Niklas Sheth <hi@niklassheth.com> - 26.3.0~devel-111.gravity
+- Build Gravity Flatpak hardware graphics extensions from the same Mesa source
+  for freedesktop 25.08/26.08 and Fedora f45, with an offline pinned SDK.
+
 * Wed Nov 11 2026 Niklas Sheth <hi@niklassheth.com> - 26.3.0~devel-110.gravity
 - Fix intermittently misplaced vertices: the shader compiler now waits for a
   scalar export before reusing its inputs (seen as flickering spikes on user

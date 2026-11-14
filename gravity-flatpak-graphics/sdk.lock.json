@@ -1,0 +1,8 @@
+{
+  "branch": "25.08",
+  "arch": "aarch64",
+  "refs": {
+    "org.freedesktop.Sdk": "841fae1606e1fad20e2c79f3778b9517bbd338551619d905bc6d85451ff4ee6d",
+    "org.freedesktop.Sdk.Extension.llvm22": "58c444e3c536ceb9176c11ddfaef9ff1feb3ac4f4f6d003ad974e5cc4aabec50"
+  }
+}

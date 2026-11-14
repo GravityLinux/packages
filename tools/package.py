@@ -340,6 +340,13 @@ def macros(work, release):
     return args
 
 
+def flatpak_sources(sources):
+    """Mesa's SDK acquisition and source-build scripts, pinned by this repo."""
+    package = ROOT / "gravity-flatpak-graphics"
+    for name in ("build.sh", "sandbox.sh", "assemble.py", "sdk.sha256", "sdk.lock.json", "export-sdk.py", "llvm-origin.json"):
+        shutil.copyfile(package / name, sources / ("gravity-flatpak-" + name))
+
+
 def prepare(name, recipe, release, args):
     if args.rpm and recipe["kind"] != "rpm":
         raise ValueError("--rpm applies to packages that repack a COPR-built RPM")
@@ -359,6 +366,8 @@ def prepare(name, recipe, release, args):
     for directory in ("SOURCES", "SPECS", "BUILD", "BUILDROOT", "RPMS", "SRPMS"):
         (work / directory).mkdir()
     sources = work / "SOURCES"
+    if name == "mesa":
+        flatpak_sources(sources)
     locks = read_json("downloads.lock.json")
     updates = {}
     base = recipe.get("base_srpm")
@@ -555,6 +564,8 @@ def main():
     if args.command == "status":
         for name, recipe in recipes.items():
             pending = blockers(name, resolve(name, recipes), release, recipes)
+            if name == "mesa":
+                pending.append("aarch64 binary build needs --enable-net on for the pinned Flatpak SDK")
             print(name + ": " + ("; ".join(pending) if pending else "inputs configured; build validation pending"))
         return
     if args.command == "pin":

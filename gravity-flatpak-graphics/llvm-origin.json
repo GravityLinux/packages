@@ -1,0 +1,9 @@
+{
+  "library": "libLLVM.so.22.1",
+  "version": "22.1.8",
+  "license": "Apache-2.0 WITH LLVM-exception",
+  "origin": "Flathub org.freedesktop.Sdk.Extension.llvm22/aarch64/25.08",
+  "sdk_commit": "58c444e3c536ceb9176c11ddfaef9ff1feb3ac4f4f6d003ad974e5cc4aabec50",
+  "source": "https://github.com/llvm/llvm-project/tree/llvmorg-22.1.8",
+  "sha256_before_assembly": "2c215f0b6773d389eb07451150d36646c80dec6a25b7834c5092e8c8f37c6350"
+}

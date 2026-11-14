@@ -40,8 +40,13 @@ Use `gravity-repos` for the first SCM smoke test: all its source inputs are
 contained in this repository. Submit dependencies in the order documented in
 README.md. New builds must use a new RPM Release when package contents change.
 
-The SRPM preparation worker can fetch sources and install preparation tools;
-binary-build network access can remain disabled.
+The SRPM preparation worker can fetch sources and install preparation tools.
+Mesa's aarch64 binary build needs `--enable-net on` to download its pinned
+Flatpak compiler SDK; its compiler sandbox is disconnected from the network.
+Other binary builds can keep networking disabled. The Mesa SRPM builds
+`gravity-flatpak-graphics` alongside the host drivers from the same source;
+there is no separate graphics payload build or upload. See
+`gravity-flatpak-graphics/README.md`.
 
 ## Release build order
 
