@@ -23,10 +23,11 @@ ambient. Thermal resistance/time constants:
 The limits are release policy, not measured macOS temperature thresholds.
 The nominal steady model budgets are 1.536 W per woofer and 0.206 W per tweeter.
 Measured paired V/I feeds the daemon; it has no excursion or resistance-based
-absolute temperature observer. The daemon reads 1024-frame periods; 4096 allows modeled tweeter overshoot
-on a 6 V sine and 2048 still misses a flat-topped electrical bound.
-Period selection and remaining device checks
-are documented in the release evidence, not replaced by a new DSP stage.
+absolute temperature observer. The daemon retains Fedora's 4096-frame (85.33 ms at 48 kHz) read cadence.
+Synthetic ceiling-level onsets can overshoot the thermal limit before the
+next control update; this is a known, accepted property of the chosen cadence.
+No compensating graph stage, guard, window or hysteresis change is included.
+Physical control latency and feedback integrity still require validation.
 
 ## Coordination and validation
 
