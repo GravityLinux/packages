@@ -1,6 +1,6 @@
 Name:           gravity-audio-j713
 Version:        1
-Release:        4.gravity%{?dist}
+Release:        5.gravity%{?dist}
 Vendor:         Gravity Linux
 Summary:        Audio profiles for the MacBook Air 13" (M4, J713)
 # UCM files follow alsa-ucm-conf-asahi (BSD-3-Clause); speakersafetyd profile
@@ -29,8 +29,8 @@ BuildRequires:  systemd-rpm-macros
 Requires:       alsa-ucm-asahi >= 10
 Requires:       asahi-audio >= 4.1
 Requires:       speakersafetyd >= 2.0.1
-Requires:       lsp-plugins-lv2 >= 1.2.29
-Requires:       pipewire-module-filter-chain-lv2 >= 1.6.11
+# The limiter selects ovs=22 (True Peak/24 bit), introduced in LSP 1.2.24.
+Requires:       lsp-plugins-lv2 >= 1.2.24
 Requires:       sed
 # Replace Gravity's forks of the three packages, which carried these files,
 # with Fedora's builds. Their releases (10x.gravity) sort above Fedora's, so
@@ -98,6 +98,10 @@ exit 0
 %{_udevrulesdir}/95-speakersafetyd-j713.rules
 
 %changelog
+* Sun Nov 15 2026 Niklas Sheth <hi@niklassheth.com> - 1-5.gravity
+- Require LSP 1.2.24 for the true-peak limiter mode
+- Rely on asahi-audio for the PipeWire LV2 module dependency
+
 * Sun Nov 15 2026 Niklas Sheth <hi@niklassheth.com> - 1-4.gravity
 - Add the J713 2.8 kHz fourth-order crossover and reduce input drive by 3.5 dB
 - Retain the 9/6 V final ceilings and the 4096-frame thermal profile
