@@ -239,6 +239,104 @@
           "Min": -0.5042016506195068,
           "Max": 0.5042016506195068
         }
+      },
+      {
+        "type": "builtin",
+        "label": "linear",
+        "name": "input_drive_l",
+        "control": {
+          "Mult": 0.6683439175686147,
+          "Add": 0.0
+        }
+      },
+      {
+        "type": "builtin",
+        "label": "linear",
+        "name": "input_drive_r",
+        "control": {
+          "Mult": 0.6683439175686147,
+          "Add": 0.0
+        }
+      },
+      {
+        "type": "builtin",
+        "label": "bq_lowpass",
+        "name": "xover_woofer_l0",
+        "control": {
+          "Freq": 2800.0,
+          "Q": 0.7071067811865475,
+          "Gain": 0.0
+        }
+      },
+      {
+        "type": "builtin",
+        "label": "bq_lowpass",
+        "name": "xover_woofer_l1",
+        "control": {
+          "Freq": 2800.0,
+          "Q": 0.7071067811865475,
+          "Gain": 0.0
+        }
+      },
+      {
+        "type": "builtin",
+        "label": "bq_lowpass",
+        "name": "xover_woofer_r0",
+        "control": {
+          "Freq": 2800.0,
+          "Q": 0.7071067811865475,
+          "Gain": 0.0
+        }
+      },
+      {
+        "type": "builtin",
+        "label": "bq_lowpass",
+        "name": "xover_woofer_r1",
+        "control": {
+          "Freq": 2800.0,
+          "Q": 0.7071067811865475,
+          "Gain": 0.0
+        }
+      },
+      {
+        "type": "builtin",
+        "label": "bq_highpass",
+        "name": "xover_tweeter_l0",
+        "control": {
+          "Freq": 2800.0,
+          "Q": 0.7071067811865475,
+          "Gain": 0.0
+        }
+      },
+      {
+        "type": "builtin",
+        "label": "bq_highpass",
+        "name": "xover_tweeter_l1",
+        "control": {
+          "Freq": 2800.0,
+          "Q": 0.7071067811865475,
+          "Gain": 0.0
+        }
+      },
+      {
+        "type": "builtin",
+        "label": "bq_highpass",
+        "name": "xover_tweeter_r0",
+        "control": {
+          "Freq": 2800.0,
+          "Q": 0.7071067811865475,
+          "Gain": 0.0
+        }
+      },
+      {
+        "type": "builtin",
+        "label": "bq_highpass",
+        "name": "xover_tweeter_r1",
+        "control": {
+          "Freq": 2800.0,
+          "Q": 0.7071067811865475,
+          "Gain": 0.0
+        }
       }
     ],
     "links": [
@@ -291,14 +389,6 @@
         "input": "tweeter_comp:in_r"
       },
       {
-        "output": "woofer_lim:out_l",
-        "input": "peak_woofer:in_l"
-      },
-      {
-        "output": "woofer_lim:out_r",
-        "input": "peak_woofer:in_r"
-      },
-      {
         "output": "peak_woofer:out_l",
         "input": "ceiling_LW:In"
       },
@@ -307,25 +397,73 @@
         "input": "ceiling_RW:In"
       },
       {
-        "output": "tweeter_comp:out_l",
-        "input": "peak_tweeter:in_l"
-      },
-      {
-        "output": "tweeter_comp:out_r",
-        "input": "peak_tweeter:in_r"
-      },
-      {
         "output": "peak_tweeter:out_l",
         "input": "ceiling_LT:In"
       },
       {
         "output": "peak_tweeter:out_r",
         "input": "ceiling_RT:In"
+      },
+      {
+        "output": "input_drive_l:Out",
+        "input": "bassex:in_l"
+      },
+      {
+        "output": "input_drive_r:Out",
+        "input": "bassex:in_r"
+      },
+      {
+        "output": "woofer_lim:out_l",
+        "input": "xover_woofer_l0:In"
+      },
+      {
+        "output": "xover_woofer_l0:Out",
+        "input": "xover_woofer_l1:In"
+      },
+      {
+        "output": "xover_woofer_l1:Out",
+        "input": "peak_woofer:in_l"
+      },
+      {
+        "output": "woofer_lim:out_r",
+        "input": "xover_woofer_r0:In"
+      },
+      {
+        "output": "xover_woofer_r0:Out",
+        "input": "xover_woofer_r1:In"
+      },
+      {
+        "output": "xover_woofer_r1:Out",
+        "input": "peak_woofer:in_r"
+      },
+      {
+        "output": "tweeter_comp:out_l",
+        "input": "xover_tweeter_l0:In"
+      },
+      {
+        "output": "xover_tweeter_l0:Out",
+        "input": "xover_tweeter_l1:In"
+      },
+      {
+        "output": "xover_tweeter_l1:Out",
+        "input": "peak_tweeter:in_l"
+      },
+      {
+        "output": "tweeter_comp:out_r",
+        "input": "xover_tweeter_r0:In"
+      },
+      {
+        "output": "xover_tweeter_r0:Out",
+        "input": "xover_tweeter_r1:In"
+      },
+      {
+        "output": "xover_tweeter_r1:Out",
+        "input": "peak_tweeter:in_r"
       }
     ],
     "inputs": [
-      "bassex:in_l",
-      "bassex:in_r"
+      "input_drive_l:In",
+      "input_drive_r:In"
     ],
     "outputs": [
       "ceiling_LW:Out",
@@ -388,5 +526,6 @@
       "AUX2",
       "AUX3"
     ]
-  }
+  },
+  "j713.input-drive-dB": -3.5
 }

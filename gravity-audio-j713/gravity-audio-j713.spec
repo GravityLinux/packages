@@ -1,6 +1,6 @@
 Name:           gravity-audio-j713
 Version:        1
-Release:        3.gravity%{?dist}
+Release:        4.gravity%{?dist}
 Vendor:         Gravity Linux
 Summary:        Audio profiles for the MacBook Air 13" (M4, J713)
 # UCM files follow alsa-ucm-conf-asahi (BSD-3-Clause); speakersafetyd profile
@@ -98,6 +98,10 @@ exit 0
 %{_udevrulesdir}/95-speakersafetyd-j713.rules
 
 %changelog
+* Sun Nov 15 2026 Niklas Sheth <hi@niklassheth.com> - 1-4.gravity
+- Add the J713 2.8 kHz fourth-order crossover and reduce input drive by 3.5 dB
+- Retain the 9/6 V final ceilings and the 4096-frame thermal profile
+
 * Sat Nov 14 2026 Niklas Sheth <hi@niklassheth.com> - 1-3.gravity
 - Retain the Fedora 4096-frame speaker-protection cadence
 
