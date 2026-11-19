@@ -173,7 +173,7 @@ Summary: The Linux kernel
 %define specversion 7.3.0
 %define patchversion 7.3
 # Gravity release number: the one place to bump it (changelog aside).
-%global gravity_release 525
+%global gravity_release 526
 %define pkgrelease %{gravity_release}.gravity
 %define kversion 7
 %define tarfile_release 7.3
@@ -4892,6 +4892,36 @@ fi\
 #
 #
 %changelog
+* Thu Nov 19 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-526.gravity
+- Display-engine retirement: retire unused engines at once instead of after
+  70 seconds, wait for a fixed port before judging its engine unused, and
+  retire from system suspend without failing it (fixes suspend on the Air
+  with an unused external engine); the mini's HDMI engine comes back after
+  every wake
+- Keep a second USB-C display working when the other one is unplugged
+- Fix lost mailbox messages when two senders wait for a full mailbox
+- Wi-Fi (brcmfmac): do not let a suspend start while the firmware setup runs
+- Mac mini (J773g): keep the HDMI picture across a sleep (restore the DP PHY
+  activation on resume)
+- Keep a signal from aborting a co-processor handshake, which could leave the
+  NVMe controller down after an interrupted suspend
+- Close the display audio service when the firmware asks for it: a display
+  unplug is reported at once instead of 10 s late, and sleeps no longer
+  time out on it
+- USB-C displays: a display that is unplugged and plugged back in gets its
+  picture again; the engine is powered down at unplug and restarted at plug
+- MacBook Air 13-inch (J713): the internal keyboard works in U-Boot and GRUB
+  (needs uboot-tools 205)
+- DP audio: read the sink information once per connection and pace large
+  firmware messages, fixing a display-engine crash at boot with
+  hdmi_audio=1 on the Air
+- Timed wake from suspend-to-idle on T8132 through the watchdog (rtc1)
+- Mac mini (J773g): keep the USB controllers powered in suspend-to-idle so
+  the front ports survive a wake
+- MacBook Air 13-inch (J713): crop the camera inside the lens image circle
+- Parse T8132 display firmware reports, removing the "failed to parse
+  report" messages on brightness changes
+- Remove the "misses supplier" notices of the DP audio controllers at boot
 * Wed Nov 18 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-525.gravity
 - Rebuild the Apple silicon topic branches on Linux 7.3 with each contributor's
   commits kept whole
