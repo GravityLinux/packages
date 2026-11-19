@@ -357,6 +357,11 @@ Summary: The Linux kernel
 # kernel-selftests-internal; nothing in the distribution uses them.
 %define with_debug 0
 %define with_selftests 0
+# Gravity: build only the 16K kernel. The stock 4K kernel (kernel,
+# kernel-core, kernel-modules*, kernel-devel*, its UKIs) cannot boot Apple
+# silicon and gravity-platform-metapackage conflicts with it; kernel-16k-core
+# provides "kernel" itself.
+%define with_stock 0
 %endif
 
 %if %{with_verbose}
