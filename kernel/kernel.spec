@@ -353,6 +353,10 @@ Summary: The Linux kernel
 %define with_arm64_16k 1
 %define with_arm64_64k 0
 %define with_automotive 0
+# Gravity: no debug kernels (kernel-debug*, kernel-16k-debug*) and no
+# kernel-selftests-internal; nothing in the distribution uses them.
+%define with_debug 0
+%define with_selftests 0
 %endif
 
 %if %{with_verbose}
