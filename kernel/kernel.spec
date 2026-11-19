@@ -1785,6 +1785,9 @@ Requires: gravity-bootloader >= 1.6.1-112\
 Requires: uboot-images-armv8 >= 1:2026.07-204\
 Requires: grubby\
 Requires: update-m1n1\
+# From 525 the J713 speaker volume ceilings are gone; gravity-audio-j713\
+# before 1-5 was written for them. Machines without the add-on are unaffected.\
+Conflicts: gravity-audio-j713 < 1-5\
 %endif\
 %{expand:%%kernel_reqprovconf %{?1:%{1}} %{-o:%{-o}}}\
 %if %{?1:1} %{!?1:0} \
@@ -4892,6 +4895,8 @@ fi\
 - Refresh P3S; trackpad palm rejection; J713 TVS temperature telemetry
 - Wi-Fi: restore the roam-delta setup that logged an error on every boot
 - Add the Centauri driver as a module
+- kernel-16k-core: conflict with gravity-audio-j713 older than 1-5, whose
+  speaker graphs relied on the removed ceilings
 
 * Fri Nov 13 2026 Gravity Linux <packaging@gravitylinux.org> - 7.3.0-520.gravity
 - Limit J713 speaker digital volume to -14 dB for woofers and -22 dB for tweeters
