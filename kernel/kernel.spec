@@ -173,7 +173,7 @@ Summary: The Linux kernel
 %define specversion 7.3.0
 %define patchversion 7.3
 # Gravity release number: the one place to bump it (changelog aside).
-%global gravity_release 520
+%global gravity_release 525
 %define pkgrelease %{gravity_release}.gravity
 %define kversion 7
 %define tarfile_release 7.3
@@ -4880,6 +4880,19 @@ fi\
 #
 #
 %changelog
+* Wed Nov 18 2026 Niklas Sheth <hi@niklassheth.com> - 7.3.0-525.gravity
+- Rebuild the Apple silicon topic branches on Linux 7.3 with each contributor's
+  commits kept whole
+- MacBook Air 13-inch (J713): remove the temporary speaker volume ceilings and
+  limit the amplifier gain instead, for the protected speaker graph in
+  gravity-audio-j713 1-5
+- Enable the J713 camera, with camera power and PMP fixes
+- USB-C displays: fixed-port hot-plug and display-engine retirement (off by
+  default)
+- Refresh P3S; trackpad palm rejection; J713 TVS temperature telemetry
+- Wi-Fi: restore the roam-delta setup that logged an error on every boot
+- Add the Centauri driver as a module
+
 * Fri Nov 13 2026 Gravity Linux <packaging@gravitylinux.org> - 7.3.0-520.gravity
 - Limit J713 speaker digital volume to -14 dB for woofers and -22 dB for tweeters
 - Keep speaker feedback protection and fail-closed volume locking enabled
