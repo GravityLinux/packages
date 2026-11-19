@@ -41,6 +41,11 @@ These committed Gravity patches follow that series:
 - gravity-t8132-mtp-skip.patch (no Gravity U-Boot commit yet) — do not bind the
   MTP keyboard on T8132, so U-Boot never starts the MTP and the OS boots it from
   cold (204.gravity). No internal keyboard in U-Boot on the M4 Air.
+- gravity-t8132-mtp-handoff.patch (U-Boot `m4/mtp-handoff-20261119`, 44c318da) —
+  when the OS device tree marks the MTP helper `apple,live-handoff-capable`, bind
+  the keyboard, keep the MTP running at hand-over with its buffers in MTP SRAM
+  and mark the helper `apple,rtkit-live-handoff` for the kernel to adopt
+  (205.gravity). Other device trees keep the 204 behaviour.
 
 The packaged Gravity U-Boot revision on `gravity-alpha-20260925` is
 `a2f6913694ff26908c16948af3f8372429782263` (RPM release 203.gravity).

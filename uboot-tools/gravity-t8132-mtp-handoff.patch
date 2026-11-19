@@ -1,0 +1,339 @@
+From 44c318da59d5a8fadec99d8de42d61dca6b55a7c Mon Sep 17 00:00:00 2001
+From: Niklas Sheth <hi@niklassheth.com>
+Date: Thu, 19 Nov 2026 15:12:12 -0500
+Subject: [PATCH] apple: hand a running T8132 MTP over to the OS
+
+The T8132 MTP firmware crashes when it is woken again after a quiesce,
+and the MTP has no reset, so today U-Boot does not bind the internal
+keyboard on T8132 and the OS starts the MTP from cold.
+
+Use the keyboard when the OS device tree marks the MTP helper with
+"apple,live-handoff-capable" and gives it an aligned "sram" resource:
+
+- the helper places every buffer the firmware asks for in that SRAM
+  tail, where it outlives U-Boot, and leaves the CPU and the RTKit
+  session running at hand-over instead of quiescing them;
+- the keyboard finds its interface in the announcements and enables it
+  with the same command the OS driver sends before it reads key
+  reports;
+- only when the helper is running and the keyboard probed, the OS
+  device tree gets "apple,rtkit-live-handoff" on the helper node, and
+  the OS adopts the session. A failed keyboard probe leaves the MTP
+  running but unmarked.
+
+Device trees without the property keep the previous behaviour.
+
+Signed-off-by: Niklas Sheth <hi@niklassheth.com>
+---
+ arch/arm/include/asm/arch-apple/rtkit.h |  2 +
+ arch/arm/mach-apple/board.c             |  5 ++
+ arch/arm/mach-apple/rtkit_helper.c      | 69 ++++++++++++++++++
+ drivers/input/apple_mtp_kbd.c           | 94 +++++++++++++++++++++++--
+ 4 files changed, 165 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/include/asm/arch-apple/rtkit.h b/arch/arm/include/asm/arch-apple/rtkit.h
+index 4b11e2a7..713b81e5 100644
+--- a/arch/arm/include/asm/arch-apple/rtkit.h
++++ b/arch/arm/include/asm/arch-apple/rtkit.h
+@@ -20,6 +20,7 @@ typedef int (*apple_rtkit_shmem_setup)(void *cookie,
+ typedef void (*apple_rtkit_shmem_destroy)(void *cookie,
+ 					  struct apple_rtkit_buffer *buf);
+ 
++struct mbox_chan;
+ struct apple_rtkit;
+ 
+ struct apple_rtkit *apple_rtkit_init(struct mbox_chan *chan, void *cookie,
+@@ -31,4 +32,5 @@ int apple_rtkit_set_ap_power(struct apple_rtkit *rtk, int pwrstate);
+ int apple_rtkit_poll(struct apple_rtkit *rtk, ulong timeout);
+ int apple_rtkit_shutdown(struct apple_rtkit *rtk, int pwrstate);
+ 
++int apple_rtkit_helper_handoff(void *blob);
+ int apple_rtkit_helper_poll(struct udevice *dev, ulong timeout);
+diff --git a/arch/arm/mach-apple/board.c b/arch/arm/mach-apple/board.c
+index 44a5ef25..9a43ec97 100644
+--- a/arch/arm/mach-apple/board.c
++++ b/arch/arm/mach-apple/board.c
+@@ -14,6 +14,7 @@
+ #include <nvme.h>
+ #include <part.h>
+ 
++#include <asm/arch/rtkit.h>
+ #include <asm/armv8/mmu.h>
+ #include <asm/cache.h>
+ #include <asm/global_data.h>
+@@ -1397,6 +1398,10 @@ int ft_board_setup(void *blob, struct bd_info *bd)
+ 	const char *stdoutname;
+ 	int node, ret;
+ 
++	ret = apple_rtkit_helper_handoff(blob);
++	if (ret)
++		return ret;
++
+ 	if (!fdt_node_check_compatible(blob, 0, "apple,j773g")) {
+ 		apple_radio_calibration(blob, "pci14e4,5f72", "brcm,taurus-bf-cal-blob",
+ 					"local-bd-address", "brcmbt4388", "bf", true);
+diff --git a/arch/arm/mach-apple/rtkit_helper.c b/arch/arm/mach-apple/rtkit_helper.c
+index cbdc204f..6198c7a9 100644
+--- a/arch/arm/mach-apple/rtkit_helper.c
++++ b/arch/arm/mach-apple/rtkit_helper.c
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <dm.h>
++#include <dm/uclass-internal.h>
+ #include <mailbox.h>
+ #include <mapmem.h>
+ #include <reset.h>
+@@ -24,12 +25,32 @@ struct rtkit_helper_priv {
+ 	struct mbox_chan chan;
+ 	struct apple_rtkit *rtk;
+ 	bool sram_stolen;
++	bool keep_running;
++	fdt_size_t sram_free;
+ };
+ 
++/* All live-session buffers must outlast U-Boot's DRAM allocations and DART. */
++static int shmem_setup_sram(struct udevice *dev, struct apple_rtkit_buffer *buf)
++{
++	struct rtkit_helper_priv *priv = dev_get_priv(dev);
++	fdt_size_t size, need = ALIGN(buf->size, SZ_16K);
++	fdt_addr_t addr = dev_read_addr_size_name(dev, "sram", &size);
++
++	if (addr == FDT_ADDR_T_NONE || !need || need > priv->sram_free)
++		return -ENOMEM;
++
++	priv->sram_free -= need;
++	buf->dva = addr + priv->sram_free;
++	return 0;
++}
++
+ static int shmem_setup(void *cookie, struct apple_rtkit_buffer *buf) {
+ 	struct udevice *dev = cookie;
+ 	struct rtkit_helper_priv *priv = dev_get_priv(dev);
+ 
++	if (!buf->is_mapped && priv->keep_running)
++		return shmem_setup_sram(dev, buf);
++
+ 	if (!buf->is_mapped) {
+ 		/*
+ 		 * Special case: The OSLog buffer on MTP persists on Linux handoff.
+@@ -85,6 +106,20 @@ static int rtkit_helper_probe(struct udevice *dev)
+ 	if (ret < 0)
+ 		return ret;
+ 
++	/*
++	 * T8132 MTP cannot resume after quiesce. The matching OS helper
++	 * adopts a live session when the DT provides its private SRAM tail.
++	 */
++	if (device_is_compatible(dev, "apple,t8132-mtp")) {
++		fdt_size_t size;
++		fdt_addr_t addr = dev_read_addr_size_name(dev, "sram", &size);
++
++		priv->keep_running = addr != FDT_ADDR_T_NONE && size &&
++			IS_ALIGNED(addr, SZ_16K) && IS_ALIGNED(size, SZ_16K);
++		if (priv->keep_running)
++			priv->sram_free = size;
++	}
++
+ 	ctrl = readl(priv->asc + REG_CPU_CTRL);
+ 	writel(ctrl | REG_CPU_CTRL_RUN, priv->asc + REG_CPU_CTRL);
+ 
+@@ -112,6 +147,13 @@ static int rtkit_helper_remove(struct udevice *dev)
+ 	struct rtkit_helper_priv *priv = dev_get_priv(dev);
+ 	u32 ctrl;
+ 
++	if (priv->keep_running) {
++		/* Buffers are in SRAM; leave the CPU and RTKit session live. */
++		apple_rtkit_free(priv->rtk);
++		priv->rtk = NULL;
++		return 0;
++	}
++
+ 	apple_rtkit_shutdown(priv->rtk, APPLE_RTKIT_PWR_STATE_QUIESCED);
+ 
+ 	ctrl = readl(priv->asc + REG_CPU_CTRL);
+@@ -123,6 +165,33 @@ static int rtkit_helper_remove(struct udevice *dev)
+ 	return 0;
+ }
+ 
++/*
++ * Mark the OS tree only when this helper established the live session and
++ * the keyboard on it probed: interfaces announced and keyboard enabled.
++ */
++int apple_rtkit_helper_handoff(void *blob)
++{
++	struct rtkit_helper_priv *priv;
++	struct udevice *dev, *kbd;
++	ofnode node = ofnode_by_compatible(ofnode_null(), "apple,t8132-mtp");
++	ofnode hid = ofnode_by_compatible(ofnode_null(), "apple,dockchannel-hid");
++	int offset;
++
++	if (!ofnode_valid(node) || !ofnode_valid(hid) ||
++	    uclass_find_device_by_ofnode(UCLASS_MISC, node, &dev) ||
++	    !device_active(dev) ||
++	    uclass_find_device_by_ofnode(UCLASS_KEYBOARD, hid, &kbd) ||
++	    !device_active(kbd))
++		return 0;
++	priv = dev_get_priv(dev);
++	if (!priv->keep_running)
++		return 0;
++	offset = fdt_node_offset_by_compatible(blob, -1, "apple,t8132-mtp");
++	if (offset < 0)
++		return 0;
++	return fdt_setprop_empty(blob, offset, "apple,rtkit-live-handoff");
++}
++
+ int apple_rtkit_helper_poll(struct udevice *dev, ulong timeout)
+ {
+ 	struct rtkit_helper_priv *priv = dev_get_priv(dev);
+diff --git a/drivers/input/apple_mtp_kbd.c b/drivers/input/apple_mtp_kbd.c
+index 6d465618..a9f2c687 100644
+--- a/drivers/input/apple_mtp_kbd.c
++++ b/drivers/input/apple_mtp_kbd.c
+@@ -13,10 +13,15 @@
+ #include <asm/arch/rtkit.h>
+ #include <asm/io.h>
+ #include <linux/input.h>
++#include <linux/delay.h>
++#include <linux/sizes.h>
+ #include "apple_kbd.h"
+ 
+ struct apple_mtp_kbd_priv {
+ 	struct apple_kbd_priv kbd;
++	int keyboard_iface;
++	bool enable_ack;
++	u32 enable_status;
+ 	struct udevice *helper;
+ 	void *local;
+ 	void *rmt;
+@@ -90,6 +95,17 @@ static int apple_mtp_kbd_check(struct input_config *input)
+ 		return ret;
+ 	}
+ 
++	/* Only the synchronous interface-enable command is sent here. */
++	if (hdr.channel == 0x11 && hdr.iface == 0 && hdr.length == 12) {
++		u8 ack[16];
++		ret = dockchannel_read(dev, ack, sizeof(ack));
++		if (ret < 0)
++			return ret;
++		priv->enable_status = ack[4] | (u32)ack[5] << 8 |
++			(u32)ack[6] << 16 | (u32)ack[7] << 24;
++		priv->enable_ack = true;
++		return 0;
++	}
+ 	/* Save comm init messages for the next stage */
+ 	if (hdr.iface == 0) {
+ 		int space = priv->fifo_size - priv->init_size;
+@@ -109,6 +125,10 @@ static int apple_mtp_kbd_check(struct input_config *input)
+ 			if (ret < 0)
+ 				return ret;
+ 			priv->init_size += need;
++			/* The public init event identifies its interface by name. */
++			if (hdr.length >= 28 && p[sizeof(hdr) + 8] == 0xf0 &&
++			    !memcmp(p + sizeof(hdr) + 12, "keyboard", 8))
++				priv->keyboard_iface = p[sizeof(hdr) + 11];
+ 		}
+ 	} else if (hdr.channel == 0x12 && hdr.length == 0x14) {
+ 		u8 buf[0x18];
+@@ -133,6 +153,43 @@ static int apple_mtp_kbd_check(struct input_config *input)
+ 	return 0;
+ }
+ 
++/* T8132 needs the same interface-enable request used by Linux. */
++static int apple_mtp_kbd_enable(struct udevice *dev)
++{
++	struct apple_mtp_kbd_priv *priv = dev_get_priv(dev);
++	struct keyboard_priv *kbd = dev_get_uclass_priv(dev);
++	u8 pkt[24] = {8, 0x11, 12, 0, 0, 0, 0, 0, 0x80, 0, 2};
++	u32 checksum = 0xffffffff;
++	ulong start = get_timer(0);
++	int i;
++
++	while (priv->keyboard_iface < 0 && get_timer(start) < 2000) {
++		apple_mtp_kbd_check(&kbd->input);
++		udelay(1000);
++	}
++	if (priv->keyboard_iface < 0)
++		return -ENODEV;
++	pkt[16] = 0xb4;
++	pkt[17] = priv->keyboard_iface;
++	for (i = 0; i < 20; i += 4)
++		checksum -= (u32)pkt[i] | (u32)pkt[i+1] << 8 |
++			(u32)pkt[i+2] << 16 | (u32)pkt[i+3] << 24;
++	for (i = 0; i < 4; i++)
++		pkt[20+i] = checksum >> (8*i);
++	start = get_timer(0);
++	while (readl(priv->local + DATA_TX_FREE) < sizeof(pkt))
++		if (get_timer(start) > 100)
++			return -ETIME;
++	for (i = 0; i < sizeof(pkt); i++)
++		writel(pkt[i], priv->local + DATA_TX8);
++	start = get_timer(0);
++	while (!priv->enable_ack && get_timer(start) < 1000) {
++		apple_mtp_kbd_check(&kbd->input);
++		udelay(1000);
++	}
++	return !priv->enable_ack ? -ETIME : priv->enable_status ? -EIO : 0;
++}
++
+ static int get_rtkit_helper(struct udevice *dev)
+ {
+ 	struct apple_mtp_kbd_priv *priv = dev_get_priv(dev);
+@@ -161,6 +218,7 @@ static int apple_mtp_kbd_probe(struct udevice *dev)
+ 	int ret;
+ 	fdt_addr_t reg;
+ 
++	priv->keyboard_iface = -1;
+ 	printf("mtp_kbd_probe\n");
+ 
+ 	reg = dev_read_addr_name(dev, "data");
+@@ -198,18 +256,44 @@ static int apple_mtp_kbd_probe(struct udevice *dev)
+ 	input_add_tables(input, false);
+ 	strcpy(sdev->name, "mtpkbd");
+ 
++	if (device_is_compatible(priv->helper, "apple,t8132-mtp")) {
++		ret = apple_mtp_kbd_enable(dev);
++		if (ret)
++			return ret;
++	}
+ 	return input_stdio_register(sdev);
+ }
+ 
+ static int apple_mtp_kbd_bind(struct udevice *dev)
+ {
+ 	/*
+-	 * The T8132 MTP firmware does not survive being quiesced and woken up
+-	 * again by the next stage, and the MTP cannot be reset. Leave the MTP
+-	 * untouched on T8132 so that the OS can boot it from cold.
++	 * The T8132 MTP firmware does not survive a quiesce and the MTP cannot
++	 * be reset, so once started here it must be adopted by the OS. Start it
++	 * only when the OS device tree says its kernel does that; otherwise
++	 * leave the MTP to the OS to boot from cold.
+ 	 */
+-	if (of_machine_is_compatible("apple,t8132"))
+-		return -ENODEV;
++	if (of_machine_is_compatible("apple,t8132")) {
++		u32 phandle;
++		int index;
++		ofnode helper;
++		fdt_addr_t addr;
++		fdt_size_t size;
++
++		if (dev_read_u32(dev, "apple,helper-cpu", &phandle))
++			return -ENODEV;
++		helper = ofnode_get_by_phandle(phandle);
++		if (!ofnode_valid(helper) ||
++		    !ofnode_device_is_compatible(helper, "apple,t8132-mtp") ||
++		    !ofnode_read_bool(helper, "apple,live-handoff-capable"))
++			return -ENODEV;
++		index = ofnode_stringlist_search(helper, "reg-names", "sram");
++		if (index < 0)
++			return -ENODEV;
++		addr = ofnode_get_addr_size_index(helper, index, &size);
++		if (addr == FDT_ADDR_T_NONE || !size ||
++		    !IS_ALIGNED(addr, SZ_16K) || !IS_ALIGNED(size, SZ_16K))
++			return -ENODEV;
++	}
+ 
+ 	return 0;
+ }
